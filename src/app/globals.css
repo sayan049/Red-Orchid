@@ -551,4 +551,226 @@ textarea:active {
   will-change: transform;
 }
 
+/* ==========================================================================
+   EDITORIAL LIGHT MODE THEME SYSTEM (RED ORCHID ATELIER)
+   ========================================================================== */
+
+html.light {
+  --background: #f8f6f1;
+  --foreground: #121110;
+  --surface: #ffffff;
+  --surface-hover: #f1eee6;
+  --surface-elevated: #ffffff;
+  --border: #e2ded4;
+  --border-subtle: #eae5dc;
+  --muted: #66625c;
+  --muted-dark: #8c867d;
+  color-scheme: light;
+  background-color: #f8f6f1 !important;
+  color: #121110 !important;
+}
+
+html.light body {
+  background-color: #f8f6f1 !important;
+  color: #121110 !important;
+}
+
+/* Background surfaces */
+html.light main,
+html.light section,
+html.light [class*="bg-[#070707]"],
+html.light .bg-\[\#070707\] {
+  background-color: #f8f6f1 !important;
+}
+
+html.light [class*="bg-[#111010]"],
+html.light .bg-\[\#111010\] {
+  background-color: #ffffff !important;
+  border-color: #e5e0d7 !important;
+}
+
+/* Text colors */
+html.light .text-bone {
+  color: #141312 !important;
+}
+
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light .font-display {
+  color: #121110 !important;
+}
+
+html.light .text-white {
+  color: #121110 !important;
+}
+
+/* White text opacity utilities converted to rich charcoal gradations */
+html.light .text-white\/90,
+html.light .text-white\/80,
+html.light .text-white\/75,
+html.light .text-white\/70 {
+  color: #38342e !important;
+}
+
+html.light .text-white\/65,
+html.light .text-white\/60,
+html.light .text-white\/55,
+html.light .text-white\/50 {
+  color: #5c5750 !important;
+}
+
+html.light .text-white\/45,
+html.light .text-white\/40,
+html.light .text-white\/35,
+html.light .text-white\/30,
+html.light .text-white\/25,
+html.light .text-white\/20 {
+  color: #888279 !important;
+}
+
+/* Borders */
+html.light .border-white\/5,
+html.light .border-white\/8,
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20,
+html.light .border-white\/30 {
+  border-color: rgba(20, 19, 18, 0.12) !important;
+}
+
+/* Translucent surfaces */
+html.light .bg-white\/5,
+html.light .bg-white\/\[0\.02\],
+html.light .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.04\],
+html.light .bg-white\/\[0\.05\],
+html.light .bg-white\/\[0\.06\],
+html.light .bg-white\/\[0\.07\] {
+  background-color: rgba(20, 19, 18, 0.04) !important;
+}
+
+html.light .bg-white\/10,
+html.light .bg-white\/15 {
+  background-color: rgba(20, 19, 18, 0.07) !important;
+}
+
+/* Retain white text over photographic media gradients */
+html.light .bg-gradient-to-t .text-white,
+html.light .bg-gradient-to-t .text-bone {
+  color: #ffffff !important;
+}
+html.light .bg-gradient-to-t .text-white\/90,
+html.light .bg-gradient-to-t .text-white\/80,
+html.light .bg-gradient-to-t .text-white\/70 {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+html.light .bg-gradient-to-t .text-white\/50,
+html.light .bg-gradient-to-t .text-white\/40 {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Navbar in light mode */
+html.light header > div {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(20, 19, 18, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+}
+html.light header a,
+html.light header button {
+  color: #2b2824 !important;
+}
+html.light header a:hover,
+html.light header button:hover {
+  color: #e11d48 !important;
+}
+html.light [data-radix-popper-content-wrapper] div,
+html.light .bg-\[\#0c0a0a\]\/95 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(20, 19, 18, 0.12) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Form Inputs in light mode */
+html.light .contact-field-input {
+  background-color: #ffffff !important;
+  color: #121110 !important;
+  border-color: #d6d0c4 !important;
+}
+html.light .contact-field-input::placeholder {
+  color: rgba(20, 19, 18, 0.38) !important;
+}
+html.light .contact-field-input:focus {
+  border-color: #e11d48 !important;
+  background-color: #ffffff !important;
+}
+html.light [role="listbox"] {
+  background-color: #ffffff !important;
+  border-color: #d6d0c4 !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
+}
+html.light [role="option"] {
+  color: #2b2824 !important;
+}
+html.light [role="option"]:hover {
+  background-color: rgba(225, 29, 72, 0.08) !important;
+  color: #e11d48 !important;
+}
+
+/* Footer in light mode */
+html.light footer {
+  background-color: #ece8df !important;
+  border-color: #ded8cb !important;
+}
+html.light .footer-brand-text {
+  color: rgba(20, 19, 18, 0.06) !important;
+}
+html.light .footer-brand-blur-overlay {
+  background: linear-gradient(to top, #ece8df 30%, transparent 100%) !important;
+}
+
+/* Client Marquee in light mode */
+html.light #clients {
+  background-color: #f3efe6 !important;
+}
+html.light #clients img {
+  filter: brightness(0) opacity(0.72) !important;
+}
+html.light #clients img:hover {
+  filter: brightness(0) opacity(1) !important;
+}
+
+/* 3D Parallax Gallery in light mode */
+html.light [aria-label="Selected Works 3D Matrix"] {
+  background-color: #f8f6f1 !important;
+}
+html.light [aria-label="Selected Works 3D Matrix"] .bg-\[\#070707\] {
+  background-color: #f8f6f1 !important;
+}
+html.light [aria-label="Selected Works 3D Matrix"] .shadow-\[inset_0_120px_160px_-40px_rgba\(7\,7\,7\,1\)\,inset_0_-120px_160px_-40px_rgba\(7\,7\,7\,1\)\] {
+  box-shadow: inset 0 120px 160px -40px rgba(248, 246, 241, 1), inset 0 -120px 160px -40px rgba(248, 246, 241, 1) !important;
+}
+html.light [aria-label="Selected Works 3D Matrix"] .shadow-\[inset_160px_0_160px_-40px_rgba\(7\,7\,7\,1\)\,inset_-160px_0_160px_-40px_rgba\(7\,7\,7\,1\)\] {
+  box-shadow: inset 160px 0 160px -40px rgba(248, 246, 241, 1), inset -160px 0 160px -40px rgba(248, 246, 241, 1) !important;
+}
+
+/* FAQ Accordion in light mode */
+html.light #faq {
+  background-color: #f8f6f1 !important;
+}
+html.light #faq .bg-white\/\[0\.02\] {
+  background-color: #ffffff !important;
+  border-color: #e2ded4 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Custom Cursor in light mode */
+html.light .custom-cursor-dot {
+  background-color: #e11d48 !important;
+}
+html.light .custom-cursor-ring {
+  border-color: rgba(20, 19, 18, 0.35) !important;
+}
+
 

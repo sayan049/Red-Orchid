@@ -80,9 +80,18 @@ class SoundEngine {
     }
   }
 
-  // Guaranteed, zero-throw tactile click
+  private lastClickTime = 0;
+
+  // Guaranteed, zero-throw tactile click with debouncing and single-pipeline audio
   public playClick(): void {
     if (!this.isSoundEnabled) return;
+
+    // Throttle clicks within 75ms to eliminate duplicate sounds from event bubbling
+    const now = Date.now();
+    if (now - this.lastClickTime < 75) {
+      return;
+    }
+    this.lastClickTime = now;
 
     try {
       // 1. Mobile haptic pulse (supported on Android Chrome & modern touch browsers)
@@ -92,54 +101,58 @@ class SoundEngine {
         } catch {}
       }
 
-      // 2. Guaranteed HTML5 Audio playback (immune to iOS AudioContext suspension bugs)
-      if (this.audioPool.length > 0) {
+      // 2. High-fidelity Web Audio API synthesis (primary desktop & modern mobile pipeline)
+      const ctx = this.getContext();
+      let webAudioPlayed = false;
+
+      if (ctx) {
+        if (ctx.state === "suspended") {
+          ctx.resume().catch(() => {});
+        }
+
+        if (ctx.state === "running") {
+          const osc = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(1800, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.035);
+
+          osc2.type = "triangle";
+          osc2.frequency.setValueAtTime(1000, ctx.currentTime);
+          osc2.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.030);
+
+          filter.type = "bandpass";
+          filter.frequency.setValueAtTime(1300, ctx.currentTime);
+          filter.Q.setValueAtTime(2.0, ctx.currentTime);
+
+          gain.gain.setValueAtTime(0.32, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.045);
+
+          osc.connect(filter);
+          osc2.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(ctx.currentTime);
+          osc2.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.05);
+          osc2.stop(ctx.currentTime + 0.05);
+          webAudioPlayed = true;
+        }
+      }
+
+      // 3. Fallback to HTML5 Audio ONLY IF Web Audio API was not played (never play both!)
+      if (!webAudioPlayed && this.audioPool.length > 0) {
         const audio = this.audioPool[this.poolIndex];
         this.poolIndex = (this.poolIndex + 1) % this.audioPool.length;
         audio.currentTime = 0;
         const playPromise = audio.play();
         if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Silently fallback to WebAudio
-          });
+          playPromise.catch(() => {});
         }
-      }
-
-      // 3. Web Audio API synthesis (high-fidelity dimensional acoustic click)
-      const ctx = this.getContext();
-      if (ctx) {
-        if (ctx.state === "suspended") {
-          ctx.resume().catch(() => {});
-        }
-        const osc = ctx.createOscillator();
-        const osc2 = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(1800, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.035);
-
-        osc2.type = "triangle";
-        osc2.frequency.setValueAtTime(1000, ctx.currentTime);
-        osc2.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.030);
-
-        filter.type = "bandpass";
-        filter.frequency.setValueAtTime(1300, ctx.currentTime);
-        filter.Q.setValueAtTime(2.0, ctx.currentTime);
-
-        gain.gain.setValueAtTime(0.35, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.045);
-
-        osc.connect(filter);
-        osc2.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(ctx.currentTime);
-        osc2.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.05);
-        osc2.stop(ctx.currentTime + 0.05);
       }
     } catch {
       // Guaranteed never to throw or crash caller

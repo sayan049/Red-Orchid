@@ -52,6 +52,14 @@ export const metadata: Metadata = {
     "Director Sayan Patra",
     "Commercial Videography",
   ],
+  icons: {
+    icon: [
+      { url: "/logo-orchid.png", sizes: "any" },
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/logo-orchid.png",
+    apple: "/icon.png",
+  },
   authors: [{ name: "Red Orchid Films" }],
   creator: "Red Orchid Films",
   openGraph: {
@@ -137,6 +145,24 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var saved = localStorage.getItem("ro-theme");
+                if (saved === "light") {
+                  document.documentElement.classList.remove("dark");
+                  document.documentElement.classList.add("light");
+                  document.documentElement.setAttribute("data-theme", "light");
+                } else {
+                  document.documentElement.classList.remove("light");
+                  document.documentElement.classList.add("dark");
+                  document.documentElement.setAttribute("data-theme", "dark");
+                }
+              } catch (e) {}
+            `,
+          }}
         />
       </head>
       <body
