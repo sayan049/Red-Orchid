@@ -146,24 +146,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                var saved = localStorage.getItem("ro-theme");
-                if (saved === "light") {
-                  document.documentElement.classList.remove("dark");
-                  document.documentElement.classList.add("light");
-                  document.documentElement.setAttribute("data-theme", "light");
-                } else {
-                  document.documentElement.classList.remove("light");
-                  document.documentElement.classList.add("dark");
-                  document.documentElement.setAttribute("data-theme", "dark");
-                }
-              } catch (e) {}
-            `,
-          }}
-        />
       </head>
       <body
         className="min-h-screen bg-[#070707] text-[#f5f2eb] antialiased selection:bg-[#e11d48] selection:text-white"

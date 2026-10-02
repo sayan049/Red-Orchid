@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/popover"
 import { BrandLogo } from "@/components/ui/BrandLogo"
 import { SoundToggle } from "@/components/ui/SoundToggle"
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
 import { LiveTime } from "@/components/ui/LiveTime"
 import { sound } from "@/lib/sound"
 
@@ -215,12 +214,9 @@ export function NavigationMenu4() {
               {/* Mobile Drawer Footer Controls */}
               <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between px-2">
                 <span className="font-mono-code text-[10px] text-white/50 uppercase tracking-widest">
-                  CONTROLS
+                  AUDIO
                 </span>
-                <div className="flex items-center gap-2">
-                  <ThemeToggle />
-                  <SoundToggle />
-                </div>
+                <SoundToggle />
               </div>
             </PopoverContent>
           </Popover>
@@ -333,13 +329,12 @@ export function NavigationMenu4() {
           </NavigationMenu>
         </div>
 
-        {/* Right side: LiveTime, ThemeToggle, and SoundToggle */}
+        {/* Right side: LiveTime and SoundToggle */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           <div className="hidden xl:flex items-center">
             <LiveTime />
           </div>
 
-          <ThemeToggle />
           <SoundToggle />
         </div>
       </div>
