@@ -2,8 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { STUDIO_CONFIG } from "@/data/works";
-import { ArrowUpRight, Check, AlertCircle, Loader2, ChevronDown, IndianRupee, Sparkles } from "lucide-react";
+import { ArrowUpRight, Check, Loader2, ChevronDown, IndianRupee, Sparkles } from "lucide-react";
 import { sound } from "@/lib/sound";
+import {
+  Field,
+  FieldLabel,
+  FieldError,
+  FieldGroup,
+} from "@/components/ui/field";
 
 const PRIMARY_INTEREST_OPTIONS = [
   {
@@ -89,12 +95,12 @@ function CustomSelect({
 
   return (
     <div className="relative space-y-2" ref={dropdownRef}>
-      <label className="flex items-center justify-between font-mono-code text-[11px] text-white/60 uppercase tracking-wider">
+      <FieldLabel className="flex items-center justify-between font-mono-code text-[11px] text-white/60 uppercase tracking-wider">
         <span className="flex items-center gap-1.5">
           {icon}
           {label} {required && <span className="text-orchid">*</span>}
         </span>
-      </label>
+      </FieldLabel>
 
       {/* Select trigger button */}
       <button
@@ -241,25 +247,25 @@ export function ContactSection() {
     const errors: { name?: string; email?: string; message?: string } = {};
 
     if (!formData.name.trim()) {
-      errors.name = "Please fill out this field (Full Name required)";
+      errors.name = "Please fill out this field.";
     }
 
     if (!formData.email.trim()) {
-      errors.email = "Please fill out this field (Email Address required)";
+      errors.email = "Please fill out this field.";
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email.trim())) {
-        errors.email = "Please provide a valid email address (e.g. name@domain.com)";
+        errors.email = "Please enter a valid email address.";
       }
     }
 
     if (!formData.message.trim()) {
-      errors.message = "Please fill out this field (Narrative / Scope required)";
+      errors.message = "Please fill out this field.";
     }
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      setErrorMessage("Please complete all required fields highlighted in crimson below.");
+      setErrorMessage("Please complete all required fields.");
       setStatus("error");
       triggerShake();
       return;
@@ -420,16 +426,13 @@ export function ContactSection() {
             </div>
           </div>
 
-          {/* Right Column: Redesigned Inquiry Form Card */}
+          {/* Right Column: Redesigned Inquiry Form */}
           <div className="lg:col-span-7">
             <div
-              className={`rounded-2xl border border-white/10 bg-[#0c0a09]/90 p-5 sm:p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.7)] backdrop-blur-xl relative transition-transform duration-200 ${
+              className={`relative transition-transform duration-200 ${
                 isShaking ? "animate-ui-shake" : ""
               }`}
             >
-              {/* Subtle top card accent line */}
-              <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-orchid/40 to-transparent" />
-
               {status === "success" ? (
                 <div className="py-12 text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
                   <div className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-orchid/50 bg-orchid/15 text-orchid shadow-[0_0_30px_rgba(225,29,72,0.3)]">
@@ -470,7 +473,7 @@ export function ContactSection() {
                   onSubmit={handleSubmit}
                   noValidate
                   suppressHydrationWarning
-                  className="space-y-5 sm:space-y-6"
+                  className="space-y-6 sm:space-y-7"
                 >
                   {/* Honeypot anti-spam field */}
                   <div className="hidden" aria-hidden="true">
@@ -496,190 +499,157 @@ export function ContactSection() {
                     </span>
                   </div>
 
-                  {/* 1. Name & 2. Email */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="name"
-                        className={`block font-mono-code text-[11px] uppercase tracking-wider transition-colors ${
-                          fieldErrors.name ? "text-rose-400 font-semibold" : "text-white/60"
-                        }`}
+                  <FieldGroup className="space-y-5 sm:space-y-6">
+                    {/* 1. Name & 2. Email */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                      <Field data-invalid={!!fieldErrors.name} className="gap-2">
+                        <FieldLabel
+                          htmlFor="name"
+                          className={`font-mono-code text-[11px] uppercase tracking-wider transition-colors ${
+                            fieldErrors.name ? "text-rose-400 font-semibold" : "text-white/60"
+                          }`}
+                        >
+                          NAME <span className={fieldErrors.name ? "text-rose-400" : "text-orchid"}>*</span>
+                        </FieldLabel>
+                        <input
+                          id="name"
+                          type="text"
+                          placeholder="e.g. Sayan Patra"
+                          value={formData.name}
+                          onChange={(e) => {
+                            setFormData({ ...formData, name: e.target.value });
+                            if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                            if (status === "error") setStatus("idle");
+                          }}
+                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:outline-none min-h-[48px] ${
+                            fieldErrors.name
+                              ? "border-rose-500 bg-rose-950/20 shadow-[0_0_15px_rgba(244,63,94,0.15)] focus:border-rose-400"
+                              : "border-white/10 bg-black/50 hover:border-white/20 focus:border-orchid focus:bg-[#120f0e]"
+                          }`}
+                        />
+                        {fieldErrors.name && (
+                          <FieldError className="font-mono-code text-[11px] text-rose-400 flex items-center gap-1.5 mt-0.5 tracking-wide">
+                            <span className="h-1 w-1 rounded-full bg-rose-400 shrink-0" />
+                            <span>{fieldErrors.name}</span>
+                          </FieldError>
+                        )}
+                      </Field>
+
+                      <Field data-invalid={!!fieldErrors.email} className="gap-2">
+                        <FieldLabel
+                          htmlFor="email"
+                          className={`font-mono-code text-[11px] uppercase tracking-wider transition-colors ${
+                            fieldErrors.email ? "text-rose-400 font-semibold" : "text-white/60"
+                          }`}
+                        >
+                          EMAIL <span className={fieldErrors.email ? "text-rose-400" : "text-orchid"}>*</span>
+                        </FieldLabel>
+                        <input
+                          id="email"
+                          type="email"
+                          placeholder="you@domain.com"
+                          value={formData.email}
+                          onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                            if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                            if (status === "error") setStatus("idle");
+                          }}
+                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:outline-none min-h-[48px] ${
+                            fieldErrors.email
+                              ? "border-rose-500 bg-rose-950/20 shadow-[0_0_15px_rgba(244,63,94,0.15)] focus:border-rose-400"
+                              : "border-white/10 bg-black/50 hover:border-white/20 focus:border-orchid focus:bg-[#120f0e]"
+                          }`}
+                        />
+                        {fieldErrors.email && (
+                          <FieldError className="font-mono-code text-[11px] text-rose-400 flex items-center gap-1.5 mt-0.5 tracking-wide">
+                            <span className="h-1 w-1 rounded-full bg-rose-400 shrink-0" />
+                            <span>{fieldErrors.email}</span>
+                          </FieldError>
+                        )}
+                      </Field>
+                    </div>
+
+                    {/* 3. Company / Production Name (Optional) */}
+                    <Field className="gap-2">
+                      <FieldLabel
+                        htmlFor="company"
+                        className="font-mono-code text-[11px] text-white/60 uppercase tracking-wider"
                       >
-                        NAME <span className={fieldErrors.name ? "text-rose-400" : "text-orchid"}>*</span>
-                      </label>
+                        COMPANY / PRODUCTION NAME <span className="text-white/35 font-normal">(OPTIONAL)</span>
+                      </FieldLabel>
                       <input
-                        id="name"
+                        id="company"
                         type="text"
-                        placeholder="e.g. Sayan Patra"
-                        value={formData.name}
-                        onChange={(e) => {
-                          setFormData({ ...formData, name: e.target.value });
-                          if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
-                          if (status === "error") setStatus("idle");
-                        }}
-                        className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:outline-none min-h-[48px] ${
-                          fieldErrors.name
-                            ? "border-rose-500 bg-rose-950/30 shadow-[0_0_25px_rgba(244,63,94,0.25)] ring-1 ring-rose-500/40 focus:border-rose-400 focus:ring-rose-400"
-                            : "border-white/10 bg-black/50 focus:border-orchid focus:bg-[#120f0e]"
-                        }`}
+                        placeholder="e.g. Warner Bros. / Maison Margiela / Independent"
+                        value={formData.company}
+                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/25 transition-all hover:border-white/20 focus:border-orchid focus:bg-[#120f0e] focus:outline-none min-h-[48px]"
                       />
-                      {fieldErrors.name && (
-                        <div className="flex items-center gap-2 rounded-lg border border-rose-500/40 bg-gradient-to-r from-rose-950/70 to-rose-900/40 px-3 py-1.5 shadow-[0_0_15px_rgba(244,63,94,0.18)] backdrop-blur-md animate-in fade-in slide-in-from-top-1 duration-150">
-                          <span className="relative flex h-2 w-2 shrink-0">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
-                          </span>
-                          <span className="font-mono-code text-[10.5px] font-semibold text-rose-300 tracking-wide uppercase">
-                            {fieldErrors.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                    </Field>
 
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="email"
-                        className={`block font-mono-code text-[11px] uppercase tracking-wider transition-colors ${
-                          fieldErrors.email ? "text-rose-400 font-semibold" : "text-white/60"
+                    {/* 4. Pricing in INR (Dropdown) */}
+                    <Field className="gap-2">
+                      <CustomSelect
+                        label="PRICING IN INR (₹)"
+                        required
+                        icon={<IndianRupee className="h-3.5 w-3.5 text-orchid" />}
+                        value={formData.pricingInr}
+                        options={PRICING_INR_OPTIONS}
+                        onChange={(val) => setFormData((prev) => ({ ...prev, pricingInr: val }))}
+                      />
+                    </Field>
+
+                    {/* 5. Primary Interest (Proper Dropdown) */}
+                    <Field className="gap-2">
+                      <CustomSelect
+                        label="PRIMARY INTEREST"
+                        required
+                        value={formData.primaryInterest}
+                        options={PRIMARY_INTEREST_OPTIONS}
+                        onChange={(val) => setFormData((prev) => ({ ...prev, primaryInterest: val }))}
+                      />
+                    </Field>
+
+                    {/* 6. Tell us about narrative/scope */}
+                    <Field data-invalid={!!fieldErrors.message} className="gap-2">
+                      <FieldLabel
+                        htmlFor="message"
+                        className={`font-mono-code text-[11px] uppercase tracking-wider transition-colors ${
+                          fieldErrors.message ? "text-rose-400 font-semibold" : "text-white/60"
                         }`}
                       >
-                        EMAIL <span className={fieldErrors.email ? "text-rose-400" : "text-orchid"}>*</span>
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        placeholder="you@domain.com"
-                        value={formData.email}
+                        TELL US ABOUT NARRATIVE / SCOPE <span className={fieldErrors.message ? "text-rose-400" : "text-orchid"}>*</span>
+                      </FieldLabel>
+                      <textarea
+                        id="message"
+                        rows={4}
+                        placeholder="Concept synopsis, expected timeline, location aspirations, technical specs (e.g. 35mm film or digital cinema)..."
+                        value={formData.message}
                         onChange={(e) => {
-                          setFormData({ ...formData, email: e.target.value });
-                          if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                          setFormData({ ...formData, message: e.target.value });
+                          if (fieldErrors.message) setFieldErrors((prev) => ({ ...prev, message: undefined }));
                           if (status === "error") setStatus("idle");
                         }}
-                        className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:outline-none min-h-[48px] ${
-                          fieldErrors.email
-                            ? "border-rose-500 bg-rose-950/30 shadow-[0_0_25px_rgba(244,63,94,0.25)] ring-1 ring-rose-500/40 focus:border-rose-400 focus:ring-rose-400"
-                            : "border-white/10 bg-black/50 focus:border-orchid focus:bg-[#120f0e]"
+                        className={`w-full rounded-xl border p-4 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:outline-none resize-y min-h-[110px] ${
+                          fieldErrors.message
+                            ? "border-rose-500 bg-rose-950/20 shadow-[0_0_15px_rgba(244,63,94,0.15)] focus:border-rose-400"
+                            : "border-white/10 bg-black/50 hover:border-white/20 focus:border-orchid focus:bg-[#120f0e]"
                         }`}
                       />
-                      {fieldErrors.email && (
-                        <div className="flex items-center gap-2 rounded-lg border border-rose-500/40 bg-gradient-to-r from-rose-950/70 to-rose-900/40 px-3 py-1.5 shadow-[0_0_15px_rgba(244,63,94,0.18)] backdrop-blur-md animate-in fade-in slide-in-from-top-1 duration-150">
-                          <span className="relative flex h-2 w-2 shrink-0">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
-                          </span>
-                          <span className="font-mono-code text-[10.5px] font-semibold text-rose-300 tracking-wide uppercase">
-                            {fieldErrors.email}
-                          </span>
-                        </div>
+                      {fieldErrors.message && (
+                        <FieldError className="font-mono-code text-[11px] text-rose-400 flex items-center gap-1.5 mt-0.5 tracking-wide">
+                          <span className="h-1 w-1 rounded-full bg-rose-400 shrink-0" />
+                          <span>{fieldErrors.message}</span>
+                        </FieldError>
                       )}
-                    </div>
-                  </div>
+                    </Field>
+                  </FieldGroup>
 
-                  {/* 3. Company / Production Name (Optional) */}
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="company"
-                      className="block font-mono-code text-[11px] text-white/60 uppercase tracking-wider"
-                    >
-                      COMPANY / PRODUCTION NAME <span className="text-white/35 font-normal">(OPTIONAL)</span>
-                    </label>
-                    <input
-                      id="company"
-                      type="text"
-                      placeholder="e.g. Warner Bros. / Maison Margiela / Independent"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:border-orchid focus:bg-[#120f0e] focus:outline-none min-h-[48px]"
-                    />
-                  </div>
-
-                  {/* 4. Pricing in INR (Dropdown) */}
-                  <CustomSelect
-                    label="PRICING IN INR (₹)"
-                    required
-                    icon={<IndianRupee className="h-3.5 w-3.5 text-orchid" />}
-                    value={formData.pricingInr}
-                    options={PRICING_INR_OPTIONS}
-                    onChange={(val) => setFormData((prev) => ({ ...prev, pricingInr: val }))}
-                  />
-
-                  {/* 5. Primary Interest (Proper Dropdown) */}
-                  <CustomSelect
-                    label="PRIMARY INTEREST"
-                    required
-                    value={formData.primaryInterest}
-                    options={PRIMARY_INTEREST_OPTIONS}
-                    onChange={(val) => setFormData((prev) => ({ ...prev, primaryInterest: val }))}
-                  />
-
-                  {/* 6. Tell us about narrative/scope */}
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="message"
-                      className={`block font-mono-code text-[11px] uppercase tracking-wider transition-colors ${
-                        fieldErrors.message ? "text-rose-400 font-semibold" : "text-white/60"
-                      }`}
-                    >
-                      TELL US ABOUT NARRATIVE / SCOPE <span className={fieldErrors.message ? "text-rose-400" : "text-orchid"}>*</span>
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={4}
-                      placeholder="Concept synopsis, expected timeline, location aspirations, technical specs (e.g. 35mm film or digital cinema)..."
-                      value={formData.message}
-                      onChange={(e) => {
-                        setFormData({ ...formData, message: e.target.value });
-                        if (fieldErrors.message) setFieldErrors((prev) => ({ ...prev, message: undefined }));
-                        if (status === "error") setStatus("idle");
-                      }}
-                      className={`w-full rounded-xl border p-4 text-base sm:text-sm text-white placeholder-white/25 transition-all focus:outline-none resize-y min-h-[110px] ${
-                        fieldErrors.message
-                          ? "border-rose-500 bg-rose-950/30 shadow-[0_0_25px_rgba(244,63,94,0.25)] ring-1 ring-rose-500/40 focus:border-rose-400 focus:ring-rose-400"
-                          : "border-white/10 bg-black/50 focus:border-orchid focus:bg-[#120f0e]"
-                      }`}
-                    />
-                    {fieldErrors.message && (
-                      <div className="flex items-center gap-2 rounded-lg border border-rose-500/40 bg-gradient-to-r from-rose-950/70 to-rose-900/40 px-3 py-1.5 shadow-[0_0_15px_rgba(244,63,94,0.18)] backdrop-blur-md animate-in fade-in slide-in-from-top-1 duration-150">
-                        <span className="relative flex h-2 w-2 shrink-0">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
-                        </span>
-                        <span className="font-mono-code text-[10.5px] font-semibold text-rose-300 tracking-wide uppercase">
-                          {fieldErrors.message}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* High-Impact Error Alert with Vibration / Shaky Style */}
-                  {status === "error" && (
-                    <div
-                      role="alert"
-                      className={`relative overflow-hidden rounded-xl border border-rose-500/40 bg-gradient-to-r from-rose-950/70 via-[#19090c]/90 to-rose-950/70 p-4 shadow-[0_0_35px_rgba(225,29,72,0.25)] backdrop-blur-md ${
-                        isShaking ? "animate-ui-shake" : "animate-in fade-in duration-150"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                          <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-rose-500 text-white items-center justify-center">
-                            <AlertCircle className="h-2.5 w-2.5" strokeWidth={3} />
-                          </span>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono-code text-[11px] font-bold uppercase tracking-widest text-rose-400">
-                              // TRANSMISSION HALTED
-                            </span>
-                            <span className="font-mono-code text-[10px] text-rose-300/60 uppercase">
-                              • ACTION REQUIRED
-                            </span>
-                          </div>
-                          <p className="mt-1 font-sans-ui text-xs text-rose-200/90 leading-relaxed">
-                            {errorMessage}
-                          </p>
-                        </div>
-                      </div>
+                  {/* Minimal Global Status if Non-Field Error */}
+                  {status === "error" && errorMessage && Object.keys(fieldErrors).length === 0 && (
+                    <div className="flex items-center gap-2 font-mono-code text-xs text-rose-400 pt-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse" />
+                      <span>{errorMessage}</span>
                     </div>
                   )}
 
