@@ -373,3 +373,28 @@
   }
 }
 
+/* Monolithic Brand Name Footer Watermark */
+.footer-brand-text {
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-weight: 900;
+  font-size: clamp(3.2rem, 15vw, 18.5rem);
+  line-height: 0.78;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.08) 55%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  display: block;
+  width: 100%;
+  transform: translateY(4%);
+}
+

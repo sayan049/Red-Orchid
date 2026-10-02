@@ -197,6 +197,13 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Giant Monolithic Brand Name Watermark */}
+      <div className="w-full overflow-hidden select-none pointer-events-none border-t border-white/[0.04] pt-6 sm:pt-10 md:pt-14 pb-0 flex items-center justify-center">
+        <span className="footer-brand-text">
+          RED ORCHID
+        </span>
+      </div>
     </footer>
   );
 }
