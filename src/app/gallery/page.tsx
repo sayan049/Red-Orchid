@@ -340,8 +340,18 @@ export default function GalleryPage() {
     if (item.videoUrl) {
       openVideoModal(item.videoUrl, videoPlaylist);
     } else {
-      const stillIdx = filteredStills.findIndex((s) => s.url === item.image);
-      openLightbox(stillIdx !== -1 ? stillIdx : 0, filteredStills);
+      // Find matching work or still across works and allStills
+      const matchedWork = WORKS_DATA.find(
+        (w) => w.title === item.title || w.slug === item.slug || w.coverImage === item.image
+      );
+      if (matchedWork && matchedWork.stills && matchedWork.stills.length > 0) {
+        openLightbox(0, matchedWork.stills);
+      } else {
+        const stillIdx = allStills.findIndex(
+          (s) => s.url === item.image || (item.title && s.caption?.includes(item.title))
+        );
+        openLightbox(stillIdx !== -1 ? stillIdx : 0, allStills);
+      }
     }
   };
 

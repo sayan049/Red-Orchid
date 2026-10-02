@@ -52,7 +52,7 @@ export function MasonryGrid({
   className = "",
 }: MasonryGridProps) {
   const [selectedIdx, setSelectedIdx] = React.useState<number | null>(null);
-  const [savedIds, setSavedIds] = React.useState<Record<string, boolean>>({});
+  const [copiedId, setCopiedId] = React.useState<string | null>(null);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
 
   // Infinite scroll intersection observer
@@ -99,27 +99,30 @@ export function MasonryGrid({
     };
   }, [items.length, selectedIdx]);
 
-  const toggleSave = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    try {
-      sound.playClick();
-    } catch {}
-    setSavedIds((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
   const handleShare = async (e: React.MouseEvent, item: MasonryItem) => {
     e.stopPropagation();
     try {
       sound.playClick();
+      const shareUrl = typeof window !== "undefined" ? window.location.href : item.src;
       if (navigator.share) {
         await navigator.share({
           title: item.title || "Red Orchid Films",
-          url: item.src,
+          url: shareUrl,
         });
       } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(item.src);
+        await navigator.clipboard.writeText(shareUrl);
       }
-    } catch {}
+      setCopiedId(item.id);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 2000);
+    } catch {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(item.src).catch(() => {});
+        setCopiedId(item.id);
+        setTimeout(() => setCopiedId(null), 2000);
+      }
+    }
   };
 
   const handleItemPress = (item: MasonryItem, index: number) => {
@@ -140,8 +143,6 @@ export function MasonryGrid({
       {/* CSS Multi-Column Masonry Grid */}
       <div className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-4">
         {items.map((item, index) => {
-          const isSaved = !!savedIds[item.id];
-
           return (
             <div
               key={item.id || index}
@@ -177,24 +178,8 @@ export function MasonryGrid({
                 )}
 
                 {/* Desktop Hover Overlay (Hidden on touch devices via @media (hover: hover)) */}
-                <div className="absolute inset-0 z-20 hidden md:flex flex-col justify-between p-3.5 bg-gradient-to-t from-black/85 via-black/20 to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                  {/* Top Row: Pinterest Save Pill Button */}
-                  <div className="flex items-center justify-end pointer-events-auto">
-                    <button
-                      type="button"
-                      onClick={(e) => toggleSave(e, item.id)}
-                      aria-label="Save image"
-                      className={`rounded-full px-4 py-2 font-sans-ui text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
-                        isSaved
-                          ? "bg-black text-white border border-white/20"
-                          : "bg-[#e60023] text-white hover:bg-[#b8001c] hover:scale-105"
-                      }`}
-                    >
-                      {isSaved ? "Saved" : "Save"}
-                    </button>
-                  </div>
-
-                  {/* Bottom Row: Title + Action Icons */}
+                <div className="absolute inset-0 z-20 hidden md:flex flex-col justify-end p-3.5 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  {/* Bottom Row: Title + Workable Share Button */}
                   <div className="flex items-end justify-between gap-2 pointer-events-auto">
                     <div className="truncate pr-2">
                       {item.title && (
@@ -209,25 +194,19 @@ export function MasonryGrid({
                       )}
                     </div>
 
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex items-center shrink-0">
                       <button
                         type="button"
                         onClick={(e) => handleShare(e, item)}
                         aria-label="Share"
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur-md hover:bg-black hover:scale-110 transition-all cursor-pointer shadow-md"
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono-code backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-95 ${
+                          copiedId === item.id
+                            ? "bg-white text-black font-semibold"
+                            : "bg-black/75 text-white hover:bg-white hover:text-black border border-white/20"
+                        }`}
                       >
                         <Share2 className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleItemPress(item, index);
-                        }}
-                        aria-label="More details"
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur-md hover:bg-black hover:scale-110 transition-all cursor-pointer shadow-md"
-                      >
-                        <MoreHorizontal className="h-3.5 w-3.5" />
+                        <span>{copiedId === item.id ? "COPIED" : "SHARE"}</span>
                       </button>
                     </div>
                   </div>

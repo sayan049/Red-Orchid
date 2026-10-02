@@ -244,18 +244,50 @@ export function ArgentLoopInfiniteSlider({
     requestRef.current = requestAnimationFrame(animationLoop);
   }, [activeIndex, animate, count]);
 
-  const stepProject = (direction: -1 | 1) => {
+  const stepNext = (e: React.MouseEvent | React.PointerEvent) => {
+    e.stopPropagation();
     sound.playClick();
     const s = state.current;
-    s.isSnapping = false;
+    if (!s.projectHeight) return;
+    const currentIndex = Math.round(-s.targetY / s.projectHeight);
+    const nextIndex = currentIndex + 1;
+    const target = -nextIndex * s.projectHeight;
+    s.isSnapping = true;
+    s.snapStart = {
+      time: Date.now(),
+      y: s.currentY,
+      target: target,
+    };
+    s.targetY = target;
     s.lastScrollTime = Date.now();
-    s.targetY += direction * s.projectHeight;
+  };
+
+  const stepPrev = (e: React.MouseEvent | React.PointerEvent) => {
+    e.stopPropagation();
+    sound.playClick();
+    const s = state.current;
+    if (!s.projectHeight) return;
+    const currentIndex = Math.round(-s.targetY / s.projectHeight);
+    const prevIndex = currentIndex - 1;
+    const target = -prevIndex * s.projectHeight;
+    s.isSnapping = true;
+    s.snapStart = {
+      time: Date.now(),
+      y: s.currentY,
+      target: target,
+    };
+    s.targetY = target;
+    s.lastScrollTime = Date.now();
   };
 
   // Pointer Drag handling (Works across Desktop Mouse & Mobile Touch)
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // Only drag with primary mouse button or touch
     if (e.button !== 0) return;
+    const target = e.target as HTMLElement;
+    if (target.closest("button, a, input, select, textarea, [role='button']")) {
+      return;
+    }
     const s = state.current;
     s.isDragging = true;
     s.isSnapping = false;
@@ -391,7 +423,8 @@ export function ArgentLoopInfiniteSlider({
           <div className="flex items-center gap-1.5 bg-black/60 p-1 rounded-full border border-white/15 backdrop-blur-md">
             <button
               type="button"
-              onClick={() => stepProject(1)}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={stepPrev}
               aria-label="Previous Project"
               className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer shadow-md active:scale-90"
             >
@@ -399,7 +432,8 @@ export function ArgentLoopInfiniteSlider({
             </button>
             <button
               type="button"
-              onClick={() => stepProject(-1)}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={stepNext}
               aria-label="Next Project"
               className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer shadow-md active:scale-90"
             >
@@ -418,7 +452,11 @@ export function ArgentLoopInfiniteSlider({
         </div>
 
         <h2
-          onClick={handleAction}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAction();
+          }}
           className="font-display text-2xl sm:text-4xl md:text-5xl font-extrabold uppercase text-bone tracking-tight drop-shadow-md cursor-pointer hover:text-white/90 transition-colors"
         >
           {currentActiveProject?.title}
@@ -431,7 +469,11 @@ export function ArgentLoopInfiniteSlider({
         {(onItemClick || currentActiveProject?.onAction) && (
           <button
             type="button"
-            onClick={handleAction}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAction();
+            }}
             className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 font-mono-code text-xs font-semibold text-white uppercase tracking-wider shadow-lg hover:border-white/40 hover:bg-white/20 transition-all cursor-pointer min-h-[44px] active:scale-95"
           >
             {currentActiveProject?.videoUrl ? (
