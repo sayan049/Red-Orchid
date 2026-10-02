@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import { WORKS_DATA } from "@/data/works";
 import { ArrowUpRight, ArrowLeft, Camera } from "lucide-react";
-import { WorkDetailClient } from "./WorkDetailClient";
+import { WorkDetailClient } from "@/components/work/WorkDetailClient";
 
 interface WorkPageProps {
   params: Promise<{
@@ -94,7 +93,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
         <div className="mt-20 grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-white/10 pb-20">
           <div className="lg:col-span-4">
             <span className="font-mono-code text-xs tracking-widest text-orchid uppercase block mb-3">
-              // SYNOPSIS & LOGLINE
+              {"// SYNOPSIS & LOGLINE"}
             </span>
             <p className="font-display text-2xl font-bold uppercase text-bone">
               THE VISION
@@ -165,7 +164,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
           {/* Credits Roster */}
           <div className="lg:col-span-7 space-y-6">
             <span className="font-mono-code text-xs text-orchid uppercase tracking-widest block">
-              // PRODUCTION CREDITS
+              {"// PRODUCTION CREDITS"}
             </span>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
