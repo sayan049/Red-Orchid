@@ -135,9 +135,6 @@ export function ClientsSection() {
       aria-label="Our Clients and Collaborators"
       className="relative w-full border-t border-white/10 bg-[#070707] py-20 sm:py-24 overflow-hidden"
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-orchid/5 blur-[160px] pointer-events-none rounded-full" />
-
       <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14 mb-10 text-center relative z-10">
         {/* Section Tag */}
         <div className="inline-flex items-center gap-2 font-mono-code text-[11px] text-orchid uppercase tracking-widest mb-3">

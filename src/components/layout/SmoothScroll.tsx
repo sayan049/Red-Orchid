@@ -21,31 +21,93 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     }
   }, []);
 
-  // 2. Whenever route changes, guarantee the page starts at the top (top: 0)
+  // 2. Handle route changes & hash navigation
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const hash = window.location.hash;
-    if (hash) {
-      const target = document.querySelector(hash);
-      if (target) {
-        if (lenisRef.current) {
-          lenisRef.current.scrollTo(target as HTMLElement, { offset: -70 });
-        } else {
-          (target as HTMLElement).scrollIntoView();
+    let timer: NodeJS.Timeout | null = null;
+    let attempts = 0;
+    const maxAttempts = 35; // 35 * 60ms = 2.1s polling window
+
+    const getHash = () => {
+      let hash = window.location.hash;
+      if (!hash) {
+        try {
+          hash = sessionStorage.getItem("target_scroll_hash") || "";
+        } catch {
+          // ignore
         }
-        return;
+      }
+      return hash;
+    };
+
+    const targetHash = getHash();
+
+    const doScrollToTarget = (hashStr: string) => {
+      const cleanId = hashStr.replace(/^#/, "");
+      const target = document.getElementById(cleanId) || document.querySelector(hashStr);
+
+      if (target) {
+        try {
+          sessionStorage.removeItem("target_scroll_hash");
+        } catch {
+          // ignore
+        }
+
+        if (lenisRef.current) {
+          lenisRef.current.scrollTo(target as HTMLElement, { offset: -80, immediate: false });
+        } else {
+          const y = target.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+        }
+        return true;
+      }
+      return false;
+    };
+
+    if (targetHash) {
+      const poll = () => {
+        if (doScrollToTarget(targetHash)) {
+          return;
+        }
+        attempts++;
+        if (attempts < maxAttempts) {
+          timer = setTimeout(poll, 60);
+        } else {
+          // Fallback to top only if element is not found after polling
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(0, { immediate: true });
+          }
+        }
+      };
+
+      // Start polling
+      poll();
+    } else {
+      // No hash at all: Unconditionally reset window & document scroll to top
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
       }
     }
 
-    // Unconditionally reset window & document scroll to top
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
+    const handleHashChange = () => {
+      const currentHash = window.location.hash;
+      if (currentHash) {
+        doScrollToTarget(currentHash);
+      }
+    };
 
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    }
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      window.removeEventListener("hashchange", handleHashChange);
+    };
   }, [pathname]);
 
   useEffect(() => {

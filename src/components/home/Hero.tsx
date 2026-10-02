@@ -24,7 +24,11 @@ const LuminaInteractiveList = dynamic(
 );
 
 export function Hero() {
-  return <LuminaInteractiveList />;
+  return (
+    <div id="home" className="relative w-full">
+      <LuminaInteractiveList />
+    </div>
+  );
 }
 
 export default Hero;

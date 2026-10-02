@@ -74,9 +74,6 @@ export default function FrequentlyAskedQuestions({
         className
       )}
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-orchid/5 blur-[160px] pointer-events-none rounded-full" />
-
       <div className="mx-auto max-w-4xl px-4 sm:px-6 md:px-8 relative z-10">
         {/* Section Tag */}
         <div className="flex items-center justify-center gap-2 font-mono-code text-[11px] text-orchid uppercase tracking-widest mb-4">

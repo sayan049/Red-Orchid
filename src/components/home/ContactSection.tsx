@@ -311,10 +311,6 @@ export function ContactSection() {
       id="contact"
       className="relative w-full border-t border-white/10 bg-[#070707] py-20 sm:py-28 text-white overflow-hidden"
     >
-      {/* Ambient background studio glow */}
-      <div className="absolute top-1/4 -right-32 h-96 w-96 rounded-full bg-orchid/10 blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-10 -left-32 h-96 w-96 rounded-full bg-orchid/5 blur-[150px] pointer-events-none" />
-
       <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14 relative z-10">
         {/* Section Header */}
         <div className="mb-12 sm:mb-18">

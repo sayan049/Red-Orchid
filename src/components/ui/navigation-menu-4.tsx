@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Clapperboard, Camera, MapPin, ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -26,11 +27,12 @@ import { SoundToggle } from "@/components/ui/SoundToggle"
 import { LiveTime } from "@/components/ui/LiveTime"
 import { sound } from "@/lib/sound"
 
-// Navigation links tailored for Red Orchid Films (strictly no gallery option)
+// Navigation links tailored for Red Orchid Films
 const navigationLinks = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Home", key: "home" },
   {
     label: "Works",
+    key: "works",
     submenu: true,
     type: "description",
     items: [
@@ -38,48 +40,56 @@ const navigationLinks = [
         href: "/#trending",
         label: "Spotlight Cinema",
         description: "Award-winning short films & premier narrative direction.",
+        key: "works",
       },
       {
         href: "/#works",
         label: "Selected Filmography",
         description: "Arri Alexa 35mm productions, kinetic visuals & brand worlds.",
+        key: "works",
       },
       {
         href: "/#services",
         label: "Production Archive",
         description: "Behind-the-scenes cinematography and master reel portfolio.",
+        key: "services",
       },
     ],
   },
   {
     label: "Services",
+    key: "services",
     submenu: true,
     type: "simple",
     items: [
-      { href: "/#services", label: "Cinema & Narrative Direction" },
-      { href: "/#services", label: "Commercial Production" },
-      { href: "/#services", label: "9:16 Kinetic Reels" },
-      { href: "/#services", label: "Color Grading & Post-Production" },
+      { href: "/#services", label: "Cinema & Narrative Direction", key: "services" },
+      { href: "/#services", label: "Commercial Production", key: "services" },
+      { href: "/#services", label: "9:16 Kinetic Reels", key: "services" },
+      { href: "/#services", label: "Color Grading & Post-Production", key: "services" },
     ],
   },
   {
     label: "Atelier",
+    key: "atelier",
     submenu: true,
     type: "icon",
     items: [
-      { href: "/#about", label: "Artistic Philosophy", icon: "Clapperboard" },
-      { href: "/contact", label: "Kolkata & Mumbai Studio", icon: "MapPin" },
-      { href: "/#services", label: "Equipment & Technical Scope", icon: "Camera" },
+      { href: "/#about", label: "Artistic Philosophy", icon: "Clapperboard", key: "home" },
+      { href: "/contact", label: "Kolkata & Mumbai Studio", icon: "MapPin", key: "contact" },
+      { href: "/#services", label: "Equipment & Technical Scope", icon: "Camera", key: "services" },
     ],
   },
-  { href: "/#faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#faq", label: "FAQ", key: "faq" },
+  { href: "/contact", label: "Contact", key: "contact" },
 ]
 
 export function NavigationMenu4() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isScrolled, setIsScrolled] = React.useState(false)
+  const [activeSection, setActiveSection] = React.useState<string>("home")
+  const pathname = usePathname()
 
+  // Track scroll position for floating bar style
   React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40)
@@ -88,6 +98,106 @@ export function NavigationMenu4() {
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Dynamic Scroll Spy for Navbar Focus on Homepage & Cross-Page Route tracking
+  React.useEffect(() => {
+    if (pathname === "/contact") {
+      setActiveSection("contact")
+      return
+    }
+
+    if (pathname?.startsWith("/work")) {
+      setActiveSection("works")
+      return
+    }
+
+    if (pathname !== "/") {
+      setActiveSection("")
+      return
+    }
+
+    // On homepage, observe sections dynamically
+    const handleScrollSpy = () => {
+      // Check if user has scrolled near bottom of page (where Contact & Clients live)
+      const scrollBottom = window.innerHeight + window.scrollY
+      const documentHeight = document.documentElement.scrollHeight
+      if (documentHeight - scrollBottom < 120) {
+        setActiveSection("contact")
+        return
+      }
+
+      const sections = [
+        { id: "home", key: "home" },
+        { id: "trending", key: "works" },
+        { id: "works", key: "works" },
+        { id: "services", key: "services" },
+        { id: "faq", key: "faq" },
+        { id: "contact", key: "contact" },
+      ]
+
+      const scrollY = window.scrollY + 220 // 220px offset for natural visual focus
+
+      let current = "home"
+      for (const sec of sections) {
+        const el = document.getElementById(sec.id)
+        if (el) {
+          const top = el.offsetTop
+          if (scrollY >= top) {
+            current = sec.key
+          }
+        }
+      }
+      setActiveSection(current)
+    }
+
+    handleScrollSpy()
+    window.addEventListener("scroll", handleScrollSpy, { passive: true })
+    return () => window.removeEventListener("scroll", handleScrollSpy)
+  }, [pathname])
+
+  // Unified click handler for navigation links (smooth in-page or reliable cross-page)
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    key?: string
+  ) => {
+    sound.playClick()
+    setIsOpen(false)
+
+    if (key) {
+      setActiveSection(key)
+    }
+
+    const hasHash = href.includes("#")
+    const hash = hasHash ? `#${href.split("#")[1]}` : ""
+
+    if (hasHash) {
+      if (pathname === "/") {
+        // Already on home page: smooth scroll to element without jumping
+        e.preventDefault()
+        const id = hash.replace(/^#/, "")
+        const target = document.getElementById(id) || document.querySelector(hash)
+        if (target) {
+          window.history.pushState(null, "", href)
+          const y = target.getBoundingClientRect().top + window.scrollY - 80
+          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" })
+        }
+      } else {
+        // On another page (e.g. /contact): store target hash so SmoothScroll can poll and scroll smoothly
+        try {
+          sessionStorage.setItem("target_scroll_hash", hash)
+        } catch {
+          // ignore
+        }
+      }
+    } else if (href === "/") {
+      if (pathname === "/") {
+        e.preventDefault()
+        window.history.pushState(null, "", "/")
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }
+    }
+  }
 
   return (
     <header
@@ -152,63 +262,72 @@ export function NavigationMenu4() {
             >
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 w-full">
-                  {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      {link.submenu ? (
-                        <>
-                          <div className="font-mono-code text-orchid px-2.5 pt-2.5 pb-1 text-[11px] font-semibold uppercase tracking-widest">
-                            {"// " + link.label}
-                          </div>
-                          <ul className="space-y-0.5 pb-1">
-                            {link.items.map((item, itemIndex) => (
-                              <li key={itemIndex}>
-                                <NavigationMenuLink asChild>
-                                  <Link
-                                    href={item.href}
-                                    onClick={() => {
-                                      sound.playClick()
-                                      setIsOpen(false)
-                                    }}
-                                    className="flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-                                  >
-                                    <span>{item.label}</span>
-                                    <ArrowRight className="h-3 w-3 text-white/30" />
-                                  </Link>
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </>
-                      ) : (
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href={link.href || "#"}
-                            onClick={() => {
-                              sound.playClick()
-                              setIsOpen(false)
-                            }}
-                            className="block rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-                          >
-                            <span>{link.label}</span>
-                          </Link>
-                        </NavigationMenuLink>
-                      )}
+                  {navigationLinks.map((link, index) => {
+                    const isLinkActive = link.key === activeSection
 
-                      {/* Separator between menu sections */}
-                      {index < navigationLinks.length - 1 &&
-                        ((!link.submenu && navigationLinks[index + 1].submenu) ||
-                          (link.submenu && !navigationLinks[index + 1].submenu) ||
-                          (link.submenu &&
-                            navigationLinks[index + 1].submenu &&
-                            link.type !== navigationLinks[index + 1].type)) && (
-                          <div
-                            role="separator"
-                            aria-orientation="horizontal"
-                            className="bg-white/10 -mx-1 my-1.5 h-px w-full"
-                          />
+                    return (
+                      <NavigationMenuItem key={index} className="w-full">
+                        {link.submenu ? (
+                          <>
+                            <div className="font-mono-code text-orchid px-2.5 pt-2.5 pb-1 text-[11px] font-semibold uppercase tracking-widest flex items-center justify-between">
+                              <span>{"// " + link.label}</span>
+                              {isLinkActive && (
+                                <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
+                              )}
+                            </div>
+                            <ul className="space-y-0.5 pb-1">
+                              {link.items.map((item, itemIndex) => (
+                                <li key={itemIndex}>
+                                  <NavigationMenuLink asChild>
+                                    <Link
+                                      href={item.href}
+                                      onClick={(e) => handleNavClick(e, item.href, item.key)}
+                                      className="flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider text-white/80 hover:bg-white/10 hover:text-white transition-colors"
+                                    >
+                                      <span>{item.label}</span>
+                                      <ArrowRight className="h-3 w-3 text-white/30" />
+                                    </Link>
+                                  </NavigationMenuLink>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : (
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={link.href || "#"}
+                              onClick={(e) => handleNavClick(e, link.href || "#", link.key)}
+                              className={cn(
+                                "flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider transition-colors",
+                                isLinkActive
+                                  ? "bg-white/15 text-white font-semibold border border-white/25"
+                                  : "text-white/80 hover:bg-white/10 hover:text-white border border-transparent"
+                              )}
+                            >
+                              <span>{link.label}</span>
+                              {isLinkActive && (
+                                <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
+                              )}
+                            </Link>
+                          </NavigationMenuLink>
                         )}
-                    </NavigationMenuItem>
-                  ))}
+
+                        {/* Separator between menu sections */}
+                        {index < navigationLinks.length - 1 &&
+                          ((!link.submenu && navigationLinks[index + 1].submenu) ||
+                            (link.submenu && !navigationLinks[index + 1].submenu) ||
+                            (link.submenu &&
+                              navigationLinks[index + 1].submenu &&
+                              link.type !== navigationLinks[index + 1].type)) && (
+                            <div
+                              role="separator"
+                              aria-orientation="horizontal"
+                              className="bg-white/10 -mx-1 my-1.5 h-px w-full"
+                            />
+                          )}
+                      </NavigationMenuItem>
+                    )
+                  })}
                 </NavigationMenuList>
               </NavigationMenu>
 
@@ -230,101 +349,116 @@ export function NavigationMenu4() {
         <div className="hidden md:flex items-center justify-center">
           <NavigationMenu>
             <NavigationMenuList className="flex items-center gap-1">
-              {navigationLinks.map((link, index) => (
-                <NavigationMenuItem key={index}>
-                  {link.submenu ? (
-                    <>
-                      <NavigationMenuTrigger
-                        onClick={() => sound.playClick()}
-                        className="bg-transparent"
-                      >
-                        {link.label}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <ul
+              {navigationLinks.map((link, index) => {
+                const isActive = link.key === activeSection
+
+                return (
+                  <NavigationMenuItem key={index}>
+                    {link.submenu ? (
+                      <>
+                        <NavigationMenuTrigger
+                          onClick={() => sound.playClick()}
                           className={cn(
-                            "grid w-[420px] gap-2 p-3 md:w-[480px] md:grid-cols-2 lg:w-[540px]",
-                            link.type === "description" && "md:grid-cols-1"
+                            "transition-all duration-300",
+                            isActive
+                              ? "text-white bg-white/15 border border-white/25 font-semibold"
+                              : "text-white/70 hover:bg-white/10 hover:text-white border border-transparent"
                           )}
                         >
-                          {link.items.map((item, itemIndex) => (
-                            <li key={itemIndex}>
-                              <NavigationMenuLink asChild>
-                                <Link
-                                  href={item.href}
-                                  onClick={() => sound.playClick()}
-                                  className="block select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white group"
-                                >
-                                  {/* Icon preview */}
-                                  {link.type === "icon" && "icon" in item && (
-                                    <div className="flex items-center gap-2.5">
-                                      {item.icon === "Clapperboard" && (
-                                        <Clapperboard
-                                          size={16}
-                                          className="text-orchid shrink-0 transition-transform group-hover:scale-110"
-                                          aria-hidden="true"
-                                        />
-                                      )}
-                                      {item.icon === "Camera" && (
-                                        <Camera
-                                          size={16}
-                                          className="text-orchid shrink-0 transition-transform group-hover:scale-110"
-                                          aria-hidden="true"
-                                        />
-                                      )}
-                                      {item.icon === "MapPin" && (
-                                        <MapPin
-                                          size={16}
-                                          className="text-orchid shrink-0 transition-transform group-hover:scale-110"
-                                          aria-hidden="true"
-                                        />
-                                      )}
-                                      <div className="text-xs font-mono-code uppercase tracking-wider text-white font-medium leading-none">
-                                        {item.label}
+                          {link.label}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul
+                            className={cn(
+                              "grid w-[420px] gap-2 p-3 md:w-[480px] md:grid-cols-2 lg:w-[540px]",
+                              link.type === "description" && "md:grid-cols-1"
+                            )}
+                          >
+                            {link.items.map((item, itemIndex) => (
+                              <li key={itemIndex}>
+                                <NavigationMenuLink asChild>
+                                  <Link
+                                    href={item.href}
+                                    onClick={(e) => handleNavClick(e, item.href, item.key)}
+                                    className="block select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white group"
+                                  >
+                                    {/* Icon preview */}
+                                    {link.type === "icon" && "icon" in item && (
+                                      <div className="flex items-center gap-2.5">
+                                        {item.icon === "Clapperboard" && (
+                                          <Clapperboard
+                                            size={16}
+                                            className="text-orchid shrink-0 transition-transform group-hover:scale-110"
+                                            aria-hidden="true"
+                                          />
+                                        )}
+                                        {item.icon === "Camera" && (
+                                          <Camera
+                                            size={16}
+                                            className="text-orchid shrink-0 transition-transform group-hover:scale-110"
+                                            aria-hidden="true"
+                                          />
+                                        )}
+                                        {item.icon === "MapPin" && (
+                                          <MapPin
+                                            size={16}
+                                            className="text-orchid shrink-0 transition-transform group-hover:scale-110"
+                                            aria-hidden="true"
+                                          />
+                                        )}
+                                        <div className="text-xs font-mono-code uppercase tracking-wider text-white font-medium leading-none">
+                                          {item.label}
+                                        </div>
                                       </div>
-                                    </div>
-                                  )}
+                                    )}
 
-                                  {/* Description preview */}
-                                  {link.type === "description" && "description" in item && (
-                                    <>
-                                      <div className="text-xs font-mono-code uppercase tracking-wider text-white font-medium leading-none flex items-center justify-between">
+                                    {/* Description preview */}
+                                    {link.type === "description" && "description" in item && (
+                                      <>
+                                        <div className="text-xs font-mono-code uppercase tracking-wider text-white font-medium leading-none flex items-center justify-between">
+                                          <span>{item.label}</span>
+                                          <ArrowRight className="h-3 w-3 text-white/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        </div>
+                                        <p className="line-clamp-2 text-xs leading-relaxed text-white/60 pt-1 font-sans-ui">
+                                          {item.description}
+                                        </p>
+                                      </>
+                                    )}
+
+                                    {/* Simple preview */}
+                                    {link.type === "simple" && (
+                                      <div className="text-xs font-mono-code uppercase tracking-wider text-white/80 hover:text-white transition-colors leading-none flex items-center justify-between py-1">
                                         <span>{item.label}</span>
-                                        <ArrowRight className="h-3 w-3 text-white/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <span className="text-[10px] text-orchid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
                                       </div>
-                                      <p className="line-clamp-2 text-xs leading-relaxed text-white/60 pt-1 font-sans-ui">
-                                        {item.description}
-                                      </p>
-                                    </>
-                                  )}
-
-                                  {/* Simple preview */}
-                                  {link.type === "simple" && (
-                                    <div className="text-xs font-mono-code uppercase tracking-wider text-white/80 hover:text-white transition-colors leading-none flex items-center justify-between py-1">
-                                      <span>{item.label}</span>
-                                      <span className="text-[10px] text-orchid opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>
-                                    </div>
-                                  )}
-                                </Link>
-                              </NavigationMenuLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
-                    </>
-                  ) : (
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href={link.href || "#"}
-                        onClick={() => sound.playClick()}
-                        className={cn(navigationMenuTriggerStyle(), "leading-none")}
-                      >
-                        <span className="leading-none">{link.label}</span>
-                      </Link>
-                    </NavigationMenuLink>
-                  )}
-                </NavigationMenuItem>
-              ))}
+                                    )}
+                                  </Link>
+                                </NavigationMenuLink>
+                              </li>
+                            ))}
+                          </ul>
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href={link.href || "#"}
+                          onClick={(e) => handleNavClick(e, link.href || "#", link.key)}
+                          className={cn(
+                            navigationMenuTriggerStyle(),
+                            "leading-none transition-all duration-300",
+                            isActive
+                              ? "text-white bg-white/15 border border-white/25 font-semibold"
+                              : "text-white/70 hover:bg-white/10 hover:text-white border border-transparent"
+                          )}
+                        >
+                          <span className="leading-none">{link.label}</span>
+                        </Link>
+                      </NavigationMenuLink>
+                    )}
+                  </NavigationMenuItem>
+                )
+              })}
             </NavigationMenuList>
             <NavigationMenuViewport />
           </NavigationMenu>
