@@ -39,8 +39,7 @@ export function LiveTime({
   if (!isClient) {
     return (
       <div className="flex items-center gap-2 font-mono-code text-[11px] text-white/50">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/50" />
-        <span>{label}</span>
+        <span className="tracking-wider uppercase">{label}</span>
         <span>--:--:--</span>
       </div>
     );
@@ -51,10 +50,6 @@ export function LiveTime({
       className="flex items-center gap-2 font-mono-code text-[11px] text-white/70"
       title={`Live studio time in ${timezone}`}
     >
-      <span className="relative flex h-2 w-2 items-center justify-center">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-      </span>
       <span className="tracking-wider text-white/50 uppercase">{label}</span>
       <span className="font-medium text-white/90 tabular-nums">{timeString} IST</span>
     </div>

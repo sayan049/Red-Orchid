@@ -41,7 +41,7 @@ export function Hero() {
             poster="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=85&w=2000"
           >
             <source
-              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+              src="/videos/hero-reel.mp4"
               type="video/mp4"
             />
           </video>
@@ -134,7 +134,7 @@ export function Hero() {
       <VideoModal
         isOpen={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}
-        videoUrl="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+        videoUrl="/videos/hero-reel.mp4"
         title="Red Orchid Films — Annual Showreel 2024"
         aspectRatio="2.39:1"
       />

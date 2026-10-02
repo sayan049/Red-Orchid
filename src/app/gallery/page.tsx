@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { WORKS_DATA } from "@/data/works";
 import { WorkItem, StillItem } from "@/types";
-import { VideoModal } from "@/components/ui/VideoModal";
 import { Lightbox } from "@/components/ui/Lightbox";
-import { Play, Camera, Film, Smartphone, ArrowUpRight } from "lucide-react";
+import { VideoModal } from "@/components/ui/VideoModal";
+import { Play, Pause, Camera, Film, Smartphone, ArrowUpRight, Volume2, VolumeX, Maximize2 } from "lucide-react";
 
 type MainFilter = "all" | "photography" | "reels" | "short-films";
 type PhotoSubFilter = "all-photo" | "portraits" | "fashion" | "architecture";
@@ -16,8 +16,12 @@ export default function GalleryPage() {
   const [mainFilter, setMainFilter] = useState<MainFilter>("all");
   const [photoSubFilter, setPhotoSubFilter] = useState<PhotoSubFilter>("all-photo");
 
-  // Video modal state
-  const [videoModalData, setVideoModalData] = useState<{
+  // In-place inline video player state
+  const [activeInlineVideoId, setActiveInlineVideoId] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
+
+  // Optional full-screen modal if user clicks expand
+  const [modalVideoData, setModalVideoData] = useState<{
     isOpen: boolean;
     url: string;
     title: string;
@@ -76,14 +80,12 @@ export default function GalleryPage() {
     return WORKS_DATA;
   }, [mainFilter, photoSubFilter]);
 
-  const openVideo = (url?: string, title?: string, aspectRatio?: string) => {
-    if (!url) return;
-    setVideoModalData({
-      isOpen: true,
-      url,
-      title: title || "Red Orchid Cinema",
-      aspectRatio: aspectRatio || "2.39:1",
-    });
+  const toggleInlineVideo = (workId: string) => {
+    if (activeInlineVideoId === workId) {
+      setActiveInlineVideoId(null);
+    } else {
+      setActiveInlineVideoId(workId);
+    }
   };
 
   const openLightbox = (index: number) => {
@@ -109,7 +111,7 @@ export default function GalleryPage() {
           </h1>
 
           <p className="mt-4 font-sans-ui text-sm sm:text-base text-white/60 max-w-2xl leading-relaxed">
-            Explorations across short films, medium format photography sets, and vertical cinematic reels. Every project captured with deliberate composition and tactile grain.
+            Explorations across short films, medium format photography sets, and vertical cinematic reels. Click any playable work to watch directly in-place.
           </p>
         </div>
 
@@ -217,165 +219,277 @@ export default function GalleryPage() {
             </div>
           </div>
         ) : mainFilter === "reels" ? (
-          /* 2. REELS 9:16 VERTICAL CARDS (Plays on hover/tap) */
+          /* 2. REELS 9:16 VERTICAL CARDS (Plays directly in-place on card!) */
           <div>
             <div className="mb-6 flex items-center justify-between text-xs font-mono-code text-white/40">
               <span>VERTICAL 9:16 KINETIC SOCIAL CINEMA</span>
-              <span>HOVER / TAP TO PLAY</span>
+              <span>TAP ANY CARD TO PLAY IN-PLACE</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredWorks.map((work) => (
-                <div
-                  key={work.id}
-                  onClick={() => openVideo(work.videoUrl, work.title, "9:16")}
-                  data-cursor="PLAY"
-                  className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#121110] aspect-[9/16] shadow-xl transition-all duration-300 hover:border-orchid"
-                >
-                  {/* Poster image */}
-                  <Image
-                    src={work.coverImage}
-                    alt={work.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 350px"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-85"
-                  />
+              {filteredWorks.map((work) => {
+                const isPlaying = activeInlineVideoId === work.id;
 
-                  {/* Gradient overlays */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                return (
+                  <div
+                    key={work.id}
+                    onClick={() => toggleInlineVideo(work.id)}
+                    data-cursor={isPlaying ? "PAUSE" : "PLAY IN-PLACE"}
+                    className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#121110] aspect-[9/16] shadow-xl transition-all duration-300 hover:border-orchid"
+                  >
+                    {/* Poster Image */}
+                    <Image
+                      src={work.coverImage}
+                      alt={work.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 350px"
+                      className={`object-cover transition-transform duration-700 filter brightness-85 ${
+                        isPlaying ? "opacity-0 pointer-events-none" : "opacity-100 group-hover:scale-105"
+                      }`}
+                    />
 
-                  {/* Top tags */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                    <span className="font-mono-code text-[10px] font-semibold uppercase tracking-wider rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md text-white/90">
-                      {work.category}
-                    </span>
-                    <span className="font-mono-code text-[10px] rounded-full bg-orchid/80 px-2.5 py-1 text-white font-bold">
-                      {work.duration || "4K 9:16"}
-                    </span>
-                  </div>
+                    {/* In-place video playback */}
+                    {work.videoUrl && isPlaying && (
+                      <div className="absolute inset-0 z-20 bg-black">
+                        <video
+                          src={work.videoUrl}
+                          autoPlay
+                          loop
+                          muted={isMuted}
+                          playsInline
+                          className="h-full w-full object-cover"
+                        />
 
-                  {/* Big Play button */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-orchid">
-                      <Play className="h-5 w-5 fill-current ml-0.5" />
+                        {/* Top controls */}
+                        <div className="absolute top-4 left-4 right-4 z-30 flex items-center justify-between">
+                          <span className="font-mono-code text-[10px] rounded-full bg-orchid px-2.5 py-1 text-white font-bold">
+                            PLAYING
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsMuted(!isMuted);
+                            }}
+                            className="rounded-full bg-black/70 p-2 text-white hover:text-orchid backdrop-blur-md"
+                            aria-label={isMuted ? "Unmute" : "Mute"}
+                          >
+                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-orchid" />}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Gradient overlays when not playing */}
+                    {!isPlaying && (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                        {/* Top tags */}
+                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                          <span className="font-mono-code text-[10px] font-semibold uppercase tracking-wider rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md text-white/90">
+                            {work.category}
+                          </span>
+                          <span className="font-mono-code text-[10px] rounded-full bg-orchid/80 px-2.5 py-1 text-white font-bold">
+                            {work.duration || "4K 9:16"}
+                          </span>
+                        </div>
+
+                        {/* Big Play button */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-orchid">
+                            <Play className="h-5 w-5 fill-current ml-0.5" />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Bottom title & metadata */}
+                    <div className="absolute bottom-4 left-4 right-4 z-30 pointer-events-none">
+                      <span className="font-mono-code text-[10px] text-white/50 uppercase tracking-widest block mb-1">
+                        {work.client}
+                      </span>
+                      <h3 className="font-display text-lg font-bold uppercase text-bone">
+                        {work.title}
+                      </h3>
                     </div>
                   </div>
-
-                  {/* Bottom title & metadata */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <span className="font-mono-code text-[10px] text-white/40 uppercase tracking-widest block mb-1">
-                      {work.client}
-                    </span>
-                    <h3 className="font-display text-lg font-bold uppercase text-bone">
-                      {work.title}
-                    </h3>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ) : (
-          /* 3. ALL / SHORT FILMS CARDS (Widescreen + modal player) */
+          /* 3. ALL / SHORT FILMS CARDS (Plays directly in-place on card!) */
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredWorks.map((work) => (
-              <article
-                key={work.id}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#111010] transition-all duration-500 hover:border-white/30"
-              >
-                {/* Visual Cover */}
-                <div
-                  className="relative aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer"
-                  onClick={() => {
-                    if (work.videoUrl) {
-                      openVideo(work.videoUrl, work.title, work.aspectRatio);
-                    }
-                  }}
-                  data-cursor={work.videoUrl ? "PLAY" : "VIEW"}
+            {filteredWorks.map((work) => {
+              const isPlaying = activeInlineVideoId === work.id;
+
+              return (
+                <article
+                  key={work.id}
+                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#111010] transition-all duration-500 hover:border-white/30"
                 >
-                  <Image
-                    src={work.coverImage}
-                    alt={work.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 600px"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-90 group-hover:brightness-95"
-                  />
+                  {/* Visual Cover Stage with In-Place Playback */}
+                  <div
+                    className="relative aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer"
+                    onClick={() => {
+                      if (work.videoUrl) {
+                        toggleInlineVideo(work.id);
+                      }
+                    }}
+                    data-cursor={work.videoUrl ? (isPlaying ? "PAUSE" : "PLAY IN-PLACE") : "VIEW"}
+                  >
+                    {/* Poster image */}
+                    <Image
+                      src={work.coverImage}
+                      alt={work.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 600px"
+                      className={`object-cover transition-transform duration-700 ease-out filter brightness-90 ${
+                        isPlaying ? "opacity-0 pointer-events-none" : "opacity-100 group-hover:scale-105"
+                      }`}
+                    />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                    {/* In-place video player */}
+                    {work.videoUrl && isPlaying && (
+                      <div className="absolute inset-0 z-20 bg-black">
+                        <video
+                          src={work.videoUrl}
+                          autoPlay
+                          loop
+                          muted={isMuted}
+                          playsInline
+                          className="h-full w-full object-cover"
+                        />
 
-                  {/* Top Badges */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between text-[11px] font-mono-code">
-                    <span className="rounded-full border border-white/20 bg-black/70 px-3 py-1 backdrop-blur-md text-white/90">
-                      {work.category}
-                    </span>
-                    <span className="rounded-full border border-white/10 bg-black/70 px-2.5 py-1 backdrop-blur-md text-white/60">
-                      {work.year}
-                    </span>
-                  </div>
+                        {/* Inline playback controls */}
+                        <div className="absolute bottom-3 left-3 right-3 z-30 flex items-center justify-between rounded-lg bg-black/75 px-3 py-2 backdrop-blur-md text-xs font-mono-code">
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleInlineVideo(work.id);
+                              }}
+                              className="text-white hover:text-orchid"
+                            >
+                              <Pause className="h-4 w-4 fill-current" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsMuted(!isMuted);
+                              }}
+                              className="text-white hover:text-orchid"
+                            >
+                              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-orchid" />}
+                            </button>
+                            <span className="text-[10px] text-white/70 uppercase">PLAYING IN-PLACE</span>
+                          </div>
 
-                  {/* Center Play Button if has video */}
-                  {work.videoUrl && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-orchid group-hover:bg-orchid">
-                        <Play className="h-5 w-5 fill-current ml-0.5" />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalVideoData({
+                                isOpen: true,
+                                url: work.videoUrl || "",
+                                title: work.title,
+                                aspectRatio: work.aspectRatio,
+                              });
+                            }}
+                            className="text-white/60 hover:text-white"
+                            title="Expand to Fullscreen Cinema"
+                          >
+                            <Maximize2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-
-                  {/* Runtime & Aspect Badge */}
-                  <div className="absolute bottom-4 left-4 font-mono-code text-[10px] text-white/70 bg-black/60 px-2.5 py-1 rounded backdrop-blur-xs">
-                    {work.aspectRatio} {work.duration ? `• ${work.duration}` : ""}
-                  </div>
-                </div>
-
-                {/* Details Section */}
-                <div className="p-6 sm:p-8 flex flex-col justify-between">
-                  <div className="mb-6">
-                    <div className="font-mono-code text-[11px] text-white/40 uppercase mb-1">
-                      CLIENT: {work.client}
-                    </div>
-
-                    <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors">
-                      {work.title}
-                    </h3>
-
-                    <p className="mt-2.5 font-sans-ui text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2">
-                      {work.synopsis}
-                    </p>
-                  </div>
-
-                  {/* Bottom link row */}
-                  <div className="flex items-center justify-between border-t border-white/5 pt-4 text-xs font-mono-code">
-                    {work.technicalSpecs?.camera ? (
-                      <span className="text-white/40 truncate max-w-[220px]">
-                        {work.technicalSpecs.camera}
-                      </span>
-                    ) : (
-                      <span className="text-white/40">RED ORCHID PRODUCTION</span>
                     )}
 
-                    <Link
-                      href={`/work/${work.slug}`}
-                      data-cursor="CASE STUDY"
-                      className="group/btn flex items-center gap-1.5 text-white/80 hover:text-white transition-colors uppercase tracking-wider"
-                    >
-                      <span>CASE STUDY</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 text-orchid transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                    </Link>
+                    {/* Overlay when not playing */}
+                    {!isPlaying && (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+
+                        {/* Top Badges */}
+                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between text-[11px] font-mono-code pointer-events-none">
+                          <span className="rounded-full border border-white/20 bg-black/70 px-3 py-1 backdrop-blur-md text-white/90">
+                            {work.category}
+                          </span>
+                          <span className="rounded-full border border-white/10 bg-black/70 px-2.5 py-1 backdrop-blur-md text-white/60">
+                            {work.year}
+                          </span>
+                        </div>
+
+                        {/* Center Play Button if has video */}
+                        {work.videoUrl && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-orchid group-hover:bg-orchid">
+                              <Play className="h-5 w-5 fill-current ml-0.5" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Runtime Badge */}
+                        <div className="absolute bottom-4 left-4 font-mono-code text-[10px] text-white/70 bg-black/60 px-2.5 py-1 rounded backdrop-blur-xs">
+                          {work.aspectRatio} {work.duration ? `• ${work.duration}` : ""}
+                        </div>
+                      </>
+                    )}
                   </div>
-                </div>
-              </article>
-            ))}
+
+                  {/* Details Section */}
+                  <div className="p-6 sm:p-8 flex flex-col justify-between">
+                    <div className="mb-6">
+                      <div className="font-mono-code text-[11px] text-white/40 uppercase mb-1">
+                        CLIENT: {work.client}
+                      </div>
+
+                      <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors">
+                        {work.title}
+                      </h3>
+
+                      <p className="mt-2.5 font-sans-ui text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2">
+                        {work.synopsis}
+                      </p>
+                    </div>
+
+                    {/* Bottom link row */}
+                    <div className="flex items-center justify-between border-t border-white/5 pt-4 text-xs font-mono-code">
+                      {work.technicalSpecs?.camera ? (
+                        <span className="text-white/40 truncate max-w-[220px]">
+                          {work.technicalSpecs.camera}
+                        </span>
+                      ) : (
+                        <span className="text-white/40">RED ORCHID PRODUCTION</span>
+                      )}
+
+                      <Link
+                        href={`/work/${work.slug}`}
+                        data-cursor="CASE STUDY"
+                        className="group/btn flex items-center gap-1.5 text-white/80 hover:text-white transition-colors uppercase tracking-wider"
+                      >
+                        <span>CASE STUDY</span>
+                        <ArrowUpRight className="h-3.5 w-3.5 text-orchid transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* Video Modal Player */}
+      {/* Expandable Cinema Modal if requested */}
       <VideoModal
-        isOpen={videoModalData.isOpen}
-        onClose={() => setVideoModalData({ ...videoModalData, isOpen: false })}
-        videoUrl={videoModalData.url}
-        title={videoModalData.title}
-        aspectRatio={videoModalData.aspectRatio}
+        isOpen={modalVideoData.isOpen}
+        onClose={() => setModalVideoData({ ...modalVideoData, isOpen: false })}
+        videoUrl={modalVideoData.url}
+        title={modalVideoData.title}
+        aspectRatio={modalVideoData.aspectRatio}
       />
 
       {/* Photography Lightbox */}

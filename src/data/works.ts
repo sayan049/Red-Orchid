@@ -104,7 +104,7 @@ export const WORKS_DATA: WorkItem[] = [
     aspectRatio: "2.39:1",
     coverImage: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=85&w=1800",
     posterUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=85&w=1800",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    videoUrl: "/videos/chronicles-of-dusk.mp4",
     synopsis:
       "Set against the shifting fog banks of an industrial river delta, Chronicles of Dusk follows an aging ferryman whose daily crossings become a vessel for memories long submerged. Captured over three weeks of twilight, every frame is an ode to the blue hour.",
     directorStatement:
@@ -225,7 +225,7 @@ export const WORKS_DATA: WorkItem[] = [
     aspectRatio: "2.39:1",
     coverImage: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=85&w=1800",
     posterUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=85&w=1800",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    videoUrl: "/videos/neo-noir.mp4",
     synopsis:
       "Tear through neon-drenched alpine passes with zero engine combustion—only the ultrasonic hiss of electric propulsion and 1,000Nm of instantaneous torque. Shot on a stabilized Russian Arm tracking car under torrential rain.",
     directorStatement:
@@ -270,7 +270,7 @@ export const WORKS_DATA: WorkItem[] = [
     aspectRatio: "9:16",
     coverImage: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=85&w=1000",
     posterUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=85&w=1000",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+    videoUrl: "/videos/vertical-reel.mp4",
     synopsis:
       "A vertical kinetic explosion of haute couture fabrics in zero-gravity wind tunnels. Synchronized to custom analog modular synthesizers, achieving over 4.2M organic impressions.",
     credits: [
@@ -350,7 +350,7 @@ export const WORKS_DATA: WorkItem[] = [
     aspectRatio: "16:9",
     coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=85&w=1600",
     posterUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=85&w=1600",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    videoUrl: "/videos/hero-reel.mp4",
     synopsis:
       "Inside a sawdust-strewn workshop dating back to 1740, octogenarian craftsman Matteo chisels aged spruce wood into resonant instruments. The film explores the acoustics of wood and the transience of human touch.",
     credits: [
@@ -426,7 +426,7 @@ export const WORKS_DATA: WorkItem[] = [
     aspectRatio: "9:16",
     coverImage: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&q=85&w=1000",
     posterUrl: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&q=85&w=1000",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+    videoUrl: "/videos/vertical-reel.mp4",
     synopsis:
       "A kinetic 9:16 hyperlapse and gimbal journey weaving through Shanghai's traditional lane houses and soaring steel canyons in heavy downpours.",
     credits: [
