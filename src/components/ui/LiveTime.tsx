@@ -38,7 +38,7 @@ export function LiveTime({
 
   if (!isClient) {
     return (
-      <div className="flex items-center gap-2 font-mono-code text-[11px] text-white/50">
+      <div className="h-9 inline-flex items-center gap-2 font-mono-code text-xs text-white/50 px-3 py-1.5 select-none leading-none">
         <span className="tracking-wider uppercase">{label}</span>
         <span>--:--:--</span>
       </div>
@@ -47,7 +47,7 @@ export function LiveTime({
 
   return (
     <div
-      className="flex items-center gap-2 font-mono-code text-[11px] text-white/70"
+      className="h-9 inline-flex items-center gap-2 font-mono-code text-xs text-white/70 px-3 py-1.5 select-none leading-none"
       title={`Live studio time in ${timezone}`}
     >
       <span className="tracking-wider text-white/50 uppercase">{label}</span>

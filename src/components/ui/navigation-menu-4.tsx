@@ -320,24 +320,13 @@ export function NavigationMenu4() {
           </NavigationMenu>
         </div>
 
-        {/* Right side: LiveTime, SoundToggle, Inquire Button - all perfectly aligned */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5">
+        {/* Right side: LiveTime and SoundToggle maintaining perfect matching gap like other navbar options */}
+        <div className="flex items-center gap-1">
           <div className="hidden xl:flex items-center">
             <LiveTime />
           </div>
 
-          <div className="flex items-center">
-            <SoundToggle />
-          </div>
-
-          <Button
-            asChild
-            size="sm"
-            onClick={() => sound.playClick()}
-            className="h-9 rounded-full px-4 sm:px-5 text-xs font-mono-code font-bold tracking-wider uppercase bg-orchid hover:bg-orchid-dark text-white shadow-[0_0_15px_rgba(225,29,72,0.3)] active:scale-95 transition-all shrink-0 inline-flex items-center justify-center"
-          >
-            <Link href="/contact">Inquire</Link>
-          </Button>
+          <SoundToggle />
         </div>
       </div>
     </header>
