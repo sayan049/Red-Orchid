@@ -557,5 +557,19 @@ textarea:active {
   will-change: transform;
 }
 
+/* Rendering Performance & Layout Containment */
+#faq,
+#contact,
+#clients {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 
 

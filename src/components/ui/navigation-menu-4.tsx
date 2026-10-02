@@ -79,10 +79,24 @@ export function NavigationMenu4() {
   const pathname = usePathname()
   const router = useRouter()
 
-  // Track scroll position for floating bar style
+  const isScrolledRef = React.useRef(false)
+  const activeSectionRef = React.useRef("home")
+
+  // Track scroll position for floating bar style with rAF throttling
   React.useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40)
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const nextScrolled = window.scrollY > 40
+          if (nextScrolled !== isScrolledRef.current) {
+            isScrolledRef.current = nextScrolled
+            setIsScrolled(nextScrolled)
+          }
+          ticking = false
+        })
+        ticking = true
+      }
     }
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
@@ -92,57 +106,74 @@ export function NavigationMenu4() {
   // Dynamic Scroll Spy for Navbar Focus on Homepage & Cross-Page Route tracking
   React.useEffect(() => {
     if (pathname === "/contact") {
+      activeSectionRef.current = "contact"
       setActiveSection("contact")
       return
     }
 
     if (pathname?.startsWith("/work")) {
+      activeSectionRef.current = "works"
       setActiveSection("works")
       return
     }
 
     if (pathname !== "/") {
+      activeSectionRef.current = ""
       setActiveSection("")
       return
     }
 
-    // On homepage, observe sections dynamically
+    // On homepage, observe sections dynamically with rAF throttling to eliminate layout thrashing
+    let ticking = false
+    const sections = [
+      { id: "home", key: "home" },
+      { id: "trending", key: "works" },
+      { id: "works", key: "works" },
+      { id: "services", key: "services" },
+      { id: "faq", key: "faq" },
+      { id: "contact", key: "contact" },
+    ]
+
     const handleScrollSpy = () => {
-      // Check if user has scrolled near bottom of page (where Contact & Clients live)
       const scrollBottom = window.innerHeight + window.scrollY
       const documentHeight = document.documentElement.scrollHeight
       if (documentHeight - scrollBottom < 120) {
-        setActiveSection("contact")
+        if (activeSectionRef.current !== "contact") {
+          activeSectionRef.current = "contact"
+          setActiveSection("contact")
+        }
         return
       }
 
-      const sections = [
-        { id: "home", key: "home" },
-        { id: "trending", key: "works" },
-        { id: "works", key: "works" },
-        { id: "services", key: "services" },
-        { id: "faq", key: "faq" },
-        { id: "contact", key: "contact" },
-      ]
-
-      const scrollY = window.scrollY + 220 // 220px offset for natural visual focus
+      const scrollY = window.scrollY + 220
 
       let current = "home"
       for (const sec of sections) {
         const el = document.getElementById(sec.id)
-        if (el) {
-          const top = el.offsetTop
-          if (scrollY >= top) {
-            current = sec.key
-          }
+        if (el && scrollY >= el.offsetTop) {
+          current = sec.key
         }
       }
-      setActiveSection(current)
+
+      if (current !== activeSectionRef.current) {
+        activeSectionRef.current = current
+        setActiveSection(current)
+      }
+    }
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScrollSpy()
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
     handleScrollSpy()
-    window.addEventListener("scroll", handleScrollSpy, { passive: true })
-    return () => window.removeEventListener("scroll", handleScrollSpy)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
   }, [pathname])
 
   // Unified click handler for navigation links (smooth in-page or reliable cross-page)

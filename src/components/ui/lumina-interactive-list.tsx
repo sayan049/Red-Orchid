@@ -414,9 +414,32 @@ export function LuminaInteractiveList() {
       }
     });
 
+    let isHeroVisible = true;
+    let visibilityObserver: IntersectionObserver | null = null;
+
+    if (containerRef.current && typeof IntersectionObserver !== "undefined") {
+      visibilityObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const visible = entry.isIntersecting;
+            isHeroVisible = visible;
+            if (visible) {
+              if (!progressRafId && !isTransitioning) {
+                startTimer();
+              }
+            } else {
+              stopTimers();
+            }
+          });
+        },
+        { threshold: 0.05 }
+      );
+      visibilityObserver.observe(containerRef.current);
+    }
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      if (renderer && scene && camera) {
+      if (isHeroVisible && renderer && scene && camera) {
         renderer.render(scene, camera);
       }
     };
@@ -444,6 +467,7 @@ export function LuminaInteractiveList() {
 
     return () => {
       isMounted = false;
+      if (visibilityObserver) visibilityObserver.disconnect();
       stopTimers();
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
