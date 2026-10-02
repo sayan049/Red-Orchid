@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Clapperboard, Camera, MapPin, ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -88,6 +88,7 @@ export function NavigationMenu4() {
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [activeSection, setActiveSection] = React.useState<string>("home")
   const pathname = usePathname()
+  const router = useRouter()
 
   // Track scroll position for floating bar style
   React.useEffect(() => {
@@ -183,12 +184,14 @@ export function NavigationMenu4() {
           window.scrollTo({ top: Math.max(0, y), behavior: "smooth" })
         }
       } else {
-        // On another page (e.g. /contact): store target hash so SmoothScroll can poll and scroll smoothly
+        // On another page (e.g. /contact): prevent jump, store target hash, and push via Next router
+        e.preventDefault()
         try {
           sessionStorage.setItem("target_scroll_hash", hash)
         } catch {
           // ignore
         }
+        router.push(href)
       }
     } else if (href === "/") {
       if (pathname === "/") {

@@ -152,8 +152,7 @@ export function LuminaInteractiveList() {
     const textures: THREE.Texture[] = [];
 
     const AUTO_SLIDE_SPEED = 6000;
-    const PROGRESS_INTERVAL = 50;
-    const TRANSITION_DURATION = 2.2;
+    const TRANSITION_DURATION = 1.6;
 
     const splitText = (text: string) => {
       return text
@@ -174,23 +173,26 @@ export function LuminaInteractiveList() {
     const updateContent = (idx: number) => {
       const titleEl = document.getElementById("mainTitle");
       const descEl = document.getElementById("mainDesc");
+      const sn = document.getElementById("slideNumber");
 
       if (titleEl && descEl) {
         const prevChars = titleEl.querySelectorAll(".char-span");
         if (prevChars.length > 0) {
           gsap.to(prevChars, {
-            y: -18,
+            y: -20,
             opacity: 0,
-            duration: 0.35,
-            stagger: 0.012,
+            duration: 0.4,
+            stagger: 0.008,
             ease: "power2.in",
           });
         }
-        gsap.to(descEl, { y: -10, opacity: 0, duration: 0.3, ease: "power2.in" });
+        gsap.to(descEl, { y: -10, opacity: 0, duration: 0.35, ease: "power2.in" });
 
+        // Synchronize text swap with the bloom point of the WebGL liquid reveal (0.5s)
         setTimeout(() => {
           titleEl.innerHTML = splitText(RED_ORCHID_SLIDES[idx].title);
           descEl.textContent = RED_ORCHID_SLIDES[idx].description;
+          if (sn) sn.textContent = String(idx + 1).padStart(2, "0");
 
           const newChars = titleEl.querySelectorAll(".char-span");
           gsap.set(newChars, { opacity: 0, y: 22 });
@@ -199,18 +201,18 @@ export function LuminaInteractiveList() {
           gsap.to(newChars, {
             y: 0,
             opacity: 1,
-            duration: 0.75,
-            stagger: 0.02,
+            duration: 0.65,
+            stagger: 0.018,
             ease: "power3.out",
           });
           gsap.to(descEl, {
             y: 0,
             opacity: 1,
-            duration: 0.75,
-            delay: 0.12,
+            duration: 0.65,
+            delay: 0.08,
             ease: "power3.out",
           });
-        }, 360);
+        }, 480);
       }
     };
 
@@ -233,28 +235,34 @@ export function LuminaInteractiveList() {
       });
     };
 
+    let progressRafId: number | null = null;
+
     const stopTimers = () => {
-      if (progressInterval) clearInterval(progressInterval);
-      if (autoSlideInterval) clearTimeout(autoSlideInterval);
-      progressInterval = null;
-      autoSlideInterval = null;
+      if (progressRafId) cancelAnimationFrame(progressRafId);
+      progressRafId = null;
     };
 
     const startTimer = () => {
       stopTimers();
-      let progress = 0;
-      const step = (100 / AUTO_SLIDE_SPEED) * PROGRESS_INTERVAL;
+      const startTime = performance.now();
+      const duration = AUTO_SLIDE_SPEED; // 6000ms
 
-      progressInterval = setInterval(() => {
-        progress += step;
+      const tick = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(100, (elapsed / duration) * 100);
         updateNavProgress(currentIndex, progress);
-        if (progress >= 100) {
+
+        if (progress < 100) {
+          progressRafId = requestAnimationFrame(tick);
+        } else {
           stopTimers();
           if (!isTransitioning) {
             goToSlide((currentIndex + 1) % RED_ORCHID_SLIDES.length);
           }
         }
-      }, PROGRESS_INTERVAL);
+      };
+
+      progressRafId = requestAnimationFrame(tick);
     };
 
     const goToSlide = (targetIndex: number) => {
@@ -270,12 +278,12 @@ export function LuminaInteractiveList() {
       shaderMaterial.uniforms.uTexture1Size.value = currentTex.userData.size;
       shaderMaterial.uniforms.uTexture2Size.value = targetTex.userData.size;
 
+      // Update nav progress state immediately so user sees active slide switch
+      updateNavProgress(targetIndex, 0);
+
       updateContent(targetIndex);
       currentIndex = targetIndex;
       setCurrentSlideIndex(targetIndex);
-
-      const sn = document.getElementById("slideNumber");
-      if (sn) sn.textContent = String(targetIndex + 1).padStart(2, "0");
 
       gsap.fromTo(
         shaderMaterial.uniforms.uProgress,

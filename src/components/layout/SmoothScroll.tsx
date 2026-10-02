@@ -54,12 +54,35 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
           // ignore
         }
 
+        // Force Lenis to recalculate page dimensions if active
         if (lenisRef.current) {
-          lenisRef.current.scrollTo(target as HTMLElement, { offset: -80, immediate: false });
-        } else {
-          const y = target.getBoundingClientRect().top + window.scrollY - 80;
-          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+          lenisRef.current.resize();
         }
+
+        const rect = target.getBoundingClientRect();
+        const absoluteTop = rect.top + window.scrollY;
+        const targetY = Math.max(0, absoluteTop - 80);
+
+        if (lenisRef.current) {
+          lenisRef.current.scrollTo(targetY, { immediate: false, duration: 1.2 });
+        }
+
+        // Also perform window.scrollTo for native/fallback
+        window.scrollTo({ top: targetY, behavior: "smooth" });
+
+        // Re-adjust after layout stabilizes from dynamic components (WebGL Canvas / images)
+        setTimeout(() => {
+          if (lenisRef.current) lenisRef.current.resize();
+          const updatedRect = target.getBoundingClientRect();
+          if (Math.abs(updatedRect.top - 80) > 40) {
+            const newY = Math.max(0, updatedRect.top + window.scrollY - 80);
+            if (lenisRef.current) {
+              lenisRef.current.scrollTo(newY, { immediate: false, duration: 0.8 });
+            }
+            window.scrollTo({ top: newY, behavior: "smooth" });
+          }
+        }, 350);
+
         return true;
       }
       return false;

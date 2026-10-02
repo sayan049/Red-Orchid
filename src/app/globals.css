@@ -386,7 +386,8 @@ textarea:active {
   height: 100%;
   background: #e11d48;
   border-radius: 9999px;
-  transition: width 0.1s linear, opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+  will-change: width;
 }
 
 .slide-nav-title {
