@@ -447,3 +447,27 @@
   pointer-events: none;
 }
 
+/* Tactile UI Vibration / Shake Animation for Validation Errors */
+@keyframes ui-shake {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  10%, 90% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(5px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-6px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(6px, 0, 0);
+  }
+}
+
+.animate-ui-shake {
+  animation: ui-shake 0.48s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  will-change: transform;
+}
+
