@@ -114,7 +114,7 @@ const jsonLd = {
       description:
         "Bespoke production atelier crafting short films, medium format photography, 9:16 kinetic reels, and commercial worlds.",
       email: "hello@redorchidfilms.com",
-      telephone: "+919830024190",
+      telephone: "+918158029243",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Kolkata",

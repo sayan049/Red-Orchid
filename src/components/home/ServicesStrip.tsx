@@ -22,7 +22,6 @@ export function ServicesStrip() {
       id="services"
       className="relative w-full border-t border-white/10 bg-[#070707] py-20 sm:py-28 text-white"
     >
-      <div id="about" className="scroll-mt-28" />
       <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14">
         {/* Section Header */}
         <div className="mb-12 sm:mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/10 pb-8">

@@ -7,7 +7,7 @@ export const STUDIO_CONFIG = {
   timezone: "Asia/Kolkata",
   coordinates: "22.5726° N, 88.3639° E",
   email: "hello@redorchidfilms.com",
-  phone: "+91 98300 24190",
+  phone: "+91 81580 29243",
   instagram: "https://instagram.com/redorchidfilms",
   vimeo: "https://vimeo.com/redorchidfilms",
   youtube: "https://youtube.com/@redorchidfilms",

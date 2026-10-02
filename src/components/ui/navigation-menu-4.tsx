@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Clapperboard, Camera, MapPin, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -66,17 +66,6 @@ const navigationLinks = [
       { href: "/#services", label: "Commercial Production", key: "services" },
       { href: "/#services", label: "9:16 Kinetic Reels", key: "services" },
       { href: "/#services", label: "Color Grading & Post-Production", key: "services" },
-    ],
-  },
-  {
-    label: "Atelier",
-    key: "atelier",
-    submenu: true,
-    type: "icon",
-    items: [
-      { href: "/#about", label: "Artistic Philosophy", icon: "Clapperboard", key: "home" },
-      { href: "/contact", label: "Kolkata & Mumbai Studio", icon: "MapPin", key: "contact" },
-      { href: "/#services", label: "Equipment & Technical Scope", icon: "Camera", key: "services" },
     ],
   },
   { href: "/#faq", label: "FAQ", key: "faq" },
@@ -385,36 +374,6 @@ export function NavigationMenu4() {
                                     onClick={(e) => handleNavClick(e, item.href, item.key)}
                                     className="block select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white group"
                                   >
-                                    {/* Icon preview */}
-                                    {link.type === "icon" && "icon" in item && (
-                                      <div className="flex items-center gap-2.5">
-                                        {item.icon === "Clapperboard" && (
-                                          <Clapperboard
-                                            size={16}
-                                            className="text-orchid shrink-0 transition-transform group-hover:scale-110"
-                                            aria-hidden="true"
-                                          />
-                                        )}
-                                        {item.icon === "Camera" && (
-                                          <Camera
-                                            size={16}
-                                            className="text-orchid shrink-0 transition-transform group-hover:scale-110"
-                                            aria-hidden="true"
-                                          />
-                                        )}
-                                        {item.icon === "MapPin" && (
-                                          <MapPin
-                                            size={16}
-                                            className="text-orchid shrink-0 transition-transform group-hover:scale-110"
-                                            aria-hidden="true"
-                                          />
-                                        )}
-                                        <div className="text-xs font-mono-code uppercase tracking-wider text-white font-medium leading-none">
-                                          {item.label}
-                                        </div>
-                                      </div>
-                                    )}
-
                                     {/* Description preview */}
                                     {link.type === "description" && "description" in item && (
                                       <>
