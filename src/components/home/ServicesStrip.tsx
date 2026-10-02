@@ -50,9 +50,17 @@ export function ServicesStrip() {
               return (
                 <div
                   key={service.id}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSelectService(service.id);
+                    }
+                  }}
                   onClick={() => handleSelectService(service.id)}
                   data-cursor="SELECT"
-                  className={`group relative cursor-pointer rounded-xl border p-5 sm:p-7 md:p-8 transition-all duration-300 ${
+                  className={`group relative cursor-pointer rounded-xl border p-5 sm:p-7 md:p-8 transition-all duration-300 touch-manipulation select-none active:scale-[0.99] ${
                     isActive
                       ? "border-orchid/60 bg-[#121011] shadow-[0_0_30px_rgba(225,29,72,0.12)]"
                       : "border-white/5 bg-[#0b0a0a] hover:border-white/20 hover:bg-[#0f0e0e]"

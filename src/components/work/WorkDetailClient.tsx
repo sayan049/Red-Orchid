@@ -134,7 +134,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                 onClick={togglePlay}
                 data-cursor="PLAY IN-PLACE"
                 aria-label={`Play film ${work.title} in-place`}
-                className="group flex items-center gap-3 sm:gap-4 rounded-full border border-white/30 bg-black/75 px-5 sm:px-7 py-3 sm:py-4 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-orchid hover:bg-orchid hover:text-white shadow-2xl min-h-[48px]"
+                className="group flex items-center gap-3 sm:gap-4 rounded-full border border-white/30 bg-black/75 px-5 sm:px-7 py-3 sm:py-4 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-orchid hover:bg-orchid hover:text-white shadow-2xl min-h-[48px] touch-manipulation cursor-pointer active:scale-95"
               >
                 <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110">
                   <Play className="h-4 w-4 fill-current ml-0.5" />
@@ -164,7 +164,8 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                   <button
                     type="button"
                     onClick={togglePlay}
-                    className="text-white hover:text-orchid transition-colors p-1"
+                    className="text-white hover:text-orchid transition-colors p-2 touch-manipulation cursor-pointer active:scale-90"
+                    aria-label="Pause"
                   >
                     <Pause className="h-4 w-4 fill-current" />
                   </button>
@@ -172,7 +173,8 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                   <button
                     type="button"
                     onClick={toggleMute}
-                    className="text-white hover:text-orchid transition-colors p-1"
+                    className="text-white hover:text-orchid transition-colors p-2 touch-manipulation cursor-pointer active:scale-90"
+                    aria-label={isMuted ? "Unmute" : "Mute"}
                   >
                     {isMuted ? <VolumeX className="h-4 w-4 text-orchid" strokeWidth={1.5} /> : <Volume2 className="h-4 w-4" strokeWidth={1.5} />}
                   </button>
@@ -225,7 +227,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                 key={still.id}
                 onClick={() => openLightbox(idx)}
                 data-cursor="EXPAND"
-                className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#111010] aspect-[16/10] transition-all duration-300 hover:border-white/30"
+                className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#111010] aspect-[16/10] transition-all duration-300 hover:border-white/30 touch-manipulation active:scale-[0.99]"
               >
                 <Image
                   src={still.url}

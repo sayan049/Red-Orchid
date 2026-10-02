@@ -305,7 +305,7 @@ export function ContactSection() {
                             type="button"
                             key={service}
                             onClick={() => handleSelectService(service)}
-                            className={`rounded-lg border px-3.5 py-2.5 text-left text-xs font-mono-code transition-all min-h-[44px] ${
+                            className={`rounded-lg border px-3.5 py-2.5 text-left text-xs font-mono-code transition-all min-h-[44px] touch-manipulation cursor-pointer active:scale-[0.98] ${
                               isSelected
                                 ? "border-orchid bg-orchid/20 text-white font-medium shadow-[0_0_15px_rgba(225,29,72,0.25)]"
                                 : "border-white/10 bg-black/40 text-white/60 hover:border-white/20 hover:text-white"
@@ -331,7 +331,7 @@ export function ContactSection() {
                             type="button"
                             key={tier.label}
                             onClick={() => handleSelectBudget(tier.label)}
-                            className={`flex flex-col rounded-lg border p-3 text-left transition-all min-h-[44px] ${
+                            className={`flex flex-col rounded-lg border p-3 text-left transition-all min-h-[44px] touch-manipulation cursor-pointer active:scale-[0.98] ${
                               isSelected
                                 ? "border-orchid bg-orchid/20 text-white"
                                 : "border-white/10 bg-black/40 text-white/60 hover:border-white/20 hover:text-white"
@@ -381,7 +381,7 @@ export function ContactSection() {
                     type="submit"
                     disabled={status === "submitting"}
                     data-cursor="TRANSMIT"
-                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark disabled:opacity-50 min-h-[48px]"
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark disabled:opacity-50 min-h-[48px] touch-manipulation cursor-pointer active:scale-98"
                   >
                     {status === "submitting" ? (
                       <>

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { sound } from "@/lib/sound";
 
 interface BrandLogoProps {
   className?: string;
@@ -9,9 +12,10 @@ export function BrandLogo({ className = "", showTagline = false }: BrandLogoProp
   return (
     <Link
       href="/"
+      onClick={() => sound.playClick()}
       aria-label="Red Orchid Films — Return to Homepage"
       data-cursor="HOME"
-      className={`group flex items-center gap-2.5 sm:gap-3.5 transition-opacity hover:opacity-90 shrink-0 ${className}`}
+      className={`group flex items-center gap-2.5 sm:gap-3.5 transition-opacity hover:opacity-90 shrink-0 touch-manipulation cursor-pointer ${className}`}
     >
       {/* Bespoke Orchid Petal & Iris Glyph */}
       <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center shrink-0">

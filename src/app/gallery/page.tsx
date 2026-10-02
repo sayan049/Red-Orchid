@@ -146,7 +146,7 @@ export default function GalleryPage() {
                   key={tab.id}
                   onClick={() => handleSelectFilter(tab.id as MainFilter)}
                   data-cursor="FILTER"
-                  className={`flex items-center gap-2 rounded-full border px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-mono-code uppercase tracking-wider whitespace-nowrap shrink-0 transition-all duration-300 min-h-[44px] ${
+                  className={`flex items-center gap-2 rounded-full border px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-mono-code uppercase tracking-wider whitespace-nowrap shrink-0 transition-all duration-300 min-h-[44px] touch-manipulation cursor-pointer active:scale-95 ${
                     isActive
                       ? "border-orchid bg-orchid text-white font-semibold shadow-[0_0_20px_rgba(225,29,72,0.3)]"
                       : "border-white/10 bg-black/40 text-white/60 hover:border-white/30 hover:text-white"
@@ -174,7 +174,7 @@ export default function GalleryPage() {
                 <button
                   key={sub.id}
                   onClick={() => handleSelectPhotoSub(sub.id as PhotoSubFilter)}
-                  className={`rounded-md border px-3 py-1.5 text-[11px] font-mono-code whitespace-nowrap transition-colors min-h-[36px] ${
+                  className={`rounded-md border px-3 py-1.5 text-[11px] font-mono-code whitespace-nowrap transition-colors min-h-[36px] touch-manipulation cursor-pointer active:scale-95 ${
                     photoSubFilter === sub.id
                       ? "border-orchid/60 bg-orchid/20 text-white font-medium"
                       : "border-white/5 bg-white/5 text-white/50 hover:text-white"
@@ -203,7 +203,7 @@ export default function GalleryPage() {
                   key={still.id}
                   onClick={() => openLightbox(idx)}
                   data-cursor="EXPAND"
-                  className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121110] break-inside-avoid transition-all duration-300 hover:border-white/30"
+                  className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121110] break-inside-avoid transition-all duration-300 hover:border-white/30 touch-manipulation active:scale-[0.99]"
                 >
                   <div className="relative w-full aspect-[4/5] overflow-hidden bg-black">
                     <Image
@@ -248,7 +248,7 @@ export default function GalleryPage() {
                     key={work.id}
                     onClick={() => toggleInlineVideo(work.id)}
                     data-cursor={isPlaying ? "PAUSE" : "PLAY IN-PLACE"}
-                    className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#121110] aspect-[9/16] shadow-xl transition-all duration-300 hover:border-orchid"
+                    className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#121110] aspect-[9/16] shadow-xl transition-all duration-300 hover:border-orchid touch-manipulation active:scale-[0.99]"
                   >
                     {/* Poster Image */}
                     <Image

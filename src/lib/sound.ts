@@ -16,26 +16,30 @@ class SoundEngine {
 
   // iOS Safari & Android WebKit require user gesture to unlock Web Audio API
   private attachUnlockListeners(): void {
-    const unlock = () => {
+    const handleGesture = () => {
       this.unlock();
-      window.removeEventListener("touchstart", unlock);
-      window.removeEventListener("touchend", unlock);
-      window.removeEventListener("click", unlock);
+      const ctx = this.getContext();
+      if (ctx && ctx.state === "running") {
+        window.removeEventListener("touchend", handleGesture);
+        window.removeEventListener("click", handleGesture);
+      }
     };
 
-    window.addEventListener("touchstart", unlock, { passive: true, once: true });
-    window.addEventListener("touchend", unlock, { passive: true, once: true });
-    window.addEventListener("click", unlock, { passive: true, once: true });
+    window.addEventListener("touchend", handleGesture, { passive: true });
+    window.addEventListener("click", handleGesture, { passive: true });
   }
 
   public unlock(): void {
-    if (this.isUnlocked) return;
     try {
       const ctx = this.getContext();
       if (!ctx) return;
 
       if (ctx.state === "suspended") {
-        ctx.resume().catch(() => {});
+        ctx.resume().then(() => {
+          if (ctx.state === "running") this.isUnlocked = true;
+        }).catch(() => {});
+      } else if (ctx.state === "running") {
+        this.isUnlocked = true;
       }
 
       // Play a silent 1-sample buffer to force iOS WebKit audio hardware to engage
@@ -44,8 +48,6 @@ class SoundEngine {
       source.buffer = buffer;
       source.connect(ctx.destination);
       source.start(0);
-
-      this.isUnlocked = true;
     } catch {
       // Audio permission restricted
     }
@@ -70,6 +72,14 @@ class SoundEngine {
   // Punchy, tactile mechanical click (Arri/Leica shutter feel) tuned for mobile speakers & headphones
   public playClick(): void {
     if (!this.isSoundEnabled) return;
+
+    // Mobile tactile haptic vibration (supported on Chrome Android & modern mobile browsers)
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      try {
+        navigator.vibrate(8);
+      } catch {}
+    }
+
     try {
       this.unlock();
       const ctx = this.getContext();
@@ -83,19 +93,19 @@ class SoundEngine {
       // Primary crisp impulse (1900Hz -> 550Hz, audible on mobile phone speakers)
       osc.type = "sine";
       osc.frequency.setValueAtTime(1900, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + 0.032);
+      osc.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + 0.035);
 
       // Secondary metallic body harmonic (1100Hz -> 380Hz)
       osc2.type = "triangle";
       osc2.frequency.setValueAtTime(1100, ctx.currentTime);
-      osc2.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + 0.028);
+      osc2.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + 0.030);
 
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1300, ctx.currentTime);
-      filter.Q.setValueAtTime(2.2, ctx.currentTime);
+      filter.frequency.setValueAtTime(1350, ctx.currentTime);
+      filter.Q.setValueAtTime(2.0, ctx.currentTime);
 
-      gain.gain.setValueAtTime(0.32, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.045);
+      gain.gain.setValueAtTime(0.42, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
 
       osc.connect(filter);
       osc2.connect(filter);
@@ -104,8 +114,8 @@ class SoundEngine {
 
       osc.start(ctx.currentTime);
       osc2.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.05);
-      osc2.stop(ctx.currentTime + 0.05);
+      osc.stop(ctx.currentTime + 0.055);
+      osc2.stop(ctx.currentTime + 0.055);
     } catch {
       // Ignore if audio is restricted
     }

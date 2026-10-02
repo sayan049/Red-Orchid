@@ -22,6 +22,15 @@ export function Hero() {
     setIsVideoModalOpen(true);
   };
 
+  const handleScrollToTrending = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sound.playClick();
+    const el = document.getElementById("trending");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <section className="relative flex min-h-[100svh] w-full flex-col justify-between overflow-hidden bg-[#070707] px-4 sm:px-8 md:px-12 lg:px-16 pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12 text-white">
@@ -98,7 +107,7 @@ export function Hero() {
               type="button"
               onClick={handleOpenShowreel}
               data-cursor="PLAY"
-              className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white"
+              className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95"
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110 group-hover:bg-black group-hover:text-white">
                 <Play className="h-3.5 w-3.5 fill-current ml-0.5" />
@@ -113,15 +122,15 @@ export function Hero() {
             </span>
           </div>
 
-          <Link
+          <a
             href="#trending"
-            onClick={() => sound.playClick()}
+            onClick={handleScrollToTrending}
             data-cursor="SCROLL"
-            className="group flex items-center justify-center sm:justify-start gap-2 font-mono-code text-xs tracking-widest text-white/60 uppercase transition-colors hover:text-white py-1"
+            className="group flex items-center justify-center sm:justify-start gap-2 font-mono-code text-xs tracking-widest text-white/60 uppercase transition-colors hover:text-white py-2 touch-manipulation cursor-pointer active:opacity-70"
           >
             <span>DISCOVER WORKS</span>
             <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-1 text-orchid" strokeWidth={1.5} />
-          </Link>
+          </a>
         </div>
       </section>
 

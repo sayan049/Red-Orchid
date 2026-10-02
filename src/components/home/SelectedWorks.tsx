@@ -66,7 +66,7 @@ export function SelectedWorks({ works }: SelectedWorksProps) {
                   href={`/work/${work.slug}`}
                   onClick={() => sound.playClick()}
                   data-cursor="VIEW FILM"
-                  className="block relative overflow-hidden rounded-xl border border-white/10 bg-[#111010] transition-all duration-500 hover:border-white/30"
+                  className="block relative overflow-hidden rounded-xl border border-white/10 bg-[#111010] transition-all duration-500 hover:border-white/30 touch-manipulation cursor-pointer"
                 >
                   {/* Media wrapper */}
                   <div className={`relative w-full ${aspectClass} overflow-hidden bg-black`}>
@@ -127,7 +127,7 @@ export function SelectedWorks({ works }: SelectedWorksProps) {
             href="/gallery"
             onClick={() => sound.playClick()}
             data-cursor="ARCHIVE"
-            className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-6 sm:px-8 py-3.5 sm:py-4 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white"
+            className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-6 sm:px-8 py-3.5 sm:py-4 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95 min-h-[48px]"
           >
             <span className="font-mono-code text-xs font-semibold tracking-widest uppercase">
               VIEW COMPLETE VISUAL ARCHIVE

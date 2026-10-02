@@ -12,11 +12,15 @@ export function CustomCursor() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const isFinePointer =
+      window.innerWidth >= 1024 &&
+      !("ontouchstart" in window) &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (!isFinePointer || prefersReducedMotion) {
       setHasFinePointer(false);
+      document.documentElement.classList.remove("has-custom-cursor");
       return;
     }
 

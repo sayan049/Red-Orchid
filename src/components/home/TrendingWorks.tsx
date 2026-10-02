@@ -69,7 +69,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                 type="button"
                 onClick={() => scroll("left")}
                 aria-label="Scroll trending works left"
-                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white"
+                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white touch-manipulation cursor-pointer active:scale-95"
               >
                 <ChevronLeft className="h-5 w-5" strokeWidth={1.5} />
               </button>
@@ -77,7 +77,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                 type="button"
                 onClick={() => scroll("right")}
                 aria-label="Scroll trending works right"
-                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white"
+                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white touch-manipulation cursor-pointer active:scale-95"
               >
                 <ChevronRight className="h-5 w-5" strokeWidth={1.5} />
               </button>
@@ -89,8 +89,8 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
         <div
           ref={scrollContainerRef}
           data-cursor="DRAG"
-          className="flex gap-5 sm:gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          className="flex gap-5 sm:gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory touch-pan-x"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
         >
           {trendingItems.map((work) => {
             const isPlayingThis = playingCardId === work.id;
@@ -131,7 +131,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                           <button
                             type="button"
                             onClick={(e) => handleToggleInlinePlay(e, work)}
-                            className="text-white hover:text-orchid transition-colors"
+                            className="text-white hover:text-orchid transition-colors touch-manipulation cursor-pointer p-1"
                             aria-label="Pause video"
                           >
                             <Pause className="h-4 w-4 fill-current" />
@@ -143,7 +143,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                               sound.playClick();
                               setIsMuted(!isMuted);
                             }}
-                            className="text-white hover:text-orchid transition-colors"
+                            className="text-white hover:text-orchid transition-colors touch-manipulation cursor-pointer p-1"
                             aria-label={isMuted ? "Unmute audio" : "Mute audio"}
                           >
                             {isMuted ? (
@@ -162,7 +162,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                             sound.playClick();
                             setActiveModalWork(work);
                           }}
-                          className="text-white/70 hover:text-white transition-colors p-1"
+                          className="text-white/70 hover:text-white transition-colors p-1.5 touch-manipulation cursor-pointer"
                           aria-label="Expand to full screen cinema"
                           title="Expand cinema view"
                         >
@@ -194,7 +194,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                       onClick={(e) => handleToggleInlinePlay(e, work)}
                       data-cursor="PLAY"
                       aria-label={`Play ${work.title} video directly in this card`}
-                      className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-orchid hover:bg-orchid"
+                      className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-orchid hover:bg-orchid touch-manipulation cursor-pointer active:scale-95"
                     >
                       <Play className="h-5 w-5 fill-current ml-0.5" />
                     </button>

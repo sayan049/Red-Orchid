@@ -33,11 +33,14 @@ export function Navbar() {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
+      document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
     } else {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     }
     return () => {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
@@ -49,7 +52,7 @@ export function Navbar() {
 
   const toggleMenu = () => {
     sound.playClick();
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
   return (
@@ -81,7 +84,7 @@ export function Navbar() {
                   href={link.href}
                   onClick={() => sound.playClick()}
                   data-cursor="NAV"
-                  className={`group relative text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 hover:text-white py-1 ${
+                  className={`group relative text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 hover:text-white py-1 touch-manipulation cursor-pointer ${
                     isActive ? "text-bone" : "text-white/60"
                   }`}
                 >
@@ -110,7 +113,7 @@ export function Navbar() {
               onClick={toggleMenu}
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid touch-manipulation cursor-pointer"
+              className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid touch-manipulation cursor-pointer active:scale-95"
             >
               {isMobileMenuOpen ? (
                 <X className="h-5 w-5" strokeWidth={1.5} />
@@ -122,55 +125,56 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Fullscreen Mobile Menu Overlay */}
-      <div
-        className={`fixed inset-0 z-30 flex flex-col justify-between bg-black/95 px-6 sm:px-10 pt-28 pb-10 backdrop-blur-2xl transition-all duration-500 ease-in-out md:hidden overflow-y-auto ${
-          isMobileMenuOpen
-            ? "pointer-events-auto opacity-100 translate-y-0"
-            : "pointer-events-none opacity-0 -translate-y-4"
-        }`}
-      >
-        <nav aria-label="Mobile Navigation" className="flex flex-col gap-5 sm:gap-6 my-auto">
-          <span className="font-mono-code text-[11px] font-medium tracking-widest text-orchid uppercase">
-            {"// INDEX DIRECTORY"}
-          </span>
-          {NAV_LINKS.map((link, idx) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              onClick={() => {
-                sound.playClick();
-                setIsMobileMenuOpen(false);
-              }}
-              className="group flex items-center justify-between border-b border-white/10 pb-4 min-h-[48px]"
-            >
-              <div className="flex items-baseline gap-4">
-                <span className="font-mono-code text-xs text-white/40">
-                  0{idx + 1}
-                </span>
-                <span className="font-display text-2xl sm:text-3xl font-bold tracking-wider text-bone uppercase transition-colors group-hover:text-orchid">
-                  {link.label}
-                </span>
-              </div>
-              <ArrowUpRight
-                className="h-5 w-5 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-orchid"
-                strokeWidth={1.5}
-              />
-            </Link>
-          ))}
-        </nav>
+      {/* Fullscreen Mobile Menu Overlay - Only rendered when open to prevent touch interception */}
+      {isMobileMenuOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation Menu"
+          className="fixed inset-0 z-35 flex flex-col justify-between bg-black/95 px-6 sm:px-10 pt-28 pb-10 backdrop-blur-2xl md:hidden overflow-y-auto"
+        >
+          <nav aria-label="Mobile Navigation" className="flex flex-col gap-5 sm:gap-6 my-auto">
+            <span className="font-mono-code text-[11px] font-medium tracking-widest text-orchid uppercase">
+              {"// INDEX DIRECTORY"}
+            </span>
+            {NAV_LINKS.map((link, idx) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => {
+                  sound.playClick();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="group flex items-center justify-between border-b border-white/10 pb-4 min-h-[48px] touch-manipulation cursor-pointer active:opacity-70"
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="font-mono-code text-xs text-white/40">
+                    0{idx + 1}
+                  </span>
+                  <span className="font-display text-2xl sm:text-3xl font-bold tracking-wider text-bone uppercase transition-colors group-hover:text-orchid">
+                    {link.label}
+                  </span>
+                </div>
+                <ArrowUpRight
+                  className="h-5 w-5 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-orchid"
+                  strokeWidth={1.5}
+                />
+              </Link>
+            ))}
+          </nav>
 
-        {/* Mobile footer info */}
-        <div className="space-y-4 border-t border-white/10 pt-6 mt-8">
-          <LiveTime showSeconds={false} />
-          <p className="font-sans-ui text-xs text-white/50">
-            Kolkata • Mumbai • Worldwide
-          </p>
-          <p className="font-mono-code text-[10px] text-white/30">
-            &copy; {new Date().getFullYear()} Red Orchid Films. All rights reserved.
-          </p>
+          {/* Mobile footer info */}
+          <div className="space-y-4 border-t border-white/10 pt-6 mt-8">
+            <LiveTime showSeconds={false} />
+            <p className="font-sans-ui text-xs text-white/50">
+              Kolkata • Mumbai • Worldwide
+            </p>
+            <p className="font-mono-code text-[10px] text-white/30">
+              &copy; {new Date().getFullYear()} Red Orchid Films. All rights reserved.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
