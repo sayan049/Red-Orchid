@@ -12,13 +12,6 @@ export function Footer() {
 
   return (
     <footer className="relative border-t border-white/10 bg-[#070707] text-white">
-      {/* Upper subtle film strip border */}
-      <div className="flex h-3 w-full items-center justify-between border-b border-white/5 px-4 overflow-hidden" aria-hidden="true">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <span key={i} className="h-1.5 w-1.5 shrink-0 bg-white/10 rounded-xs" />
-        ))}
-      </div>
-
       <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14 pt-14 sm:pt-16 pb-12">
         {/* Massive closing prompt */}
         <div className="mb-12 sm:mb-16 border-b border-white/10 pb-12 sm:pb-16">

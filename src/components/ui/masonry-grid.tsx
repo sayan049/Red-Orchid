@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import {
   Share2,
+  Check,
   MoreHorizontal,
   Bookmark,
   Heart,
@@ -179,34 +180,38 @@ export function MasonryGrid({
 
                 {/* Desktop Hover Overlay (Hidden on touch devices via @media (hover: hover)) */}
                 <div className="absolute inset-0 z-20 hidden md:flex flex-col justify-end p-3.5 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                  {/* Bottom Row: Title + Workable Share Button */}
-                  <div className="flex items-end justify-between gap-2 pointer-events-auto">
-                    <div className="truncate pr-2">
+                  {/* Bottom Row: Title + Workable Share Icon Button */}
+                  <div className="flex items-center justify-between gap-3 pointer-events-auto">
+                    <div className="truncate pr-1">
                       {item.title && (
-                        <p className="font-display text-xs sm:text-sm font-semibold text-white drop-shadow truncate">
+                        <p className="font-display text-xs sm:text-sm font-semibold text-white drop-shadow truncate leading-tight">
                           {item.title}
                         </p>
                       )}
                       {item.client && (
-                        <p className="font-mono-code text-[10px] text-white/70 uppercase truncate">
+                        <p className="font-mono-code text-[10px] text-white/70 uppercase truncate mt-0.5">
                           {item.client}
                         </p>
                       )}
                     </div>
 
-                    <div className="flex items-center shrink-0">
+                    <div className="shrink-0 flex items-center">
                       <button
                         type="button"
                         onClick={(e) => handleShare(e, item)}
                         aria-label="Share"
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono-code backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-95 ${
+                        title={copiedId === item.id ? "Link copied" : "Share"}
+                        className={`flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 cursor-pointer shadow-lg active:scale-90 ${
                           copiedId === item.id
-                            ? "bg-white text-black font-semibold"
-                            : "bg-black/75 text-white hover:bg-white hover:text-black border border-white/20"
+                            ? "bg-white text-black scale-105"
+                            : "bg-black/60 text-white/90 hover:bg-white hover:text-black border border-white/20"
                         }`}
                       >
-                        <Share2 className="h-3.5 w-3.5" />
-                        <span>{copiedId === item.id ? "COPIED" : "SHARE"}</span>
+                        {copiedId === item.id ? (
+                          <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+                        ) : (
+                          <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
+                        )}
                       </button>
                     </div>
                   </div>

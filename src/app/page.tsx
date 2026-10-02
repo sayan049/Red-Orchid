@@ -3,6 +3,7 @@ import { TrendingWorks } from "@/components/home/TrendingWorks";
 import { SelectedWorks } from "@/components/home/SelectedWorks";
 import { ServicesStrip } from "@/components/home/ServicesStrip";
 import { ContactSection } from "@/components/home/ContactSection";
+import { ClientsSection } from "@/components/home/ClientsSection";
 import { WORKS_DATA } from "@/data/works";
 
 export default function HomePage() {
@@ -22,6 +23,9 @@ export default function HomePage() {
 
       {/* 5. Contact & Commissions Suite */}
       <ContactSection />
+
+      {/* 6. Clients & Collaborators Two-Way Marquee */}
+      <ClientsSection />
     </main>
   );
 }
