@@ -51,7 +51,9 @@ export function Navbar() {
   }, [pathname]);
 
   const toggleMenu = () => {
-    sound.playClick();
+    try {
+      sound.playClick();
+    } catch {}
     setIsMobileMenuOpen((prev) => !prev);
   };
 

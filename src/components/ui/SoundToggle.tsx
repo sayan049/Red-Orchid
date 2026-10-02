@@ -8,8 +8,12 @@ export function SoundToggle() {
   const [isEnabled, setIsEnabled] = useState<boolean>(true);
 
   const handleToggle = () => {
-    const active = sound.toggleSound();
-    setIsEnabled(active);
+    try {
+      const active = sound.toggleSound();
+      setIsEnabled(active);
+    } catch {
+      setIsEnabled((prev) => !prev);
+    }
   };
 
   return (
@@ -19,17 +23,17 @@ export function SoundToggle() {
       data-cursor="SOUND"
       aria-label={isEnabled ? "Mute all website audio" : "Enable website audio"}
       aria-pressed={isEnabled}
-      className={`group flex items-center gap-2 rounded-full border px-3 sm:px-3.5 py-1.5 backdrop-blur-md transition-all duration-300 focus-visible:outline-orchid touch-manipulation cursor-pointer select-none ${
+      className={`group flex items-center gap-2 rounded-full border px-3 sm:px-3.5 py-1.5 backdrop-blur-md transition-all duration-300 focus-visible:outline-orchid touch-manipulation cursor-pointer select-none active:scale-95 ${
         isEnabled
           ? "border-orchid/60 bg-orchid/20 text-white shadow-[0_0_15px_rgba(225,29,72,0.3)]"
           : "border-white/10 bg-black/40 text-white/70 hover:border-white/30 hover:bg-white/5 hover:text-white"
       }`}
     >
-      <div className="relative flex h-3.5 w-3.5 items-center justify-center shrink-0">
+      <div className="relative flex h-3.5 w-3.5 items-center justify-center shrink-0 pointer-events-none">
         {isEnabled ? (
-          <Volume2 className="h-3.5 w-3.5 text-orchid transition-transform duration-200 group-hover:scale-110" strokeWidth={1.5} />
+          <Volume2 className="h-3.5 w-3.5 text-orchid transition-transform duration-200 group-hover:scale-110 pointer-events-none" strokeWidth={1.5} />
         ) : (
-          <VolumeX className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" strokeWidth={1.5} />
+          <VolumeX className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110 pointer-events-none" strokeWidth={1.5} />
         )}
       </div>
 

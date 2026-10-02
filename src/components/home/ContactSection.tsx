@@ -21,18 +21,24 @@ export function ContactSection() {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSelectService = (service: string) => {
-    sound.playClick();
+    try {
+      sound.playClick();
+    } catch {}
     setFormData((prev) => ({ ...prev, serviceType: service }));
   };
 
   const handleSelectBudget = (budget: string) => {
-    sound.playClick();
+    try {
+      sound.playClick();
+    } catch {}
     setFormData((prev) => ({ ...prev, budgetRange: budget }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    sound.playClick();
+    try {
+      sound.playClick();
+    } catch {}
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setErrorMessage("Please complete all required fields (Name, Email, Message).");

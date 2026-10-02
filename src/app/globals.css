@@ -42,12 +42,16 @@
     selection-background-color: var(--orchid);
     selection-color: #ffffff;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
   }
 
-  button, a, input, select, textarea, [role="button"] {
+  button, a, input, select, textarea, [role="button"], [tabindex] {
+    cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  button svg, a svg, [role="button"] svg {
+    pointer-events: none;
   }
 
   ::selection {

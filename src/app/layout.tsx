@@ -139,10 +139,13 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-[#070707] text-[#f5f2eb] antialiased selection:bg-[#e11d48] selection:text-white">
+      <body
+        className="min-h-screen bg-[#070707] text-[#f5f2eb] antialiased selection:bg-[#e11d48] selection:text-white"
+        suppressHydrationWarning
+      >
+        <CustomCursor />
+        <Navbar />
         <SmoothScroll>
-          <CustomCursor />
-          <Navbar />
           {children}
           <Footer />
         </SmoothScroll>

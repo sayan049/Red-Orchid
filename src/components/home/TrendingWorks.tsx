@@ -19,7 +19,9 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
   const [isMuted, setIsMuted] = useState<boolean>(true);
 
   const scroll = (direction: "left" | "right") => {
-    sound.playClick();
+    try {
+      sound.playClick();
+    } catch {}
     if (!scrollContainerRef.current) return;
     const scrollAmount = window.innerWidth > 768 ? 580 : window.innerWidth * 0.82;
     scrollContainerRef.current.scrollBy({
@@ -33,7 +35,9 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
   const handleToggleInlinePlay = (e: React.MouseEvent, work: WorkItem) => {
     e.preventDefault();
     e.stopPropagation();
-    sound.playClick();
+    try {
+      sound.playClick();
+    } catch {}
     if (playingCardId === work.id) {
       setPlayingCardId(null);
     } else {
