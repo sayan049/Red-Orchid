@@ -50,7 +50,10 @@ export function Navbar() {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  const toggleMenu = () => {
+  const toggleMenu = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     try {
       sound.playClick();
     } catch {}
@@ -115,12 +118,12 @@ export function Navbar() {
               onClick={toggleMenu}
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
-              className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid touch-manipulation cursor-pointer active:scale-95"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid touch-manipulation cursor-pointer active:scale-95 select-none"
             >
               {isMobileMenuOpen ? (
-                <X className="h-5 w-5" strokeWidth={1.5} />
+                <X className="h-5 w-5 pointer-events-none" strokeWidth={1.5} />
               ) : (
-                <Menu className="h-5 w-5" strokeWidth={1.5} />
+                <Menu className="h-5 w-5 pointer-events-none" strokeWidth={1.5} />
               )}
             </button>
           </div>
@@ -133,9 +136,22 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Navigation Menu"
-          className="fixed inset-0 z-35 flex flex-col justify-between bg-black/95 px-6 sm:px-10 pt-28 pb-10 backdrop-blur-2xl md:hidden overflow-y-auto"
+          className="fixed inset-0 z-50 flex flex-col justify-between bg-black/98 px-6 sm:px-10 pt-20 pb-10 backdrop-blur-3xl md:hidden overflow-y-auto"
         >
-          <nav aria-label="Mobile Navigation" className="flex flex-col gap-5 sm:gap-6 my-auto">
+          {/* Top header inside overlay with Brand and explicit Close button */}
+          <div className="flex items-center justify-between pb-6 border-b border-white/10">
+            <BrandLogo />
+            <button
+              type="button"
+              onClick={toggleMenu}
+              aria-label="Close navigation menu"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md touch-manipulation cursor-pointer active:scale-90"
+            >
+              <X className="h-5 w-5 pointer-events-none" strokeWidth={1.5} />
+            </button>
+          </div>
+
+          <nav aria-label="Mobile Navigation" className="flex flex-col gap-5 sm:gap-6 my-auto pt-6">
             <span className="font-mono-code text-[11px] font-medium tracking-widest text-orchid uppercase">
               {"// INDEX DIRECTORY"}
             </span>
@@ -144,12 +160,14 @@ export function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => {
-                  sound.playClick();
+                  try {
+                    sound.playClick();
+                  } catch {}
                   setIsMobileMenuOpen(false);
                 }}
                 className="group flex items-center justify-between border-b border-white/10 pb-4 min-h-[48px] touch-manipulation cursor-pointer active:opacity-70"
               >
-                <div className="flex items-baseline gap-4">
+                <div className="flex items-baseline gap-4 pointer-events-none">
                   <span className="font-mono-code text-xs text-white/40">
                     0{idx + 1}
                   </span>
@@ -158,7 +176,7 @@ export function Navbar() {
                   </span>
                 </div>
                 <ArrowUpRight
-                  className="h-5 w-5 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-orchid"
+                  className="h-5 w-5 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-orchid pointer-events-none"
                   strokeWidth={1.5}
                 />
               </Link>

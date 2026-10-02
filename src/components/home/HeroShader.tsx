@@ -11,6 +11,10 @@ export function HeroShader() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
+    // Do NOT run WebGL shader on mobile or touch devices (saves CPU/battery and prevents touch latency)
+    const isMobile = window.innerWidth < 1024 || "ontouchstart" in window || window.matchMedia("(pointer: coarse)").matches;
+    if (isMobile) return;
+
     let renderer: THREE.WebGLRenderer | null = null;
     let scene: THREE.Scene | null = null;
     let camera: THREE.OrthographicCamera | null = null;
@@ -77,6 +81,7 @@ export function HeroShader() {
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       renderer.setSize(width, height);
+      renderer.domElement.style.pointerEvents = "none";
       container.appendChild(renderer.domElement);
 
       const uniforms = {

@@ -105,9 +105,12 @@ class SoundEngine {
         }
       }
 
-      // 3. Web Audio API synthesis (for high-fidelity desktop sound)
+      // 3. Web Audio API synthesis (high-fidelity dimensional acoustic click)
       const ctx = this.getContext();
-      if (ctx && ctx.state === "running") {
+      if (ctx) {
+        if (ctx.state === "suspended") {
+          ctx.resume().catch(() => {});
+        }
         const osc = ctx.createOscillator();
         const osc2 = ctx.createOscillator();
         const gain = ctx.createGain();

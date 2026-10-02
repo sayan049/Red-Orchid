@@ -229,7 +229,11 @@ export function ContactSection() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                <form
+                  onSubmit={handleSubmit}
+                  suppressHydrationWarning
+                  className="space-y-5 sm:space-y-6"
+                >
                   {/* Honeypot anti-spam field */}
                   <div className="hidden" aria-hidden="true">
                     <input
@@ -311,7 +315,7 @@ export function ContactSection() {
                             type="button"
                             key={service}
                             onClick={() => handleSelectService(service)}
-                            className={`rounded-lg border px-3.5 py-2.5 text-left text-xs font-mono-code transition-all min-h-[44px] touch-manipulation cursor-pointer active:scale-[0.98] ${
+                            className={`rounded-lg border px-3.5 py-2.5 text-left text-xs font-mono-code transition-all min-h-[44px] touch-manipulation cursor-pointer active:scale-[0.98] select-none ${
                               isSelected
                                 ? "border-orchid bg-orchid/20 text-white font-medium shadow-[0_0_15px_rgba(225,29,72,0.25)]"
                                 : "border-white/10 bg-black/40 text-white/60 hover:border-white/20 hover:text-white"
@@ -337,7 +341,7 @@ export function ContactSection() {
                             type="button"
                             key={tier.label}
                             onClick={() => handleSelectBudget(tier.label)}
-                            className={`flex flex-col rounded-lg border p-3 text-left transition-all min-h-[44px] touch-manipulation cursor-pointer active:scale-[0.98] ${
+                            className={`flex flex-col rounded-lg border p-3 text-left transition-all min-h-[44px] touch-manipulation cursor-pointer active:scale-[0.98] select-none ${
                               isSelected
                                 ? "border-orchid bg-orchid/20 text-white"
                                 : "border-white/10 bg-black/40 text-white/60 hover:border-white/20 hover:text-white"

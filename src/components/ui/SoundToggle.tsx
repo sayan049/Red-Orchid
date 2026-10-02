@@ -7,7 +7,10 @@ import { sound } from "@/lib/sound";
 export function SoundToggle() {
   const [isEnabled, setIsEnabled] = useState<boolean>(true);
 
-  const handleToggle = () => {
+  const handleToggle = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     try {
       const active = sound.toggleSound();
       setIsEnabled(active);

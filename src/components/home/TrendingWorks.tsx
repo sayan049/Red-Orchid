@@ -23,11 +23,18 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
       sound.playClick();
     } catch {}
     if (!scrollContainerRef.current) return;
-    const scrollAmount = window.innerWidth > 768 ? 580 : window.innerWidth * 0.82;
-    scrollContainerRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
+    const container = scrollContainerRef.current;
+    const scrollAmount = window.innerWidth > 768 ? 580 : window.innerWidth * 0.85;
+    const target = direction === "left" ? container.scrollLeft - scrollAmount : container.scrollLeft + scrollAmount;
+    
+    try {
+      container.scrollTo({
+        left: target,
+        behavior: "smooth",
+      });
+    } catch {
+      container.scrollLeft = target;
+    }
   };
 
   const trendingItems = works.filter((w) => w.trending);
@@ -73,17 +80,17 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                 type="button"
                 onClick={() => scroll("left")}
                 aria-label="Scroll trending works left"
-                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white touch-manipulation cursor-pointer active:scale-95"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white touch-manipulation cursor-pointer active:scale-90 select-none"
               >
-                <ChevronLeft className="h-5 w-5" strokeWidth={1.5} />
+                <ChevronLeft className="h-5 w-5 pointer-events-none" strokeWidth={1.5} />
               </button>
               <button
                 type="button"
                 onClick={() => scroll("right")}
                 aria-label="Scroll trending works right"
-                className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white touch-manipulation cursor-pointer active:scale-95"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white touch-manipulation cursor-pointer active:scale-90 select-none"
               >
-                <ChevronRight className="h-5 w-5" strokeWidth={1.5} />
+                <ChevronRight className="h-5 w-5 pointer-events-none" strokeWidth={1.5} />
               </button>
             </div>
           </div>

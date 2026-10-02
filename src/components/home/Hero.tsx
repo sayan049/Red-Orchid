@@ -107,12 +107,12 @@ export function Hero() {
               type="button"
               onClick={handleOpenShowreel}
               data-cursor="PLAY"
-              className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95"
+              className="group flex w-full sm:w-auto items-center justify-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95 select-none"
             >
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110 group-hover:bg-black group-hover:text-white">
-                <Play className="h-3.5 w-3.5 fill-current ml-0.5" />
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110 group-hover:bg-black group-hover:text-white pointer-events-none">
+                <Play className="h-3.5 w-3.5 fill-current ml-0.5 pointer-events-none" />
               </div>
-              <span className="font-mono-code text-xs font-semibold tracking-widest uppercase">
+              <span className="font-mono-code text-xs font-semibold tracking-widest uppercase pointer-events-none">
                 PLAY ATELIER REEL (02:15)
               </span>
             </button>
@@ -126,10 +126,10 @@ export function Hero() {
             href="#trending"
             onClick={handleScrollToTrending}
             data-cursor="SCROLL"
-            className="group flex items-center justify-center sm:justify-start gap-2 font-mono-code text-xs tracking-widest text-white/60 uppercase transition-colors hover:text-white py-2 touch-manipulation cursor-pointer active:opacity-70"
+            className="group flex items-center justify-center sm:justify-start gap-2 font-mono-code text-xs tracking-widest text-white/60 uppercase transition-colors hover:text-white py-2 touch-manipulation cursor-pointer active:opacity-70 select-none"
           >
             <span>DISCOVER WORKS</span>
-            <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-1 text-orchid" strokeWidth={1.5} />
+            <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-1 text-orchid pointer-events-none" strokeWidth={1.5} />
           </a>
         </div>
       </section>
