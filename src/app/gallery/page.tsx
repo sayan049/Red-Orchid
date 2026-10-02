@@ -6,12 +6,11 @@ import Link from "next/link";
 import { WORKS_DATA } from "@/data/works";
 import { WorkItem, StillItem } from "@/types";
 import { Lightbox } from "@/components/ui/Lightbox";
-import { VideoModal } from "@/components/ui/VideoModal";
+import { VideoModal, VideoModalItem } from "@/components/ui/VideoModal";
 import { CoverflowCarousel, CoverflowSlide } from "@/components/ui/coverflow-carousel";
 import { ArgentLoopInfiniteSlider, ProjectData } from "@/components/ui/argent-loop-infinite-slider";
 import {
   Play,
-  Pause,
   Camera,
   Film,
   Smartphone,
@@ -38,20 +37,18 @@ export default function GalleryPage() {
   const [activeInlineVideoId, setActiveInlineVideoId] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(true);
 
-  // Fullscreen video modal state
+  // Fullscreen video modal with backward / forward navigation
   const [modalVideoData, setModalVideoData] = useState<{
     isOpen: boolean;
-    url: string;
-    title: string;
-    aspectRatio: string;
+    currentIndex: number;
+    items: VideoModalItem[];
   }>({
     isOpen: false,
-    url: "",
-    title: "",
-    aspectRatio: "2.39:1",
+    currentIndex: 0,
+    items: [],
   });
 
-  // Lightbox state for photography stills
+  // Lightbox state for photography stills with backward / forward navigation
   const [lightboxData, setLightboxData] = useState<{
     isOpen: boolean;
     initialIndex: number;
@@ -110,6 +107,21 @@ export default function GalleryPage() {
     return WORKS_DATA;
   }, [mainFilter, photoSubFilter]);
 
+  // Active collection of playable video works with backward / forward support
+  const videoPlaylist: VideoModalItem[] = useMemo(() => {
+    const worksList = mainFilter === "photography" ? WORKS_DATA : filteredWorks;
+    const withVideos = worksList.filter((w) => !!w.videoUrl);
+    return withVideos.map((w) => ({
+      url: w.videoUrl!,
+      title: w.title,
+      aspectRatio: w.aspectRatio,
+      client: w.client,
+      category: w.category,
+      year: w.year,
+      synopsis: w.synopsis,
+    }));
+  }, [mainFilter, filteredWorks]);
+
   const toggleInlineVideo = (workId: string) => {
     sound.playClick();
     if (activeInlineVideoId === workId) {
@@ -145,13 +157,13 @@ export default function GalleryPage() {
     });
   };
 
-  const openVideoModal = (url: string, title: string, aspectRatio: string = "2.39:1") => {
+  const openVideoModal = (videoUrl: string, playlist: VideoModalItem[] = videoPlaylist) => {
     sound.playClick();
+    const idx = playlist.findIndex((item) => item.url === videoUrl);
     setModalVideoData({
       isOpen: true,
-      url,
-      title,
-      aspectRatio,
+      currentIndex: idx !== -1 ? idx : 0,
+      items: playlist.length > 0 ? playlist : [{ url: videoUrl, title: "Cinema Reel" }],
     });
   };
 
@@ -195,14 +207,14 @@ export default function GalleryPage() {
         meta,
         onClick: () => {
           if (work.videoUrl) {
-            openVideoModal(work.videoUrl, work.title, work.aspectRatio);
+            openVideoModal(work.videoUrl, videoPlaylist);
           } else if (work.stills && work.stills.length > 0) {
             openLightbox(0, work.stills);
           }
         },
       };
     });
-  }, [mainFilter, filteredStills, filteredWorks]);
+  }, [mainFilter, filteredStills, filteredWorks, videoPlaylist]);
 
   // -------------------------------------------------------------
   // Data Adaptor: Argent Loop Infinite Slider Items
@@ -231,13 +243,23 @@ export default function GalleryPage() {
       slug: work.slug,
       onAction: () => {
         if (work.videoUrl) {
-          openVideoModal(work.videoUrl, work.title, work.aspectRatio);
+          openVideoModal(work.videoUrl, videoPlaylist);
         } else if (work.stills && work.stills.length > 0) {
           openLightbox(0, work.stills);
         }
       },
     }));
-  }, [mainFilter, filteredStills, filteredWorks]);
+  }, [mainFilter, filteredStills, filteredWorks, videoPlaylist]);
+
+  const handleSliderItemClick = (item: ProjectData) => {
+    sound.playClick();
+    if (item.videoUrl) {
+      openVideoModal(item.videoUrl, videoPlaylist);
+    } else {
+      const stillIdx = filteredStills.findIndex((s) => s.url === item.image);
+      openLightbox(stillIdx !== -1 ? stillIdx : 0, filteredStills);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#070707] text-white pt-28 sm:pt-32 pb-20 sm:pb-24">
@@ -356,7 +378,7 @@ export default function GalleryPage() {
                 onClick={() => handleSelectPhotoSub(sub.id as PhotoSubFilter)}
                 className={`rounded-md border px-3 py-1.5 text-[11px] font-mono-code whitespace-nowrap transition-colors min-h-[34px] touch-manipulation cursor-pointer active:scale-95 ${
                   photoSubFilter === sub.id
-                    ? "border-orchid/60 bg-orchid/20 text-white font-medium"
+                    ? "border-white/30 bg-white/15 text-white font-medium"
                     : "border-white/5 bg-white/5 text-white/50 hover:text-white"
                 }`}
               >
@@ -374,12 +396,12 @@ export default function GalleryPage() {
             <div className="mb-6 flex items-center justify-between text-xs font-mono-code text-white/40">
               <span className="uppercase tracking-wider">
                 {mainFilter === "photography"
-                  ? "TAP ANY STILL TO ENTER LIGHTBOX"
+                  ? "TAP ANY STILL TO OPEN VIEWER • ARROWS: BACK/FORWARD"
                   : mainFilter === "reels"
-                  ? "VERTICAL 9:16 KINETIC SOCIAL CINEMA • TAP TO PLAY"
+                  ? "VERTICAL 9:16 KINETIC SOCIAL CINEMA • TAP TO PLAY / EXPAND"
                   : mainFilter === "short-films"
-                  ? "LARGE-FORMAT NARRATIVE ARCHIVE • TAP TO PLAY"
-                  : "PINTEREST MASONRY ARCHIVE • TAP ANY ITEM TO PREVIEW"}
+                  ? "LARGE-FORMAT NARRATIVE ARCHIVE • TAP TO PLAY / EXPAND"
+                  : "PINTEREST MASONRY ARCHIVE • TAP ANY ITEM TO OPEN"}
               </span>
               <span>
                 {mainFilter === "photography"
@@ -396,7 +418,7 @@ export default function GalleryPage() {
                     <div
                       key={still.id}
                       onClick={() => openLightbox(idx, filteredStills)}
-                      className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121110] break-inside-avoid transition-all duration-300 hover:border-orchid/80 touch-manipulation active:scale-[0.99] shadow-lg"
+                      className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121110] break-inside-avoid transition-all duration-300 hover:border-white/30 touch-manipulation active:scale-[0.99] shadow-lg"
                     >
                       <div className="relative w-full aspect-[4/5] overflow-hidden bg-black">
                         <Image
@@ -428,7 +450,7 @@ export default function GalleryPage() {
                     return (
                       <article
                         key={work.id}
-                        className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-[#111010] break-inside-avoid transition-all duration-300 hover:border-orchid/80 shadow-xl ${
+                        className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-[#111010] break-inside-avoid transition-all duration-300 hover:border-white/30 shadow-xl ${
                           isReel ? "aspect-[9/16]" : ""
                         }`}
                       >
@@ -439,7 +461,7 @@ export default function GalleryPage() {
                           }`}
                           onClick={() => {
                             if (work.videoUrl) {
-                              toggleInlineVideo(work.id);
+                              openVideoModal(work.videoUrl, videoPlaylist);
                             } else if (work.stills && work.stills.length > 0) {
                               openLightbox(0, work.stills);
                             }
@@ -457,7 +479,7 @@ export default function GalleryPage() {
                             }`}
                           />
 
-                          {/* In-place Video Playing */}
+                          {/* In-place Video Playing if user toggles inline */}
                           {work.videoUrl && isPlaying && (
                             <div className="absolute inset-0 z-20 bg-black">
                               <video
@@ -494,7 +516,7 @@ export default function GalleryPage() {
                                     type="button"
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      openVideoModal(work.videoUrl || "", work.title, work.aspectRatio);
+                                      openVideoModal(work.videoUrl || "", videoPlaylist);
                                     }}
                                     className="rounded-full bg-black/75 p-2 text-white hover:text-orchid backdrop-blur-md cursor-pointer"
                                     title="Fullscreen Cinema"
@@ -521,11 +543,11 @@ export default function GalleryPage() {
                                 </span>
                               </div>
 
-                              {/* Play Button Indicator */}
+                              {/* Center Play Button Indicator */}
                               {work.videoUrl && (
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                  <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-orchid group-hover:bg-orchid">
-                                    <Play className="h-5 w-5 fill-current ml-0.5" />
+                                  <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-white/50 group-hover:bg-black/90">
+                                    <Play className="h-5 w-5 fill-current ml-0.5 text-white" />
                                   </div>
                                 </div>
                               )}
@@ -539,7 +561,12 @@ export default function GalleryPage() {
                             <div className="font-mono-code text-[10px] text-white/40 uppercase mb-1">
                               {work.client}
                             </div>
-                            <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-tight text-bone group-hover:text-orchid transition-colors">
+                            <h3
+                              onClick={() => {
+                                if (work.videoUrl) openVideoModal(work.videoUrl, videoPlaylist);
+                              }}
+                              className="font-display text-base sm:text-lg font-bold uppercase tracking-tight text-bone group-hover:text-white transition-colors cursor-pointer"
+                            >
                               {work.title}
                             </h3>
                             <p className="mt-1.5 font-sans-ui text-xs text-white/60 line-clamp-2 leading-relaxed">
@@ -556,7 +583,7 @@ export default function GalleryPage() {
                                 className="flex items-center gap-1 text-[11px] text-white/70 hover:text-white uppercase tracking-wider"
                               >
                                 <span>CASE STUDY</span>
-                                <ArrowUpRight className="h-3 w-3 text-orchid" strokeWidth={1.5} />
+                                <ArrowUpRight className="h-3 w-3 text-white/80" strokeWidth={1.5} />
                               </Link>
                             </div>
                           </div>
@@ -585,7 +612,7 @@ export default function GalleryPage() {
           <div className="py-4">
             <div className="mb-4 flex items-center justify-between text-xs font-mono-code text-white/40">
               <span className="uppercase tracking-wider">
-                DRAG OR USE ARROW KEYS TO CYCLE 3D COVERFLOW • CLICK TO INSPECT
+                DRAG OR USE ARROW KEYS TO CYCLE 3D COVERFLOW • TAP TO OPEN VIEWER
               </span>
               <span>{coverflowSlides.length} ARCHIVED SLIDES</span>
             </div>
@@ -597,6 +624,15 @@ export default function GalleryPage() {
                 showNavigation
                 showPagination
                 cardWidth="clamp(220px, 28vw, 340px)"
+                onSlideClick={(slide) => {
+                  sound.playClick();
+                  if (slide.videoUrl) {
+                    openVideoModal(slide.videoUrl, videoPlaylist);
+                  } else {
+                    const stillIdx = filteredStills.findIndex((s) => s.url === slide.src);
+                    openLightbox(stillIdx !== -1 ? stillIdx : 0, filteredStills);
+                  }
+                }}
               />
             </div>
           </div>
@@ -609,29 +645,32 @@ export default function GalleryPage() {
           <div className="py-4">
             <div className="mb-4 flex items-center justify-between text-xs font-mono-code text-white/40">
               <span className="uppercase tracking-wider">
-                SCROLL OR DRAG TO RUN INFINITE PARALLAX FILMSTRIP • SYNCHRONIZED MINIMAP
+                SCROLL OR DRAG TO RUN INFINITE PARALLAX FILMSTRIP • TAP TO OPEN VIEWER
               </span>
               <span>{sliderItems.length} SEQUENCES</span>
             </div>
 
-            <ArgentLoopInfiniteSlider items={sliderItems} />
+            <ArgentLoopInfiniteSlider
+              items={sliderItems}
+              onItemClick={handleSliderItemClick}
+            />
           </div>
         )}
       </div>
 
-      {/* Expandable Cinema Modal if requested */}
+      {/* Fullscreen Video Modal with Backward / Forward Navigation */}
       <VideoModal
         isOpen={modalVideoData.isOpen}
-        onClose={() => setModalVideoData({ ...modalVideoData, isOpen: false })}
-        videoUrl={modalVideoData.url}
-        title={modalVideoData.title}
-        aspectRatio={modalVideoData.aspectRatio}
+        onClose={() => setModalVideoData((prev) => ({ ...prev, isOpen: false }))}
+        items={modalVideoData.items}
+        currentIndex={modalVideoData.currentIndex}
+        onIndexChange={(idx) => setModalVideoData((prev) => ({ ...prev, currentIndex: idx }))}
       />
 
-      {/* Photography Lightbox */}
+      {/* Photography Lightbox with Backward / Forward Navigation */}
       <Lightbox
         isOpen={lightboxData.isOpen}
-        onClose={() => setLightboxData({ ...lightboxData, isOpen: false })}
+        onClose={() => setLightboxData((prev) => ({ ...prev, isOpen: false }))}
         stills={lightboxData.stills}
         initialIndex={lightboxData.initialIndex}
       />

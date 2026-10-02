@@ -335,7 +335,7 @@ export function CoverflowCarousel({
                   onClick={() => handleCardClick(slide, index)}
                   className={cn(
                     "absolute left-1/2 top-0 aspect-[3/4] overflow-hidden rounded-2xl bg-[#141211] shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-white/10 will-change-transform cursor-pointer transition-colors duration-300",
-                    isCenter && "border-orchid/80 shadow-[0_0_35px_rgba(225,29,72,0.3)]",
+                    isCenter && "border-white/25 shadow-[0_25px_60px_rgba(0,0,0,0.95)]",
                     cardClassName,
                   )}
                   style={{ width: "var(--cf-card)" }}
@@ -363,7 +363,7 @@ export function CoverflowCarousel({
                   {/* Center hint when active */}
                   {isCenter && (
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <span className="font-mono-code text-[11px] font-bold uppercase tracking-wider rounded-full bg-orchid/90 px-3.5 py-1.5 text-white shadow-lg backdrop-blur-md">
+                      <span className="font-mono-code text-[11px] font-bold uppercase tracking-wider rounded-full bg-black/80 border border-white/20 px-3.5 py-1.5 text-white shadow-xl backdrop-blur-md">
                         {slide.videoUrl ? "WATCH FILM" : "OPEN LIGHTBOX"}
                       </span>
                     </div>
@@ -380,7 +380,7 @@ export function CoverflowCarousel({
               type="button"
               aria-label="Previous slide"
               onClick={() => nudge(-1)}
-              className="absolute left-2 sm:left-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-orchid hover:bg-orchid hover:scale-110 cursor-pointer shadow-xl active:scale-95"
+              className="absolute left-2 sm:left-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-white/50 hover:bg-white/15 hover:scale-110 cursor-pointer shadow-xl active:scale-95"
             >
               <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
@@ -388,7 +388,7 @@ export function CoverflowCarousel({
               type="button"
               aria-label="Next slide"
               onClick={() => nudge(1)}
-              className="absolute right-2 sm:right-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-orchid hover:bg-orchid hover:scale-110 cursor-pointer shadow-xl active:scale-95"
+              className="absolute right-2 sm:right-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-white/50 hover:bg-white/15 hover:scale-110 cursor-pointer shadow-xl active:scale-95"
             >
               <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
@@ -403,7 +403,7 @@ export function CoverflowCarousel({
         >
           <div className="flex items-center gap-2 mb-2">
             {active.category && (
-              <span className="font-mono-code text-[10px] uppercase tracking-widest text-orchid px-2.5 py-0.5 rounded-full border border-orchid/30 bg-orchid/10">
+              <span className="font-mono-code text-[10px] uppercase tracking-widest text-white/80 px-2.5 py-0.5 rounded-full border border-white/15 bg-white/5">
                 {active.category}
               </span>
             )}
@@ -442,7 +442,7 @@ export function CoverflowCarousel({
             <button
               type="button"
               onClick={() => handleCardClick(active, selected)}
-              className="mt-5 inline-flex items-center gap-2 rounded-full border border-orchid/80 bg-orchid/20 px-6 py-2.5 font-mono-code text-xs font-semibold text-white uppercase tracking-wider hover:bg-orchid hover:shadow-[0_0_25px_rgba(225,29,72,0.4)] transition-all cursor-pointer min-h-[44px] active:scale-95"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-2.5 font-mono-code text-xs font-semibold text-white uppercase tracking-wider hover:border-white/40 hover:bg-white/20 transition-all cursor-pointer min-h-[44px] active:scale-95"
             >
               <span>{active.videoUrl ? "WATCH IN CINEMA" : "VIEW FULL RESOLUTION"}</span>
               <span>&rarr;</span>
@@ -463,7 +463,7 @@ export function CoverflowCarousel({
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
                 index === selected
-                  ? "w-7 bg-orchid shadow-[0_0_10px_#e11d48]"
+                  ? "w-7 bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]"
                   : "w-2 bg-white/25 hover:bg-white/50",
               )}
             />
