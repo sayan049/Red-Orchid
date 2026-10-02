@@ -374,27 +374,76 @@
 }
 
 /* Monolithic Brand Name Footer Watermark */
+.footer-brand-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+  background-color: #070707;
+  padding-top: clamp(2rem, 5vw, 4.5rem);
+  padding-bottom: clamp(1rem, 2.5vw, 2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .footer-brand-text {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   font-weight: 900;
-  font-size: clamp(3.2rem, 15vw, 18.5rem);
-  line-height: 0.78;
+  font-size: clamp(3.2rem, 15vw, 19rem);
+  line-height: 0.76;
   letter-spacing: -0.06em;
   text-transform: uppercase;
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(255, 255, 255, 0.08) 55%,
-    rgba(255, 255, 255, 0.01) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   text-align: center;
   display: block;
   width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0.16) 35%,
+    rgba(255, 255, 255, 0.03) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.95) 30%,
+    rgba(0, 0, 0, 0.3) 68%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.95) 30%,
+    rgba(0, 0, 0, 0.3) 68%,
+    rgba(0, 0, 0, 0) 100%
+  );
   transform: translateY(4%);
+}
+
+.footer-brand-blur-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  background: linear-gradient(
+    to top,
+    #070707 15%,
+    rgba(7, 7, 7, 0.8) 45%,
+    transparent 100%
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
 }
 
