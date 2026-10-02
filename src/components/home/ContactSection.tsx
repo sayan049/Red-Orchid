@@ -113,10 +113,8 @@ function CustomSelect({
         }}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        className={`group relative flex w-full items-center justify-between rounded-xl border px-4 py-3.5 text-left transition-colors min-h-[48px] touch-manipulation cursor-pointer select-none bg-black/40 outline-none focus:outline-none focus:ring-0 ${
-          isOpen
-            ? "border-orchid"
-            : "border-white/10 hover:border-white/20"
+        className={`contact-select-trigger group relative flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left transition-colors min-h-[48px] touch-manipulation cursor-pointer select-none ${
+          isOpen ? "is-open" : ""
         }`}
       >
         <div className="flex flex-col pr-3 truncate">
@@ -521,10 +519,8 @@ export function ContactSection() {
                             if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
                             if (status === "error") setStatus("idle");
                           }}
-                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 min-h-[48px] bg-black/40 ${
-                            fieldErrors.name
-                              ? "border-rose-500/80 focus:border-rose-400"
-                              : "border-white/10 focus:border-orchid"
+                          className={`contact-field-input w-full rounded-xl px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 min-h-[48px] ${
+                            fieldErrors.name ? "has-error" : ""
                           }`}
                         />
                         {fieldErrors.name && (
@@ -554,10 +550,8 @@ export function ContactSection() {
                             if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
                             if (status === "error") setStatus("idle");
                           }}
-                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 min-h-[48px] bg-black/40 ${
-                            fieldErrors.email
-                              ? "border-rose-500/80 focus:border-rose-400"
-                              : "border-white/10 focus:border-orchid"
+                          className={`contact-field-input w-full rounded-xl px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 min-h-[48px] ${
+                            fieldErrors.email ? "has-error" : ""
                           }`}
                         />
                         {fieldErrors.email && (
@@ -583,7 +577,7 @@ export function ContactSection() {
                         placeholder="e.g. Warner Bros. / Maison Margiela / Independent"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 focus:border-orchid min-h-[48px]"
+                        className="contact-field-input w-full rounded-xl px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 min-h-[48px]"
                       />
                     </Field>
 
@@ -630,10 +624,8 @@ export function ContactSection() {
                           if (fieldErrors.message) setFieldErrors((prev) => ({ ...prev, message: undefined }));
                           if (status === "error") setStatus("idle");
                         }}
-                        className={`w-full rounded-xl border p-4 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 resize-y min-h-[110px] bg-black/40 ${
-                          fieldErrors.message
-                            ? "border-rose-500/80 focus:border-rose-400"
-                            : "border-white/10 focus:border-orchid"
+                        className={`contact-field-input w-full rounded-xl p-4 text-base sm:text-sm text-white placeholder-white/20 resize-y min-h-[110px] ${
+                          fieldErrors.message ? "has-error" : ""
                         }`}
                       />
                       {fieldErrors.message && (

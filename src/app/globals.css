@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+  --color-orchid: #e11d48;
+  --color-orchid-glow: #fb7185;
+  --color-orchid-dark: #9f1239;
+  --color-bone: #f5f2eb;
+  --color-tungsten: #d97706;
+}
+
 @layer base {
   :root {
     --background: #070707;
@@ -174,6 +182,60 @@ select:focus-visible,
 button:focus,
 button:focus-visible {
   outline: none !important;
+  box-shadow: none !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus-visible,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):active,
+textarea:focus,
+textarea:focus-visible,
+textarea:active {
+  border-color: #e11d48 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Form input focus border - single crisp theme orchid border on click */
+.contact-field-input {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  transition: border-color 0.2s ease !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.contact-field-input:focus,
+.contact-field-input:focus-visible,
+.contact-field-input:active {
+  border-color: #e11d48 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.contact-field-input.has-error {
+  border-color: rgba(244, 63, 94, 0.85) !important;
+}
+
+.contact-field-input.has-error:focus,
+.contact-field-input.has-error:focus-visible {
+  border-color: #fb7185 !important;
+}
+
+.contact-select-trigger {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  transition: border-color 0.2s ease !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.contact-select-trigger:focus,
+.contact-select-trigger:focus-visible,
+.contact-select-trigger.is-open {
+  border-color: #e11d48 !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Lumina Interactive WebGL Slider */
