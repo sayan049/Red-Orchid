@@ -329,11 +329,14 @@ export function ContactSection() {
           {/* Left Column: Studio availability and direct channels */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-8 sm:space-y-10">
             <div className="space-y-6">
-              {/* Studio availability badge */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/30 px-3.5 py-1.5 backdrop-blur-md">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                <span className="font-mono-code text-[10px] sm:text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
-                  ACCEPTING COMMISSIONS // 2025-2026
+              {/* Studio availability badge - Bespoke Editorial Cinema aesthetic */}
+              <div className="inline-flex items-center gap-2.5 sm:gap-3 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 backdrop-blur-md transition-all duration-300 hover:border-orchid/40">
+                <span className="relative flex h-2 w-2 items-center justify-center shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orchid opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-orchid" />
+                </span>
+                <span className="font-mono-code text-[11px] sm:text-xs tracking-wider text-bone uppercase font-medium">
+                  ACCEPTING COMMISSIONS <span className="text-orchid font-bold mx-1">//</span> 2025–2026
                 </span>
               </div>
 

@@ -103,7 +103,7 @@ export function Footer() {
 
           {/* Col 3: Capabilities */}
           <div className="space-y-3">
-            <span className="font-mono-code text-[11px] tracking-widest text-white/40 uppercase block">
+            <span className="font-mono-code text-[11px] tracking-widest text-orchid uppercase block">
               {"// CAPABILITIES"}
             </span>
             <ul className="space-y-2 text-xs font-sans-ui text-white/60">
@@ -117,7 +117,7 @@ export function Footer() {
 
           {/* Col 4: Dispatch & Socials */}
           <div className="space-y-3">
-            <span className="font-mono-code text-[11px] tracking-widest text-white/40 uppercase block">
+            <span className="font-mono-code text-[11px] tracking-widest text-orchid uppercase block">
               {"// DISPATCH"}
             </span>
             <div className="space-y-2 text-xs font-mono-code text-white/80">
