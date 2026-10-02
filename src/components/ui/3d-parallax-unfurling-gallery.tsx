@@ -165,7 +165,7 @@ const ImageCard = ({ item, onLoad, onItemClick }: ImageCardProps) => {
         if (onItemClick) onItemClick(item);
       }}
       data-cursor="VIEW FILM"
-      className="group relative w-full h-[220px] sm:h-[320px] md:h-[400px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#111010] border border-white/10 hover:border-white/40 transition-all duration-300 shadow-2xl cursor-pointer will-change-transform backface-hidden"
+      className="group relative w-full h-[220px] sm:h-[320px] md:h-[400px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#111010] border border-white/10 hover:border-white/40 transition-all duration-300 cursor-pointer will-change-transform backface-hidden"
     >
       {/* Background Image */}
       <Image
@@ -328,7 +328,7 @@ export default function ParallaxUnfurlingGallery({
             borderWidth: bannerBorderWidth,
             borderColor: "rgba(255, 255, 255, 0.15)",
           }}
-          className="relative bg-[#070707] overflow-hidden flex items-center justify-center max-w-[1920px] mx-auto will-change-transform backface-hidden preserve-3d shadow-[0_20px_80px_rgba(0,0,0,0.9)]"
+          className="relative bg-[#070707] overflow-hidden flex items-center justify-center max-w-[1920px] mx-auto will-change-transform backface-hidden preserve-3d"
         >
           {/* Top Floating Cinema HUD */}
           <div className="absolute top-5 left-5 right-5 sm:top-8 sm:left-10 sm:right-10 z-30 flex items-center justify-between pointer-events-none">
@@ -349,7 +349,7 @@ export default function ParallaxUnfurlingGallery({
 
               <motion.div
                 style={{ opacity: alignedStatusOpacity }}
-                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white uppercase tracking-widest bg-emerald-950/70 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/30 backdrop-blur-md shadow-lg"
+                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white uppercase tracking-widest bg-emerald-950/70 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/30 backdrop-blur-md"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 <span>MATRIX ALIGNED • HOVER & EXPLORE</span>
@@ -372,10 +372,6 @@ export default function ParallaxUnfurlingGallery({
             className="absolute inset-0 flex justify-center items-center pointer-events-none"
             style={{ perspective: "1100px" }}
           >
-            {/* Cinematic Edge Masking Shadows */}
-            <div className="absolute inset-0 z-20 pointer-events-none shadow-[inset_0_120px_160px_-40px_rgba(7,7,7,1),inset_0_-120px_160px_-40px_rgba(7,7,7,1)]" />
-            <div className="absolute inset-0 z-20 pointer-events-none shadow-[inset_160px_0_160px_-40px_rgba(7,7,7,1),inset_-160px_0_160px_-40px_rgba(7,7,7,1)]" />
-
             {/* 3D Parallax Image Matrix: Tilts into 0° straight */}
             <motion.div
               style={{
@@ -451,7 +447,7 @@ export default function ParallaxUnfurlingGallery({
 
           {/* Bottom Floating Info / Action Bar */}
           <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center pointer-events-none px-4">
-            <div className="pointer-events-auto flex items-center gap-3 bg-black/75 px-4 sm:px-6 py-2 rounded-full border border-white/15 backdrop-blur-md shadow-2xl">
+            <div className="pointer-events-auto flex items-center gap-3 bg-black/75 px-4 sm:px-6 py-2 rounded-full border border-white/15 backdrop-blur-md">
               <span className="font-mono-code text-[10px] sm:text-[11px] text-white/60 uppercase tracking-widest">
                 35MM & DIGITAL CINEMA ATELIER
               </span>
