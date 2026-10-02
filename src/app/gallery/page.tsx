@@ -152,7 +152,7 @@ export default function GalleryPage() {
                       : "border-white/10 bg-black/40 text-white/60 hover:border-white/30 hover:text-white"
                   }`}
                 >
-                  {Icon && <Icon className="h-3.5 w-3.5" />}
+                  {Icon && <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />}
                   <span>{tab.label}</span>
                 </button>
               );
@@ -288,7 +288,7 @@ export default function GalleryPage() {
                             className="rounded-full bg-black/70 p-2 text-white hover:text-orchid backdrop-blur-md"
                             aria-label={isMuted ? "Unmute" : "Mute"}
                           >
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-orchid" />}
+                            {isMuted ? <VolumeX className="h-4 w-4" strokeWidth={1.5} /> : <Volume2 className="h-4 w-4 text-orchid" strokeWidth={1.5} />}
                           </button>
                         </div>
                       </div>
@@ -398,7 +398,7 @@ export default function GalleryPage() {
                               }}
                               className="text-white hover:text-orchid"
                             >
-                              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-orchid" />}
+                              {isMuted ? <VolumeX className="h-4 w-4" strokeWidth={1.5} /> : <Volume2 className="h-4 w-4 text-orchid" strokeWidth={1.5} />}
                             </button>
                             <span className="text-[10px] text-white/70 uppercase">IN-PLACE</span>
                           </div>
@@ -418,7 +418,7 @@ export default function GalleryPage() {
                             className="text-white/60 hover:text-white"
                             title="Expand to Fullscreen Cinema"
                           >
-                            <Maximize2 className="h-3.5 w-3.5" />
+                            <Maximize2 className="h-3.5 w-3.5" strokeWidth={1.5} />
                           </button>
                         </div>
                       </div>
@@ -489,7 +489,7 @@ export default function GalleryPage() {
                         className="group/btn flex items-center gap-1.5 text-white/80 hover:text-white transition-colors uppercase tracking-wider py-1"
                       >
                         <span>CASE STUDY</span>
-                        <ArrowUpRight className="h-3.5 w-3.5 text-orchid transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                        <ArrowUpRight className="h-3.5 w-3.5 text-orchid transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" strokeWidth={1.5} />
                       </Link>
                     </div>
                   </div>

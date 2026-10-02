@@ -103,7 +103,7 @@ export function SelectedWorks({ works }: SelectedWorksProps) {
                         </h3>
 
                         <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition-all duration-300 group-hover:border-orchid group-hover:bg-orchid">
-                          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.5} />
                         </div>
                       </div>
 
@@ -132,7 +132,7 @@ export function SelectedWorks({ works }: SelectedWorksProps) {
             <span className="font-mono-code text-xs font-semibold tracking-widest uppercase">
               VIEW COMPLETE VISUAL ARCHIVE
             </span>
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" strokeWidth={1.5} />
           </Link>
         </div>
       </div>

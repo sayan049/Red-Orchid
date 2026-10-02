@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { STUDIO_CONFIG } from "@/data/works";
-import { ArrowUpRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { ArrowUpRight, Check, AlertCircle, Loader2 } from "lucide-react";
 import { sound } from "@/lib/sound";
 
 export function ContactSection() {
@@ -159,7 +159,7 @@ export function ContactSection() {
                   className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors py-1"
                 >
                   <span>INSTAGRAM</span>
-                  <ArrowUpRight className="h-3 w-3" />
+                  <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
                 </a>
                 <a
                   href={STUDIO_CONFIG.vimeo}
@@ -169,7 +169,7 @@ export function ContactSection() {
                   className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors py-1"
                 >
                   <span>VIMEO</span>
-                  <ArrowUpRight className="h-3 w-3" />
+                  <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
                 </a>
                 <a
                   href={STUDIO_CONFIG.youtube}
@@ -179,7 +179,7 @@ export function ContactSection() {
                   className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors py-1"
                 >
                   <span>YOUTUBE</span>
-                  <ArrowUpRight className="h-3 w-3" />
+                  <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
                 </a>
               </div>
             </div>
@@ -191,7 +191,7 @@ export function ContactSection() {
               {status === "success" ? (
                 <div className="py-10 text-center space-y-5">
                   <div className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-orchid/50 bg-orchid/10 text-orchid">
-                    <CheckCircle2 className="h-7 w-7 sm:h-8 sm:w-8" />
+                    <Check className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={1.75} />
                   </div>
                   <div>
                     <h3 className="font-display text-2xl sm:text-3xl font-bold uppercase text-bone">
@@ -368,10 +368,10 @@ export function ContactSection() {
                     />
                   </div>
 
-                  {/* Error banner with haptic vibration */}
+                  {/* Error banner */}
                   {status === "error" && (
                     <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-950/30 p-3 text-xs text-rose-300">
-                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                       <span>{errorMessage}</span>
                     </div>
                   )}
@@ -385,13 +385,13 @@ export function ContactSection() {
                   >
                     {status === "submitting" ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.75} />
                         <span>TRANSMITTING INQUIRY...</span>
                       </>
                     ) : (
                       <>
                         <span>TRANSMIT PRODUCTION INQUIRY</span>
-                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.75} />
                       </>
                     )}
                   </button>

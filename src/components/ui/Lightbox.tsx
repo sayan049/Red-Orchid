@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, Camera, Maximize } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react";
 import { StillItem } from "@/types";
 
 interface LightboxProps {
@@ -109,7 +109,7 @@ export function Lightbox({
             aria-label="Close Lightbox"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/30 hover:bg-white/10 hover:text-white"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" strokeWidth={1.5} />
           </button>
         </div>
       </div>
@@ -123,7 +123,7 @@ export function Lightbox({
           aria-label="Previous still image"
           className="absolute left-2 sm:left-6 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/80 backdrop-blur-md transition-all hover:scale-110 hover:border-orchid hover:text-white"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="h-6 w-6" strokeWidth={1.5} />
         </button>
 
         {/* Next Button */}
@@ -133,7 +133,7 @@ export function Lightbox({
           aria-label="Next still image"
           className="absolute right-2 sm:right-6 z-20 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/80 backdrop-blur-md transition-all hover:scale-110 hover:border-orchid hover:text-white"
         >
-          <ChevronRight className="h-6 w-6" />
+          <ChevronRight className="h-6 w-6" strokeWidth={1.5} />
         </button>
 
         {/* Centered Image */}
@@ -160,7 +160,7 @@ export function Lightbox({
           )}
           {currentStill.camera && (
             <div className="flex items-center gap-2 font-mono-code text-[11px] text-white/50 mt-1">
-              <Camera className="h-3 w-3 text-orchid" />
+              <Camera className="h-3 w-3 text-orchid" strokeWidth={1.5} />
               <span>{currentStill.camera}</span>
               {currentStill.iso && <span>• ISO {currentStill.iso}</span>}
             </div>

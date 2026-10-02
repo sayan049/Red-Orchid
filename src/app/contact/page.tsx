@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { ContactSection } from "@/components/home/ContactSection";
 import { STUDIO_CONFIG } from "@/data/works";
-import { ShieldCheck, Film, Sparkles, Clock } from "lucide-react";
+import { Film, Globe, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact & Commissions — Red Orchid Films",
@@ -17,7 +17,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-white/10 pb-16">
           <div className="rounded-xl border border-white/5 bg-[#100e0e] p-6 space-y-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orchid/10 text-orchid">
-              <Film className="h-5 w-5" />
+              <Film className="h-5 w-5" strokeWidth={1.5} />
             </div>
             <h3 className="font-display text-lg font-bold uppercase text-bone">
               BESPOKE APPROACH
@@ -29,7 +29,7 @@ export default function ContactPage() {
 
           <div className="rounded-xl border border-white/5 bg-[#100e0e] p-6 space-y-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orchid/10 text-orchid">
-              <Clock className="h-5 w-5" />
+              <Clock className="h-5 w-5" strokeWidth={1.5} />
             </div>
             <h3 className="font-display text-lg font-bold uppercase text-bone">
               RAPID TURNAROUND
@@ -41,7 +41,7 @@ export default function ContactPage() {
 
           <div className="rounded-xl border border-white/5 bg-[#100e0e] p-6 space-y-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orchid/10 text-orchid">
-              <ShieldCheck className="h-5 w-5" />
+              <Globe className="h-5 w-5" strokeWidth={1.5} />
             </div>
             <h3 className="font-display text-lg font-bold uppercase text-bone">
               GLOBAL LICENSING

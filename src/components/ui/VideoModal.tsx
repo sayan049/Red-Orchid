@@ -145,7 +145,7 @@ export function VideoModal({
             aria-label="Close cinema player"
             className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" strokeWidth={1.5} />
           </button>
         </div>
 
@@ -194,7 +194,7 @@ export function VideoModal({
                 aria-label={isPlaying ? "Pause" : "Play"}
                 className="text-white/80 hover:text-white transition-colors"
               >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 fill-current" />}
+                {isPlaying ? <Pause className="h-4 w-4" strokeWidth={1.5} /> : <Play className="h-4 w-4 fill-current" />}
               </button>
 
               <button
@@ -203,7 +203,7 @@ export function VideoModal({
                 aria-label={isMuted ? "Unmute" : "Mute"}
                 className="text-white/80 hover:text-white transition-colors"
               >
-                {isMuted ? <VolumeX className="h-4 w-4 text-orchid" /> : <Volume2 className="h-4 w-4" />}
+                {isMuted ? <VolumeX className="h-4 w-4 text-orchid" strokeWidth={1.5} /> : <Volume2 className="h-4 w-4" strokeWidth={1.5} />}
               </button>
 
               {/* Precise timecode */}
@@ -224,7 +224,7 @@ export function VideoModal({
                 aria-label="Toggle Fullscreen"
                 className="text-white/80 hover:text-white transition-colors"
               >
-                <Maximize2 className="h-4 w-4" />
+                <Maximize2 className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </div>
           </div>

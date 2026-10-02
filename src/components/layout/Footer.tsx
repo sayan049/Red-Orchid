@@ -45,7 +45,7 @@ export function Footer() {
               <span className="font-display text-xs sm:text-sm font-semibold tracking-widest uppercase">
                 INITIATE PROJECT
               </span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" strokeWidth={1.5} />
             </Link>
           </div>
         </div>

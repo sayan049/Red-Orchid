@@ -174,7 +174,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                     onClick={toggleMute}
                     className="text-white hover:text-orchid transition-colors p-1"
                   >
-                    {isMuted ? <VolumeX className="h-4 w-4 text-orchid" /> : <Volume2 className="h-4 w-4" />}
+                    {isMuted ? <VolumeX className="h-4 w-4 text-orchid" strokeWidth={1.5} /> : <Volume2 className="h-4 w-4" strokeWidth={1.5} />}
                   </button>
 
                   <span className="text-white/70 tabular-nums text-[11px] sm:text-xs">
@@ -191,7 +191,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                     onClick={toggleFullscreen}
                     className="text-white/70 hover:text-white p-1"
                   >
-                    <Maximize2 className="h-4 w-4" />
+                    <Maximize2 className="h-4 w-4" strokeWidth={1.5} />
                   </button>
                 </div>
               </div>
@@ -242,7 +242,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                     {still.caption || "Frame Grab"}
                   </span>
                   <div className="flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white/80">
-                    <Maximize2 className="h-3 w-3" />
+                    <Maximize2 className="h-3 w-3" strokeWidth={1.5} />
                   </div>
                 </div>
               </div>

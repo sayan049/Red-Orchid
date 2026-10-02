@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import { WORKS_DATA } from "@/data/works";
-import { ArrowUpRight, ArrowLeft, Play, Camera } from "lucide-react";
+import { ArrowUpRight, ArrowLeft, Camera } from "lucide-react";
 import { WorkDetailClient } from "./WorkDetailClient";
 
 interface WorkPageProps {
@@ -59,7 +59,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
             href="/#works"
             className="group inline-flex items-center gap-2 font-mono-code text-xs text-white/50 hover:text-white transition-colors uppercase tracking-wider"
           >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1 text-orchid" />
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1 text-orchid" strokeWidth={1.5} />
             <span>BACK TO WORKS ARCHIVE</span>
           </Link>
         </div>
@@ -124,7 +124,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
           {/* Technical Specifications */}
           <div className="lg:col-span-5 space-y-6">
             <div className="flex items-center gap-2 font-mono-code text-xs text-orchid uppercase tracking-widest">
-              <Camera className="h-3.5 w-3.5" />
+              <Camera className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span>TECHNICAL SPECIFICATIONS</span>
             </div>
 
@@ -202,7 +202,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
             </h2>
             <div className="flex items-center gap-2 font-mono-code text-xs text-white/60 group-hover:text-white transition-colors">
               <span>{nextWork.category} • {nextWork.client}</span>
-              <ArrowUpRight className="h-4 w-4 text-orchid transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowUpRight className="h-4 w-4 text-orchid transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" strokeWidth={1.5} />
             </div>
           </Link>
         </div>

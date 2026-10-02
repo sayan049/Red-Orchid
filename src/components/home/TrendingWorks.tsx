@@ -71,7 +71,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                 aria-label="Scroll trending works left"
                 className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-5 w-5" strokeWidth={1.5} />
               </button>
               <button
                 type="button"
@@ -79,7 +79,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                 aria-label="Scroll trending works right"
                 className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition-colors hover:border-white/40 hover:bg-white/10 hover:text-white"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-5 w-5" strokeWidth={1.5} />
               </button>
             </div>
           </div>
@@ -146,7 +146,11 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                             className="text-white hover:text-orchid transition-colors"
                             aria-label={isMuted ? "Unmute audio" : "Mute audio"}
                           >
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-orchid" />}
+                            {isMuted ? (
+                              <VolumeX className="h-4 w-4" strokeWidth={1.5} />
+                            ) : (
+                              <Volume2 className="h-4 w-4 text-orchid" strokeWidth={1.5} />
+                            )}
                           </button>
                           <span className="text-[10px] text-white/60 uppercase">IN-PLACE</span>
                         </div>
@@ -162,7 +166,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                           aria-label="Expand to full screen cinema"
                           title="Expand cinema view"
                         >
-                          <Maximize2 className="h-3.5 w-3.5" />
+                          <Maximize2 className="h-3.5 w-3.5" strokeWidth={1.5} />
                         </button>
                       </div>
                     </div>
@@ -232,7 +236,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                       className="group/link inline-flex items-center gap-1.5 text-white/80 hover:text-white transition-colors"
                     >
                       <span className="uppercase tracking-wider">PROJECT DETAILS</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 text-orchid" />
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 text-orchid" strokeWidth={1.5} />
                     </Link>
                   </div>
                 </div>

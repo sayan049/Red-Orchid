@@ -112,7 +112,11 @@ export function Navbar() {
               aria-expanded={isMobileMenuOpen}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid"
             >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5" strokeWidth={1.5} />
+              ) : (
+                <Menu className="h-5 w-5" strokeWidth={1.5} />
+              )}
             </button>
           </div>
         </div>
@@ -148,7 +152,10 @@ export function Navbar() {
                   {link.label}
                 </span>
               </div>
-              <ArrowUpRight className="h-5 w-5 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-orchid" />
+              <ArrowUpRight
+                className="h-5 w-5 text-white/40 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-orchid"
+                strokeWidth={1.5}
+              />
             </Link>
           ))}
         </nav>

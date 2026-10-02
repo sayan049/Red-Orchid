@@ -27,9 +27,9 @@ export function SoundToggle() {
     >
       <div className="relative flex h-3.5 w-3.5 items-center justify-center shrink-0">
         {isEnabled ? (
-          <Volume2 className="h-3.5 w-3.5 text-orchid transition-transform duration-200 group-hover:scale-110" />
+          <Volume2 className="h-3.5 w-3.5 text-orchid transition-transform duration-200 group-hover:scale-110" strokeWidth={1.5} />
         ) : (
-          <VolumeX className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" />
+          <VolumeX className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" strokeWidth={1.5} />
         )}
       </div>
 

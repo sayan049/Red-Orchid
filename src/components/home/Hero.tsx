@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { Play, ArrowDown, Sparkles } from "lucide-react";
+import { Play, ArrowDown } from "lucide-react";
 import { VideoModal } from "@/components/ui/VideoModal";
 import { sound } from "@/lib/sound";
 
@@ -61,21 +61,16 @@ export function Hero() {
         </div>
 
         {/* Top spacing indicator */}
-        <div className="relative z-20 flex items-center justify-between gap-4">
+        <div className="relative z-20 flex items-center justify-start">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
             <span className="font-mono-code text-[10px] sm:text-[11px] font-medium tracking-wider text-white/80 uppercase">
               SHOWREEL // 2024–2025
             </span>
           </div>
-
-          <div className="hidden sm:flex items-center gap-2 font-mono-code text-xs text-white/50">
-            <Sparkles className="h-3.5 w-3.5 text-orchid" />
-            <span>EST. 2019 • KOLKATA // MUMBAI</span>
-          </div>
         </div>
 
-        {/* Center: Monumental Editorial Statement - Perfectly fitted, zero clipping on any device */}
+        {/* Center: Monumental Editorial Statement */}
         <div className="relative z-20 my-auto py-6 sm:py-10 max-w-7xl w-full">
           <p className="mb-2.5 sm:mb-4 font-mono-code text-[10px] sm:text-xs md:text-sm tracking-[0.25em] text-orchid uppercase">
             // BESPOKE PRODUCTION ATELIER
@@ -125,7 +120,7 @@ export function Hero() {
             className="group flex items-center justify-center sm:justify-start gap-2 font-mono-code text-xs tracking-widest text-white/60 uppercase transition-colors hover:text-white py-1"
           >
             <span>DISCOVER WORKS</span>
-            <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-1 text-orchid" />
+            <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-1 text-orchid" strokeWidth={1.5} />
           </Link>
         </div>
       </section>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { SERVICES_DATA } from "@/data/works";
 import { sound } from "@/lib/sound";
 
@@ -74,6 +74,7 @@ export function ServicesStrip() {
                     </div>
 
                     <ArrowUpRight
+                      strokeWidth={1.5}
                       className={`h-5 w-5 shrink-0 transition-all duration-300 ${
                         isActive
                           ? "rotate-45 text-orchid"
@@ -93,9 +94,9 @@ export function ServicesStrip() {
                         {service.deliverables.map((item, dIdx) => (
                           <div
                             key={dIdx}
-                            className="flex items-center gap-2 font-mono-code text-[11px] text-white/80"
+                            className="flex items-center gap-2.5 font-mono-code text-[11px] text-white/80"
                           >
-                            <CheckCircle2 className="h-3.5 w-3.5 text-orchid shrink-0" />
+                            <span className="h-1 w-1 rounded-full bg-orchid shrink-0" />
                             <span>{item}</span>
                           </div>
                         ))}
@@ -153,7 +154,7 @@ export function ServicesStrip() {
                       className="text-orchid hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1 min-h-[44px]"
                     >
                       <span>INQUIRE</span>
-                      <ArrowUpRight className="h-3.5 w-3.5" />
+                      <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </Link>
                   </div>
                 </div>
