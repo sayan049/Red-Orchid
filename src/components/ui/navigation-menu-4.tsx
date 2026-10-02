@@ -71,6 +71,7 @@ const navigationLinks = [
       { href: "/#services", label: "Equipment & Technical Scope", icon: "Camera" },
     ],
   },
+  { href: "/#faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
 ]
 

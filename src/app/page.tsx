@@ -2,6 +2,7 @@ import { Hero } from "@/components/home/Hero";
 import { TrendingWorks } from "@/components/home/TrendingWorks";
 import { SelectedWorks } from "@/components/home/SelectedWorks";
 import { ServicesStrip } from "@/components/home/ServicesStrip";
+import FrequentlyAskedQuestions from "@/components/ui/frequently-asked-questions-with-accordion";
 import { ContactSection } from "@/components/home/ContactSection";
 import { ClientsSection } from "@/components/home/ClientsSection";
 import { WORKS_DATA } from "@/data/works";
@@ -15,16 +16,19 @@ export default function HomePage() {
       {/* 2. Trending Works Horizontal Showcase */}
       <TrendingWorks works={WORKS_DATA} />
 
-      {/* 3. Selected Works Asymmetric Editorial Grid */}
+      {/* 3. Selected Works 3D Parallax Unfurling Matrix */}
       <SelectedWorks works={WORKS_DATA} />
 
       {/* 4. Capabilities & Services Strip */}
       <ServicesStrip />
 
-      {/* 5. Contact & Commissions Suite */}
+      {/* 5. Frequently Asked Inquiries Accordion */}
+      <FrequentlyAskedQuestions />
+
+      {/* 6. Contact & Commissions Suite */}
       <ContactSection />
 
-      {/* 6. Clients & Collaborators Two-Way Marquee */}
+      {/* 7. Clients & Collaborators Two-Way Marquee */}
       <ClientsSection />
     </main>
   );
