@@ -1,23 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { WORKS_DATA } from "@/data/works";
-import { WorkItem, StillItem } from "@/types";
+import { StillItem } from "@/types";
 import { Lightbox } from "@/components/ui/Lightbox";
 import { VideoModal, VideoModalItem } from "@/components/ui/VideoModal";
 import { CoverflowCarousel, CoverflowSlide } from "@/components/ui/coverflow-carousel";
 import { ArgentLoopInfiniteSlider, ProjectData } from "@/components/ui/argent-loop-infinite-slider";
+import { MasonryGrid, MasonryItem } from "@/components/ui/masonry-grid";
 import {
-  Play,
   Camera,
   Film,
   Smartphone,
-  ArrowUpRight,
-  Volume2,
-  VolumeX,
-  Maximize2,
   LayoutGrid,
   Layers,
   SlidersHorizontal,
@@ -32,10 +26,6 @@ export default function GalleryPage() {
   const [mainFilter, setMainFilter] = useState<MainFilter>("all");
   const [photoSubFilter, setPhotoSubFilter] = useState<PhotoSubFilter>("all-photo");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-
-  // In-place inline video player state (for Grid view)
-  const [activeInlineVideoId, setActiveInlineVideoId] = useState<string | null>(null);
-  const [isMuted, setIsMuted] = useState<boolean>(true);
 
   // Fullscreen video modal with backward / forward navigation
   const [modalVideoData, setModalVideoData] = useState<{
@@ -122,19 +112,9 @@ export default function GalleryPage() {
     }));
   }, [mainFilter, filteredWorks]);
 
-  const toggleInlineVideo = (workId: string) => {
-    sound.playClick();
-    if (activeInlineVideoId === workId) {
-      setActiveInlineVideoId(null);
-    } else {
-      setActiveInlineVideoId(workId);
-    }
-  };
-
   const handleSelectFilter = (id: MainFilter) => {
     sound.playClick();
     setMainFilter(id);
-    setActiveInlineVideoId(null);
   };
 
   const handleSelectPhotoSub = (id: PhotoSubFilter) => {
@@ -145,7 +125,6 @@ export default function GalleryPage() {
   const handleSelectViewMode = (mode: ViewMode) => {
     sound.playClick();
     setViewMode(mode);
-    setActiveInlineVideoId(null);
   };
 
   const openLightbox = (index: number, stillsList: StillItem[] = allStills) => {
@@ -168,7 +147,112 @@ export default function GalleryPage() {
   };
 
   // -------------------------------------------------------------
-  // Data Adaptor: Coverflow Slides
+  // Data Adaptor 1: Pinterest Masonry Grid Items
+  // -------------------------------------------------------------
+  const masonryItems: MasonryItem[] = useMemo(() => {
+    if (mainFilter === "photography") {
+      return filteredStills.map((still) => {
+        const isSquare = still.aspectRatio?.includes("1:1");
+        const isLandscape = still.aspectRatio?.includes("16:9") || still.aspectRatio?.includes("2.39");
+        const height = isSquare ? 800 : isLandscape ? 520 : 1000;
+        return {
+          id: still.id,
+          src: still.url,
+          alt: still.caption || "Photography still",
+          width: 800,
+          height,
+          title: still.caption,
+          author: still.camera || "Red Orchid Atelier",
+          category: "Photography",
+        };
+      });
+    }
+
+    if (mainFilter === "reels") {
+      return filteredWorks.map((work) => ({
+        id: work.id,
+        src: work.coverImage,
+        alt: work.title,
+        width: 1080,
+        height: 1920,
+        title: work.title,
+        author: work.client,
+        videoUrl: work.videoUrl,
+        category: "9:16 Reel",
+        client: work.client,
+        slug: work.slug,
+      }));
+    }
+
+    if (mainFilter === "short-films") {
+      return filteredWorks.map((work) => {
+        const isCinemaScope = work.aspectRatio?.includes("2.39");
+        return {
+          id: work.id,
+          src: work.coverImage,
+          alt: work.title,
+          width: 1600,
+          height: isCinemaScope ? 670 : 900,
+          title: work.title,
+          author: work.client,
+          videoUrl: work.videoUrl,
+          category: work.category,
+          client: work.client,
+          slug: work.slug,
+        };
+      });
+    }
+
+    // "all": mix of short films, vertical reels, and photography stills for a rich Pinterest grid
+    const combined: MasonryItem[] = [];
+    filteredWorks.forEach((work) => {
+      const isReel = work.category === "Reels";
+      const isCinemaScope = work.aspectRatio?.includes("2.39");
+      combined.push({
+        id: work.id,
+        src: work.coverImage,
+        alt: work.title,
+        width: isReel ? 1080 : 1600,
+        height: isReel ? 1920 : isCinemaScope ? 670 : 900,
+        title: work.title,
+        author: work.client,
+        videoUrl: work.videoUrl,
+        category: work.category,
+        client: work.client,
+        slug: work.slug,
+      });
+    });
+
+    // Interleave stills in the "All" view so heights vary delightfully
+    filteredStills.slice(0, 15).forEach((still, idx) => {
+      const isLandscape = still.aspectRatio?.includes("16:9");
+      combined.push({
+        id: `still-${still.id}-${idx}`,
+        src: still.url,
+        alt: still.caption || "Photography still",
+        width: 800,
+        height: isLandscape ? 520 : 1000,
+        title: still.caption,
+        author: still.camera || "Red Orchid Stills",
+        category: "Photography",
+      });
+    });
+
+    return combined;
+  }, [mainFilter, filteredStills, filteredWorks]);
+
+  const handleMasonryItemClick = (item: MasonryItem) => {
+    sound.playClick();
+    if (item.videoUrl) {
+      openVideoModal(item.videoUrl, videoPlaylist);
+    } else {
+      const stillIdx = filteredStills.findIndex((s) => s.url === item.src);
+      openLightbox(stillIdx !== -1 ? stillIdx : 0, filteredStills);
+    }
+  };
+
+  // -------------------------------------------------------------
+  // Data Adaptor 2: Coverflow Slides
   // -------------------------------------------------------------
   const coverflowSlides: CoverflowSlide[] = useMemo(() => {
     if (mainFilter === "photography") {
@@ -217,7 +301,7 @@ export default function GalleryPage() {
   }, [mainFilter, filteredStills, filteredWorks, videoPlaylist]);
 
   // -------------------------------------------------------------
-  // Data Adaptor: Argent Loop Infinite Slider Items
+  // Data Adaptor 3: Argent Loop Infinite Slider Items
   // -------------------------------------------------------------
   const sliderItems: ProjectData[] = useMemo(() => {
     if (mainFilter === "photography") {
@@ -389,219 +473,22 @@ export default function GalleryPage() {
         )}
 
         {/* ========================================================= */}
-        {/* VIEW MODE 1: PINTEREST GRID                               */}
+        {/* VIEW MODE 1: PINTEREST MASONRY PHOTO GRID                 */}
         {/* ========================================================= */}
         {viewMode === "grid" && (
           <div>
             <div className="mb-6 flex items-center justify-between text-xs font-mono-code text-white/40">
               <span className="uppercase tracking-wider">
-                {mainFilter === "photography"
-                  ? "TAP ANY STILL TO OPEN VIEWER • ARROWS: BACK/FORWARD"
-                  : mainFilter === "reels"
-                  ? "VERTICAL 9:16 KINETIC SOCIAL CINEMA • TAP TO PLAY / EXPAND"
-                  : mainFilter === "short-films"
-                  ? "LARGE-FORMAT NARRATIVE ARCHIVE • TAP TO PLAY / EXPAND"
-                  : "PINTEREST MASONRY ARCHIVE • TAP ANY ITEM TO OPEN"}
+                PINTEREST MASONRY ARCHIVE • TAP TO EXPAND
               </span>
-              <span>
-                {mainFilter === "photography"
-                  ? `${filteredStills.length} STILLS`
-                  : `${filteredWorks.length} WORKS`}
-              </span>
+              <span>{masonryItems.length} ITEMS</span>
             </div>
 
-            {/* Pinterest Multi-Column Masonry Layout */}
-            <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
-              {/* Category: Photography */}
-              {mainFilter === "photography"
-                ? filteredStills.map((still, idx) => (
-                    <div
-                      key={still.id}
-                      onClick={() => openLightbox(idx, filteredStills)}
-                      className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121110] break-inside-avoid transition-all duration-300 hover:border-white/30 touch-manipulation active:scale-[0.99] shadow-lg"
-                    >
-                      <div className="relative w-full aspect-[4/5] overflow-hidden bg-black">
-                        <Image
-                          src={still.url}
-                          alt={still.caption || "Photography still"}
-                          fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                          <p className="font-display text-sm font-semibold text-bone">
-                            {still.caption}
-                          </p>
-                          {still.camera && (
-                            <p className="font-mono-code text-[10px] text-white/50 mt-0.5">
-                              {still.camera}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                : /* Category: All Works, Reels, or Short Films */
-                  filteredWorks.map((work) => {
-                    const isReel = work.category === "Reels";
-                    const isPlaying = activeInlineVideoId === work.id;
-
-                    return (
-                      <article
-                        key={work.id}
-                        className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-[#111010] break-inside-avoid transition-all duration-300 hover:border-white/30 shadow-xl ${
-                          isReel ? "aspect-[9/16]" : ""
-                        }`}
-                      >
-                        {/* Visual Stage */}
-                        <div
-                          className={`relative w-full overflow-hidden bg-black cursor-pointer ${
-                            isReel ? "h-full" : "aspect-[16/9]"
-                          }`}
-                          onClick={() => {
-                            if (work.videoUrl) {
-                              openVideoModal(work.videoUrl, videoPlaylist);
-                            } else if (work.stills && work.stills.length > 0) {
-                              openLightbox(0, work.stills);
-                            }
-                          }}
-                        >
-                          <Image
-                            src={work.coverImage}
-                            alt={work.title}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                            className={`object-cover transition-transform duration-700 ease-out filter brightness-90 ${
-                              isPlaying
-                                ? "opacity-0 pointer-events-none"
-                                : "opacity-100 group-hover:scale-105 group-hover:brightness-100"
-                            }`}
-                          />
-
-                          {/* In-place Video Playing if user toggles inline */}
-                          {work.videoUrl && isPlaying && (
-                            <div className="absolute inset-0 z-20 bg-black">
-                              <video
-                                src={work.videoUrl}
-                                autoPlay
-                                loop
-                                muted={isMuted}
-                                playsInline
-                                className="h-full w-full object-cover"
-                              />
-
-                              <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between">
-                                <span className="font-mono-code text-[10px] rounded-full bg-orchid px-2.5 py-1 text-white font-bold">
-                                  PLAYING
-                                </span>
-                                <div className="flex items-center gap-1.5">
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      sound.playClick();
-                                      setIsMuted(!isMuted);
-                                    }}
-                                    className="rounded-full bg-black/75 p-2 text-white hover:text-orchid backdrop-blur-md cursor-pointer"
-                                    aria-label={isMuted ? "Unmute" : "Mute"}
-                                  >
-                                    {isMuted ? (
-                                      <VolumeX className="h-4 w-4" strokeWidth={1.5} />
-                                    ) : (
-                                      <Volume2 className="h-4 w-4 text-orchid" strokeWidth={1.5} />
-                                    )}
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      openVideoModal(work.videoUrl || "", videoPlaylist);
-                                    }}
-                                    className="rounded-full bg-black/75 p-2 text-white hover:text-orchid backdrop-blur-md cursor-pointer"
-                                    title="Fullscreen Cinema"
-                                  >
-                                    <Maximize2 className="h-4 w-4" strokeWidth={1.5} />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Overlay when paused */}
-                          {!isPlaying && (
-                            <>
-                              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent pointer-events-none" />
-
-                              {/* Top Badges */}
-                              <div className="absolute top-3 left-3 right-3 flex items-center justify-between text-[10px] font-mono-code pointer-events-none">
-                                <span className="rounded-full border border-white/20 bg-black/70 px-2.5 py-1 backdrop-blur-md text-white/90">
-                                  {work.category}
-                                </span>
-                                <span className="rounded-full border border-white/10 bg-black/70 px-2 py-1 backdrop-blur-md text-white/60">
-                                  {work.duration || work.year}
-                                </span>
-                              </div>
-
-                              {/* Center Play Button Indicator */}
-                              {work.videoUrl && (
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                  <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-white/50 group-hover:bg-black/90">
-                                    <Play className="h-5 w-5 fill-current ml-0.5 text-white" />
-                                  </div>
-                                </div>
-                              )}
-                            </>
-                          )}
-                        </div>
-
-                        {/* Text Content (if not a pure 9:16 full-card reel) */}
-                        {!isReel ? (
-                          <div className="p-4 sm:p-5">
-                            <div className="font-mono-code text-[10px] text-white/40 uppercase mb-1">
-                              {work.client}
-                            </div>
-                            <h3
-                              onClick={() => {
-                                if (work.videoUrl) openVideoModal(work.videoUrl, videoPlaylist);
-                              }}
-                              className="font-display text-base sm:text-lg font-bold uppercase tracking-tight text-bone group-hover:text-white transition-colors cursor-pointer"
-                            >
-                              {work.title}
-                            </h3>
-                            <p className="mt-1.5 font-sans-ui text-xs text-white/60 line-clamp-2 leading-relaxed">
-                              {work.synopsis}
-                            </p>
-
-                            <div className="flex items-center justify-between border-t border-white/5 pt-3 mt-3 text-xs font-mono-code">
-                              <span className="text-[10px] text-white/40">
-                                {work.technicalSpecs?.camera || "35MM / ARRI LF"}
-                              </span>
-                              <Link
-                                href={`/work/${work.slug}`}
-                                onClick={() => sound.playClick()}
-                                className="flex items-center gap-1 text-[11px] text-white/70 hover:text-white uppercase tracking-wider"
-                              >
-                                <span>CASE STUDY</span>
-                                <ArrowUpRight className="h-3 w-3 text-white/80" strokeWidth={1.5} />
-                              </Link>
-                            </div>
-                          </div>
-                        ) : (
-                          /* Reel Bottom Title Overlay */
-                          <div className="absolute bottom-3 left-3 right-3 z-30 pointer-events-none">
-                            <span className="font-mono-code text-[10px] text-white/50 uppercase tracking-widest block mb-0.5">
-                              {work.client}
-                            </span>
-                            <h3 className="font-display text-sm font-bold uppercase text-bone">
-                              {work.title}
-                            </h3>
-                          </div>
-                        )}
-                      </article>
-                    );
-                  })}
-            </div>
+            <MasonryGrid
+              items={masonryItems}
+              onItemClick={handleMasonryItemClick}
+              showMeta
+            />
           </div>
         )}
 

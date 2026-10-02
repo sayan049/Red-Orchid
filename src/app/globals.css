@@ -149,6 +149,14 @@
   }
 }
 
+/* Ensure cursor is visible in fullscreen modals and players */
+:fullscreen,
+::backdrop,
+video:fullscreen,
+:-webkit-full-screen {
+  cursor: auto !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

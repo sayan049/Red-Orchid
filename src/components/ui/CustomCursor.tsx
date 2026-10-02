@@ -104,7 +104,7 @@ export function CustomCursor() {
       <div
         ref={cursorDotRef}
         aria-hidden="true"
-        className={`pointer-events-none fixed top-0 left-0 z-50 -ml-1 -mt-1 h-2 w-2 rounded-full bg-white ${
+        className={`pointer-events-none fixed top-0 left-0 z-[9999] -ml-1 -mt-1 h-2 w-2 rounded-full bg-white ${
           isVisible ? "opacity-100" : "opacity-0"
         } ${isHovered && cursorText ? "opacity-0" : ""}`}
         style={{
@@ -117,7 +117,7 @@ export function CustomCursor() {
       <div
         ref={cursorRingRef}
         aria-hidden="true"
-        className={`pointer-events-none fixed top-0 left-0 z-50 flex items-center justify-center rounded-full border ${
+        className={`pointer-events-none fixed top-0 left-0 z-[9999] flex items-center justify-center rounded-full border ${
           isVisible ? "opacity-100" : "opacity-0"
         } ${
           cursorText
