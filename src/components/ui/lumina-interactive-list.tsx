@@ -19,37 +19,37 @@ const RED_ORCHID_SLIDES: SlideData[] = [
     category: "// 01 • ETHEREAL GLOW",
     title: "Ethereal Glow",
     description: "A soft, radiant light that illuminates the soul.",
-    media: "https://assets.codepen.io/7558/orange-portrait-001.jpg",
+    media: "/images/slider/slide-1.jpg",
   },
   {
     category: "// 02 • ROSE MIRAGE",
     title: "Rose Mirage",
     description: "Lost in a desert of blooming dreams and endless horizons.",
-    media: "https://assets.codepen.io/7558/orange-portrait-002.jpg",
+    media: "/images/slider/slide-2.jpg",
   },
   {
     category: "// 03 • VELVET MYSTIQUE",
     title: "Velvet Mystique",
     description: "Wrapped in the deep, luxurious embrace of the night.",
-    media: "https://assets.codepen.io/7558/orange-portrait-003.jpg",
+    media: "/images/slider/slide-3.jpg",
   },
   {
     category: "// 04 • GOLDEN HOUR",
     title: "Golden Hour",
     description: "That fleeting moment when the world is dipped in gold.",
-    media: "https://assets.codepen.io/7558/orange-portrait-004.jpg",
+    media: "/images/slider/slide-4.jpg",
   },
   {
     category: "// 05 • MIDNIGHT DREAMS",
     title: "Midnight Dreams",
     description: "Where reality fades and imagination takes flight.",
-    media: "https://assets.codepen.io/7558/orange-portrait-005.jpg",
+    media: "/images/slider/slide-5.jpg",
   },
   {
     category: "// 06 • SILVER LIGHT",
     title: "Silver Light",
     description: "A cool, metallic shimmer reflecting the urban pulse.",
-    media: "https://assets.codepen.io/7558/orange-portrait-006.jpg",
+    media: "/images/slider/slide-6.jpg",
   },
 ];
 
@@ -75,7 +75,22 @@ const fragmentShader = `
     vec2 s = uResolution / textureSize;
     float scale = max(s.x, s.y);
     vec2 scaledSize = textureSize * scale;
-    vec2 offset = (uResolution - scaledSize) * 0.5;
+
+    // Dynamic responsive framing:
+    // Calculates ratio between screen aspect and texture aspect.
+    // On widescreen desktops and laptops (screenAspect > texAspect), the scale expands based on width.
+    // Smoothly bias the vertical anchor (yAnchor) up to ~0.82 so the subject's face/eyes are prominently
+    // and beautifully framed without getting cut off at the top.
+    // On mobile and vertical tablets (screenAspect <= texAspect), anchor at 0.5 for centered framing.
+    float screenAspect = uResolution.x / uResolution.y;
+    float texAspect = textureSize.x / textureSize.y;
+    float excessWidth = max(0.0, screenAspect - texAspect);
+    float yAnchor = mix(0.5, 0.82, clamp(excessWidth / 1.1, 0.0, 1.0));
+
+    vec2 offset = vec2(
+      (uResolution.x - scaledSize.x) * 0.5,
+      (uResolution.y - scaledSize.y) * yAnchor
+    );
     return (uv * uResolution - offset) / scaledSize;
   }
 
@@ -145,12 +160,18 @@ export function LuminaInteractiveList() {
 
     const splitText = (text: string) => {
       return text
-        .split("")
+        .split(" ")
         .map(
-          (char) =>
-            `<span style="display: inline-block; opacity: 0;">${char === " " ? "&nbsp;" : char}</span>`
+          (word) =>
+            `<span class="inline-block whitespace-nowrap">${word
+              .split("")
+              .map(
+                (char) =>
+                  `<span class="char-span inline-block" style="opacity: 0; transform: translateY(24px);">${char}</span>`
+              )
+              .join("")}</span>`
         )
-        .join("");
+        .join(" ");
     };
 
     const updateContent = (idx: number) => {
@@ -163,37 +184,41 @@ export function LuminaInteractiveList() {
       }
 
       if (titleEl && descEl) {
-        gsap.to(titleEl.children, {
-          y: -20,
-          opacity: 0,
-          duration: 0.4,
-          stagger: 0.02,
-          ease: "power2.in",
-        });
-        gsap.to(descEl, { y: -10, opacity: 0, duration: 0.35, ease: "power2.in" });
+        const prevChars = titleEl.querySelectorAll(".char-span");
+        if (prevChars.length > 0) {
+          gsap.to(prevChars, {
+            y: -18,
+            opacity: 0,
+            duration: 0.35,
+            stagger: 0.012,
+            ease: "power2.in",
+          });
+        }
+        gsap.to(descEl, { y: -10, opacity: 0, duration: 0.3, ease: "power2.in" });
 
         setTimeout(() => {
           titleEl.innerHTML = splitText(RED_ORCHID_SLIDES[idx].title);
           descEl.textContent = RED_ORCHID_SLIDES[idx].description;
 
-          gsap.set(titleEl.children, { opacity: 0, y: 24 });
-          gsap.set(descEl, { y: 16, opacity: 0 });
+          const newChars = titleEl.querySelectorAll(".char-span");
+          gsap.set(newChars, { opacity: 0, y: 22 });
+          gsap.set(descEl, { y: 14, opacity: 0 });
 
-          gsap.to(titleEl.children, {
+          gsap.to(newChars, {
             y: 0,
             opacity: 1,
-            duration: 0.8,
-            stagger: 0.025,
+            duration: 0.75,
+            stagger: 0.02,
             ease: "power3.out",
           });
           gsap.to(descEl, {
             y: 0,
             opacity: 1,
-            duration: 0.8,
-            delay: 0.15,
+            duration: 0.75,
+            delay: 0.12,
             ease: "power3.out",
           });
-        }, 400);
+        }, 360);
       }
     };
 
@@ -330,26 +355,29 @@ export function LuminaInteractiveList() {
           (tex) => {
             tex.minFilter = THREE.LinearFilter;
             tex.magFilter = THREE.LinearFilter;
-            tex.userData = { size: new THREE.Vector2(tex.image.width || 1920, tex.image.height || 1080) };
+            const img = tex.image;
+            const w = (img && (img.naturalWidth || img.width)) || 960;
+            const h = (img && (img.naturalHeight || img.height)) || 1200;
+            tex.userData = { size: new THREE.Vector2(w, h) };
             resolve(tex);
           },
           undefined,
           () => {
             // High quality dark fallback canvas if network fails
             const c = document.createElement("canvas");
-            c.width = 1920;
-            c.height = 1080;
+            c.width = 960;
+            c.height = 1200;
             const ctx = c.getContext("2d");
             if (ctx) {
-              const grad = ctx.createLinearGradient(0, 0, 1920, 1080);
+              const grad = ctx.createLinearGradient(0, 0, 960, 1200);
               grad.addColorStop(0, "#0c0a09");
               grad.addColorStop(0.5, "#1f0d14");
               grad.addColorStop(1, "#050505");
               ctx.fillStyle = grad;
-              ctx.fillRect(0, 0, 1920, 1080);
+              ctx.fillRect(0, 0, 960, 1200);
             }
             const fallbackTex = new THREE.CanvasTexture(c);
-            fallbackTex.userData = { size: new THREE.Vector2(1920, 1080) };
+            fallbackTex.userData = { size: new THREE.Vector2(960, 1200) };
             resolve(fallbackTex);
           }
         );
@@ -374,8 +402,9 @@ export function LuminaInteractiveList() {
         if (tEl && dEl) {
           tEl.innerHTML = splitText(RED_ORCHID_SLIDES[0].title);
           dEl.textContent = RED_ORCHID_SLIDES[0].description;
-          gsap.to(tEl.children, { y: 0, opacity: 1, duration: 0.8, stagger: 0.025, ease: "power3.out" });
-          gsap.to(dEl, { y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: "power3.out" });
+          const chars = tEl.querySelectorAll(".char-span");
+          gsap.to(chars, { y: 0, opacity: 1, duration: 0.8, stagger: 0.02, ease: "power3.out" });
+          gsap.to(dEl, { y: 0, opacity: 1, duration: 0.8, delay: 0.15, ease: "power3.out" });
         }
 
         startTimer();
@@ -433,15 +462,15 @@ export function LuminaInteractiveList() {
         <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#070707]/50 to-[#070707]" />
 
         {/* Top Indicators */}
-        <div className="absolute top-24 sm:top-28 left-4 sm:left-8 md:left-12 lg:left-16 z-20 flex items-center gap-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 backdrop-blur-md">
+        <div className="absolute top-20 sm:top-24 md:top-28 left-4 sm:left-8 md:left-12 lg:left-16 z-20 flex items-center gap-3 sm:gap-4 pointer-events-none">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-2.5 sm:px-3 py-1 backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
             <span id="mainCategory" className="font-mono-code text-[10px] sm:text-[11px] font-medium tracking-wider text-white/80 uppercase">
               // 01 • ETHEREAL GLOW
             </span>
           </div>
 
-          <div className="flex items-center gap-1 font-mono-code text-xs text-white/40">
+          <div className="flex items-center gap-1 font-mono-code text-[11px] sm:text-xs text-white/40">
             <span id="slideNumber" className="text-orchid font-semibold">01</span>
             <span>/</span>
             <span id="slideTotal">06</span>
@@ -454,7 +483,7 @@ export function LuminaInteractiveList() {
           <p id="mainDesc" className="slide-description"></p>
 
           {/* Interactive Atelier Showreel button */}
-          <div className="mt-6 sm:mt-8 flex items-center gap-4 pointer-events-auto">
+          <div className="mt-4 sm:mt-6 md:mt-8 flex items-center gap-4 pointer-events-auto">
             <button
               type="button"
               onClick={() => {
@@ -462,12 +491,12 @@ export function LuminaInteractiveList() {
                 setIsVideoModalOpen(true);
               }}
               data-cursor="PLAY"
-              className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95 select-none"
+              className="group inline-flex items-center gap-2.5 sm:gap-3 rounded-full border border-white/20 bg-white/10 px-4 sm:px-5 py-2.5 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95 select-none"
             >
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110 group-hover:bg-black group-hover:text-white pointer-events-none">
-                <Play className="h-3.5 w-3.5 fill-current ml-0.5 pointer-events-none" />
+              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110 group-hover:bg-black group-hover:text-white pointer-events-none">
+                <Play className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current ml-0.5 pointer-events-none" />
               </div>
-              <span className="font-mono-code text-xs font-semibold tracking-widest uppercase pointer-events-none">
+              <span className="font-mono-code text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest uppercase pointer-events-none">
                 PLAY ATELIER REEL (02:15)
               </span>
             </button>
