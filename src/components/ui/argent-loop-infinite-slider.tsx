@@ -376,7 +376,7 @@ export function ArgentLoopInfiniteSlider({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      className={`parallax-container group relative select-none w-full h-[600px] sm:h-[680px] md:h-[740px] overflow-hidden rounded-2xl border border-white/10 bg-[#070707] shadow-2xl cursor-grab active:cursor-grabbing ${className}`}
+      className={`parallax-container group relative select-none w-full h-[600px] sm:h-[680px] md:h-[740px] overflow-hidden rounded-2xl border border-white/10 bg-[#070707] cursor-grab active:cursor-grabbing ${className}`}
     >
       {/* Background Project Slides List */}
       <ul className="project-list absolute inset-0 m-0 p-0 list-none overflow-hidden pointer-events-none">
@@ -426,7 +426,7 @@ export function ArgentLoopInfiniteSlider({
               onPointerDown={(e) => e.stopPropagation()}
               onClick={stepPrev}
               aria-label="Previous Project"
-              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer shadow-md active:scale-90"
+              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer active:scale-90"
             >
               <ChevronUp className="h-4 w-4" />
             </button>
@@ -435,7 +435,7 @@ export function ArgentLoopInfiniteSlider({
               onPointerDown={(e) => e.stopPropagation()}
               onClick={stepNext}
               aria-label="Next Project"
-              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer shadow-md active:scale-90"
+              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer active:scale-90"
             >
               <ChevronDown className="h-4 w-4" />
             </button>
@@ -457,7 +457,7 @@ export function ArgentLoopInfiniteSlider({
             e.stopPropagation();
             handleAction();
           }}
-          className="font-display text-2xl sm:text-4xl md:text-5xl font-extrabold uppercase text-bone tracking-tight drop-shadow-md cursor-pointer hover:text-white/90 transition-colors"
+          className="font-display text-2xl sm:text-4xl md:text-5xl font-extrabold uppercase text-bone tracking-tight cursor-pointer hover:text-white/90 transition-colors"
         >
           {currentActiveProject?.title}
         </h2>
@@ -474,7 +474,7 @@ export function ArgentLoopInfiniteSlider({
               e.stopPropagation();
               handleAction();
             }}
-            className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 font-mono-code text-xs font-semibold text-white uppercase tracking-wider shadow-lg hover:border-white/40 hover:bg-white/20 transition-all cursor-pointer min-h-[44px] active:scale-95"
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 font-mono-code text-xs font-semibold text-white uppercase tracking-wider hover:border-white/40 hover:bg-white/20 transition-all cursor-pointer min-h-[44px] active:scale-95"
           >
             {currentActiveProject?.videoUrl ? (
               <>
@@ -493,7 +493,7 @@ export function ArgentLoopInfiniteSlider({
       </div>
 
       {/* Minimap Synchronized Parallax Card (Bottom Right on Desktop) */}
-      <div className="minimap hidden sm:block absolute bottom-6 right-6 z-30 w-[270px] md:w-[310px] h-[175px] rounded-xl overflow-hidden border border-white/15 bg-[#12100f]/85 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] pointer-events-none">
+      <div className="minimap hidden sm:block absolute bottom-6 right-6 z-30 w-[270px] md:w-[310px] h-[175px] rounded-xl overflow-hidden border border-white/15 bg-[#12100f]/85 backdrop-blur-xl pointer-events-none">
         <div className="minimap-wrapper relative flex w-full h-full">
           <div className="minimap-img-preview relative w-[95px] h-full overflow-hidden border-r border-white/10">
             {indices.map((i) => {

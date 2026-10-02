@@ -118,7 +118,7 @@ export const InfiniteSlider = memo(function InfiniteSlider({
 
 export const LogoImage = memo(function LogoImage({ logo }: { logo: Logo }) {
   return (
-    <div className="flex items-center justify-center h-12 px-6 py-2.5 rounded-xl bg-white/[0.03] border border-white/8 hover:border-orchid/40 hover:bg-white/[0.07] transition-all duration-300 group/logo shadow-sm select-none">
+    <div className="flex items-center justify-center h-12 px-6 py-2.5 rounded-xl bg-white/[0.03] border border-white/8 hover:border-orchid/40 hover:bg-white/[0.07] transition-all duration-300 group/logo select-none">
       <img
         alt={logo.alt}
         src={logo.src}

@@ -121,7 +121,7 @@ export function CustomCursor() {
           isVisible ? "opacity-100" : "opacity-0"
         } ${
           cursorText
-            ? "-ml-9 -mt-9 h-18 w-18 border-orchid/90 bg-black/80 backdrop-blur-xs shadow-[0_0_20px_rgba(225,29,72,0.35)]"
+            ? "-ml-9 -mt-9 h-18 w-18 border-orchid/90 bg-black/80 backdrop-blur-xs"
             : isHovered
             ? "-ml-5 -mt-5 h-10 w-10 border-orchid/80 bg-orchid/15"
             : "-ml-4 -mt-4 h-8 w-8 border-white/40"

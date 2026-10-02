@@ -334,8 +334,8 @@ export function CoverflowCarousel({
                   aria-label={`${index + 1} of ${count}`}
                   onClick={() => handleCardClick(slide, index)}
                   className={cn(
-                    "absolute left-1/2 top-0 aspect-[3/4] overflow-hidden rounded-2xl bg-[#141211] shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-white/10 will-change-transform cursor-pointer transition-colors duration-300",
-                    isCenter && "border-white/25 shadow-[0_25px_60px_rgba(0,0,0,0.95)]",
+                    "absolute left-1/2 top-0 aspect-[3/4] overflow-hidden rounded-2xl bg-[#141211] border border-white/10 will-change-transform cursor-pointer transition-colors duration-300",
+                    isCenter && "border-white/25",
                     cardClassName,
                   )}
                   style={{ width: "var(--cf-card)" }}
@@ -363,7 +363,7 @@ export function CoverflowCarousel({
                   {/* Center hint when active */}
                   {isCenter && (
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <span className="font-mono-code text-[11px] font-bold uppercase tracking-wider rounded-full bg-black/80 border border-white/20 px-3.5 py-1.5 text-white shadow-xl backdrop-blur-md">
+                      <span className="font-mono-code text-[11px] font-bold uppercase tracking-wider rounded-full bg-black/80 border border-white/20 px-3.5 py-1.5 text-white backdrop-blur-md">
                         {slide.videoUrl ? "WATCH FILM" : "OPEN LIGHTBOX"}
                       </span>
                     </div>
@@ -380,7 +380,7 @@ export function CoverflowCarousel({
               type="button"
               aria-label="Previous slide"
               onClick={() => nudge(-1)}
-              className="absolute left-2 sm:left-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-white/50 hover:bg-white/15 hover:scale-110 cursor-pointer shadow-xl active:scale-95"
+              className="absolute left-2 sm:left-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-white/50 hover:bg-white/15 hover:scale-110 cursor-pointer active:scale-95"
             >
               <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
@@ -388,7 +388,7 @@ export function CoverflowCarousel({
               type="button"
               aria-label="Next slide"
               onClick={() => nudge(1)}
-              className="absolute right-2 sm:right-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-white/50 hover:bg-white/15 hover:scale-110 cursor-pointer shadow-xl active:scale-95"
+              className="absolute right-2 sm:right-4 top-1/2 z-[200] -translate-y-1/2 rounded-full border border-white/20 bg-black/80 p-2.5 sm:p-3 text-white backdrop-blur-md transition-all hover:border-white/50 hover:bg-white/15 hover:scale-110 cursor-pointer active:scale-95"
             >
               <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
@@ -463,7 +463,7 @@ export function CoverflowCarousel({
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
                 index === selected
-                  ? "w-7 bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                  ? "w-7 bg-white"
                   : "w-2 bg-white/25 hover:bg-white/50",
               )}
             />

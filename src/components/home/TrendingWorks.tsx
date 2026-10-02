@@ -205,7 +205,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                       onClick={(e) => handleToggleInlinePlay(e, work)}
                       data-cursor="PLAY"
                       aria-label={`Play ${work.title} video directly in this card`}
-                      className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-orchid hover:bg-orchid touch-manipulation cursor-pointer active:scale-95"
+                      className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-black/80 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-orchid hover:bg-orchid touch-manipulation cursor-pointer active:scale-95"
                     >
                       <Play className="h-5 w-5 fill-current ml-0.5" />
                     </button>

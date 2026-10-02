@@ -25,7 +25,7 @@ export function BrandLogo({ className = "", showTagline = false }: BrandLogoProp
           alt="Red Orchid"
           width={36}
           height={36}
-          className="h-full w-full object-contain filter drop-shadow-[0_2px_10px_rgba(225,29,72,0.45)] transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 select-none"
+          className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 select-none"
           priority
         />
       </div>

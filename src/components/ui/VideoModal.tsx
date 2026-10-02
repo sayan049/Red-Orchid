@@ -207,7 +207,7 @@ export function VideoModal({
           type="button"
           onClick={handlePrev}
           aria-label="Previous video"
-          className="absolute left-2 sm:left-4 md:left-6 z-20 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/80 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-white/15 cursor-pointer shadow-2xl active:scale-95"
+          className="absolute left-2 sm:left-4 md:left-6 z-20 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/80 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-white/15 cursor-pointer active:scale-95"
         >
           <ChevronLeft className="h-6 w-6" strokeWidth={1.5} />
         </button>
@@ -219,13 +219,13 @@ export function VideoModal({
           type="button"
           onClick={handleNext}
           aria-label="Next video"
-          className="absolute right-2 sm:right-4 md:right-6 z-20 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/80 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-white/15 cursor-pointer shadow-2xl active:scale-95"
+          className="absolute right-2 sm:right-4 md:right-6 z-20 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/80 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-white/50 hover:bg-white/15 cursor-pointer active:scale-95"
         >
           <ChevronRight className="h-6 w-6" strokeWidth={1.5} />
         </button>
       )}
 
-      <div className="relative z-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-white/15 bg-[#0c0a09] shadow-2xl">
+      <div className="relative z-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-white/15 bg-[#0c0a09]">
         {/* Top cinema header */}
         <div className="flex items-center justify-between border-b border-white/10 px-5 sm:px-6 py-3.5 bg-black/70">
           <div className="flex items-center gap-3">
@@ -274,7 +274,7 @@ export function VideoModal({
           {/* Big center play icon when paused */}
           {!isPlaying && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-black/75 text-white shadow-2xl transition-transform hover:scale-110">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-black/75 text-white transition-transform hover:scale-110">
                 <Play className="h-6 w-6 fill-current ml-1 text-orchid" />
               </div>
             </div>

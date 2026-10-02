@@ -393,7 +393,7 @@ export default function GalleryPage() {
                   onClick={() => handleSelectFilter(tab.id as MainFilter)}
                   className={`flex items-center gap-2 rounded-full border px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-mono-code uppercase tracking-wider whitespace-nowrap shrink-0 transition-all duration-300 min-h-[42px] touch-manipulation cursor-pointer active:scale-95 ${
                     isActive
-                      ? "border-orchid bg-orchid text-white font-semibold shadow-[0_0_20px_rgba(225,29,72,0.3)]"
+                      ? "border-orchid bg-orchid text-white font-semibold"
                       : "border-white/10 bg-black/40 text-white/60 hover:border-white/30 hover:text-white"
                   }`}
                 >
@@ -409,14 +409,14 @@ export default function GalleryPage() {
             <span className="font-mono-code text-[10px] sm:text-[11px] text-white/40 uppercase tracking-widest hidden sm:inline-block mr-1">
               VIEW AS:
             </span>
-            <div className="flex items-center gap-1 rounded-full border border-white/15 bg-black/70 p-1 backdrop-blur-md shadow-lg">
+            <div className="flex items-center gap-1 rounded-full border border-white/15 bg-black/70 p-1 backdrop-blur-md">
               <button
                 type="button"
                 onClick={() => handleSelectViewMode("grid")}
                 aria-label="Pinterest Grid Layout"
                 className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-mono-code uppercase tracking-wider transition-all min-h-[36px] cursor-pointer touch-manipulation active:scale-95 ${
                   viewMode === "grid"
-                    ? "bg-orchid text-white font-semibold shadow-[0_0_15px_rgba(225,29,72,0.4)]"
+                    ? "bg-orchid text-white font-semibold"
                     : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -430,7 +430,7 @@ export default function GalleryPage() {
                 aria-label="3D Coverflow View"
                 className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-mono-code uppercase tracking-wider transition-all min-h-[36px] cursor-pointer touch-manipulation active:scale-95 ${
                   viewMode === "coverflow"
-                    ? "bg-orchid text-white font-semibold shadow-[0_0_15px_rgba(225,29,72,0.4)]"
+                    ? "bg-orchid text-white font-semibold"
                     : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -444,7 +444,7 @@ export default function GalleryPage() {
                 aria-label="Parallax Infinite Slider"
                 className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-mono-code uppercase tracking-wider transition-all min-h-[36px] cursor-pointer touch-manipulation active:scale-95 ${
                   viewMode === "slider"
-                    ? "bg-orchid text-white font-semibold shadow-[0_0_15px_rgba(225,29,72,0.4)]"
+                    ? "bg-orchid text-white font-semibold"
                     : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
@@ -514,7 +514,7 @@ export default function GalleryPage() {
               <span>{coverflowSlides.length} ARCHIVED SLIDES</span>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-[#0c0b0b]/60 p-4 sm:p-8 backdrop-blur-md shadow-2xl">
+            <div className="rounded-2xl border border-white/10 bg-[#0c0b0b]/60 p-4 sm:p-8 backdrop-blur-md">
               <CoverflowCarousel
                 slides={coverflowSlides}
                 showCaption

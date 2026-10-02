@@ -102,8 +102,8 @@ export function NavigationMenu4() {
         className={cn(
           "pointer-events-auto flex items-center justify-between w-full transition-all duration-500 ease-out",
           isScrolled
-            ? "max-w-6xl rounded-2xl sm:rounded-full border border-white/15 bg-black/75 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.65)] px-4 sm:px-6 py-2 sm:py-2.5"
-            : "max-w-7xl rounded-none border border-transparent bg-transparent shadow-none backdrop-blur-none px-2 sm:px-4 py-3 sm:py-4"
+            ? "max-w-6xl rounded-2xl sm:rounded-full border border-white/15 bg-black/75 backdrop-blur-xl px-4 sm:px-6 py-2 sm:py-2.5"
+            : "max-w-7xl rounded-none border border-transparent bg-transparent backdrop-blur-none px-2 sm:px-4 py-3 sm:py-4"
         )}
       >
         {/* Left: Brand Logo & Mobile Popover trigger */}
@@ -147,7 +147,7 @@ export function NavigationMenu4() {
             </PopoverTrigger>
             <PopoverContent
               align="start"
-              className="w-72 p-2 md:hidden bg-[#0c0a0a]/95 border border-white/15 backdrop-blur-2xl text-white shadow-2xl rounded-2xl"
+              className="w-72 p-2 md:hidden bg-[#0c0a0a]/95 border border-white/15 backdrop-blur-2xl text-white rounded-2xl"
             >
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 w-full">

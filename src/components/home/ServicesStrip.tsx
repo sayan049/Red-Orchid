@@ -62,7 +62,7 @@ export function ServicesStrip() {
                   data-cursor="SELECT"
                   className={`group relative cursor-pointer rounded-xl border p-5 sm:p-7 md:p-8 transition-all duration-300 touch-manipulation select-none active:scale-[0.99] ${
                     isActive
-                      ? "border-orchid/60 bg-[#121011] shadow-[0_0_30px_rgba(225,29,72,0.12)]"
+                      ? "border-orchid/60 bg-[#121011]"
                       : "border-white/5 bg-[#0b0a0a] hover:border-white/20 hover:bg-[#0f0e0e]"
                   }`}
                 >
@@ -130,7 +130,7 @@ export function ServicesStrip() {
 
           {/* Right Column: Visual Stage / Still Preview (Desktop & Tablet) */}
           <div className="hidden lg:block lg:col-span-5 sticky top-28">
-            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#111010] p-3 shadow-2xl">
+            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#111010] p-3">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-black">
                 <Image
                   key={activeService.id}

@@ -141,7 +141,7 @@ function CustomSelect({
       {isOpen && (
         <div
           role="listbox"
-          className="absolute z-50 left-0 right-0 mt-2 max-h-72 overflow-y-auto rounded-xl border border-white/15 bg-[#12100f]/98 p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.85)] backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150"
+          className="absolute z-50 left-0 right-0 mt-2 max-h-72 overflow-y-auto rounded-xl border border-white/15 bg-[#12100f]/98 p-1.5 backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150"
         >
           {options.map((opt) => {
             const isSelected = opt.label === value;
@@ -433,7 +433,7 @@ export function ContactSection() {
             >
               {status === "success" ? (
                 <div className="py-12 text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-orchid/50 bg-orchid/15 text-orchid shadow-[0_0_30px_rgba(225,29,72,0.3)]">
+                  <div className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-orchid/50 bg-orchid/15 text-orchid">
                     <Check className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2} />
                   </div>
                   <div>
@@ -650,7 +650,7 @@ export function ContactSection() {
                     type="submit"
                     disabled={status === "submitting"}
                     data-cursor="SUBMIT"
-                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs sm:text-sm font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark hover:shadow-[0_0_30px_rgba(225,29,72,0.4)] disabled:opacity-50 min-h-[50px] touch-manipulation cursor-pointer active:scale-[0.99] select-none"
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs sm:text-sm font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark disabled:opacity-50 min-h-[50px] touch-manipulation cursor-pointer active:scale-[0.99] select-none"
                   >
                     {status === "submitting" ? (
                       <>

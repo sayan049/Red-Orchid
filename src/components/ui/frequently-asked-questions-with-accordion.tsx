@@ -127,7 +127,7 @@ export default function FrequentlyAskedQuestions({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 sm:mt-16 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-8 backdrop-blur-md shadow-2xl"
+          className="mt-12 sm:mt-16 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-8 backdrop-blur-md"
         >
           <Accordion type="single" collapsible className="w-full">
             {data.map((item, index) => (

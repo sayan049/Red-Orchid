@@ -150,9 +150,9 @@ export function MasonryGrid({
               className="break-inside-avoid mb-4 group cursor-zoom-in"
               onClick={() => handleItemPress(item, index)}
             >
-              {/* Card Container with subtle scale & shadow */}
+              {/* Card Container with subtle scale */}
               <div
-                className="relative overflow-hidden rounded-2xl bg-muted/40 transition-transform duration-200 ease-out will-change-transform group-hover:scale-[1.02] shadow-sm hover:shadow-2xl border border-white/5 hover:border-white/20"
+                className="relative overflow-hidden rounded-2xl bg-muted/40 transition-transform duration-200 ease-out will-change-transform group-hover:scale-[1.02] border border-white/5 hover:border-white/20"
                 style={{
                   aspectRatio: `${item.width} / ${item.height}`,
                 }}
@@ -184,7 +184,7 @@ export function MasonryGrid({
                   <div className="flex items-center justify-between gap-3 pointer-events-auto">
                     <div className="truncate pr-1">
                       {item.title && (
-                        <p className="font-display text-xs sm:text-sm font-semibold text-white drop-shadow truncate leading-tight">
+                        <p className="font-display text-xs sm:text-sm font-semibold text-white truncate leading-tight">
                           {item.title}
                         </p>
                       )}
@@ -201,7 +201,7 @@ export function MasonryGrid({
                         onClick={(e) => handleShare(e, item)}
                         aria-label="Share"
                         title={copiedId === item.id ? "Link copied" : "Share"}
-                        className={`flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 cursor-pointer shadow-lg active:scale-90 ${
+                        className={`flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 cursor-pointer active:scale-90 ${
                           copiedId === item.id
                             ? "bg-white text-black scale-105"
                             : "bg-black/60 text-white/90 hover:bg-white hover:text-black border border-white/20"
@@ -291,7 +291,7 @@ export function MasonryGrid({
             type="button"
             onClick={() => setSelectedIdx(null)}
             aria-label="Close"
-            className="absolute top-4 sm:top-6 right-4 sm:right-6 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white hover:bg-white hover:text-black transition-all cursor-pointer shadow-xl"
+            className="absolute top-4 sm:top-6 right-4 sm:right-6 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white hover:bg-white hover:text-black transition-all cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -305,7 +305,7 @@ export function MasonryGrid({
                 setSelectedIdx((prev) => (prev !== null ? (prev - 1 + items.length) % items.length : 0));
               }}
               aria-label="Previous"
-              className="absolute left-3 sm:left-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white hover:border-white hover:scale-110 transition-all cursor-pointer shadow-xl"
+              className="absolute left-3 sm:left-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white hover:border-white hover:scale-110 transition-all cursor-pointer"
             >
               <ChevronLeft className="h-6 w-6" />
             </button>
@@ -320,7 +320,7 @@ export function MasonryGrid({
                 setSelectedIdx((prev) => (prev !== null ? (prev + 1) % items.length : 0));
               }}
               aria-label="Next"
-              className="absolute right-3 sm:right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white hover:border-white hover:scale-110 transition-all cursor-pointer shadow-xl"
+              className="absolute right-3 sm:right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white hover:border-white hover:scale-110 transition-all cursor-pointer"
             >
               <ChevronRight className="h-6 w-6" />
             </button>

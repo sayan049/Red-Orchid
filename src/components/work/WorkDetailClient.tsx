@@ -89,7 +89,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
   return (
     <>
       {/* Hero Media Stage: In-Place Cinema Player */}
-      <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0d0b0a] shadow-2xl">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0d0b0a]">
         <div
           className={`relative w-full ${
             work.aspectRatio === "2.39:1"
@@ -134,7 +134,7 @@ export function WorkDetailClient({ work }: WorkDetailClientProps) {
                 onClick={togglePlay}
                 data-cursor="PLAY IN-PLACE"
                 aria-label={`Play film ${work.title} in-place`}
-                className="group flex items-center gap-3 sm:gap-4 rounded-full border border-white/30 bg-black/75 px-5 sm:px-7 py-3 sm:py-4 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-orchid hover:bg-orchid hover:text-white shadow-2xl min-h-[48px] touch-manipulation cursor-pointer active:scale-95"
+                className="group flex items-center gap-3 sm:gap-4 rounded-full border border-white/30 bg-black/75 px-5 sm:px-7 py-3 sm:py-4 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-orchid hover:bg-orchid hover:text-white min-h-[48px] touch-manipulation cursor-pointer active:scale-95"
               >
                 <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110">
                   <Play className="h-4 w-4 fill-current ml-0.5" />
