@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { STUDIO_CONFIG } from "@/data/works";
 import { ArrowUpRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { sound } from "@/lib/sound";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -19,10 +20,31 @@ export function ContactSection() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const handleSelectService = (service: string) => {
+    sound.playClick();
+    setFormData((prev) => ({ ...prev, serviceType: service }));
+  };
+
+  const handleSelectBudget = (budget: string) => {
+    sound.playClick();
+    setFormData((prev) => ({ ...prev, budgetRange: budget }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
+    sound.playClick();
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      sound.playError();
       setErrorMessage("Please complete all required fields (Name, Email, Message).");
+      setStatus("error");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      sound.playError();
+      setErrorMessage("Please provide a valid email address.");
       setStatus("error");
       return;
     }
@@ -39,12 +61,15 @@ export function ContactSection() {
 
       const data = await res.json();
       if (res.ok && data.success) {
+        sound.playSuccess();
         setStatus("success");
       } else {
+        sound.playError();
         setErrorMessage(data.error || "Failed to submit. Please email hello@redorchidfilms.com directly.");
         setStatus("error");
       }
     } catch {
+      sound.playError();
       setErrorMessage("Network error. Please email hello@redorchidfilms.com directly.");
       setStatus("error");
     }
@@ -53,30 +78,30 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative w-full border-t border-white/10 bg-[#070707] py-28 text-white overflow-hidden"
+      className="relative w-full border-t border-white/10 bg-[#070707] py-20 sm:py-28 text-white overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-14">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14">
         {/* Section Header */}
-        <div className="mb-20">
+        <div className="mb-14 sm:mb-20">
           <div className="flex items-center gap-2.5 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
             <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
             <span>// COMMISSIONS & INQUIRIES</span>
           </div>
-          <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-bone uppercase max-w-4xl leading-[0.95]">
+          <h2 className="font-display text-3xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-bone uppercase max-w-4xl leading-[0.95] break-words">
             LET&apos;S CRAFT SOMETHING <br />
             <span className="text-orchid">TIMELESS.</span>
           </h2>
         </div>
 
         {/* 2-Column Split: Direct Contacts vs Inquiry Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           {/* Left Column: Studio availability and direct channels */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-10">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-8 sm:space-y-10">
             <div className="space-y-6">
               {/* Studio availability badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-950/30 px-4 py-1.5 backdrop-blur-md">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-                <span className="font-mono-code text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/30 px-3.5 py-1.5 backdrop-blur-md">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span className="font-mono-code text-[10px] sm:text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
                   ACCEPTING COMMISSIONS // 2025
                 </span>
               </div>
@@ -93,7 +118,8 @@ export function ContactSection() {
                   </span>
                   <a
                     href={`mailto:${STUDIO_CONFIG.email}`}
-                    className="font-display text-xl sm:text-2xl text-bone hover:text-orchid transition-colors block"
+                    onClick={() => sound.playClick()}
+                    className="font-display text-lg sm:text-2xl text-bone hover:text-orchid transition-colors block truncate"
                   >
                     {STUDIO_CONFIG.email}
                   </a>
@@ -105,6 +131,7 @@ export function ContactSection() {
                   </span>
                   <a
                     href={`tel:${STUDIO_CONFIG.phone}`}
+                    onClick={() => sound.playClick()}
                     className="font-mono-code text-sm text-white/80 hover:text-white transition-colors block"
                   >
                     {STUDIO_CONFIG.phone}
@@ -132,7 +159,8 @@ export function ContactSection() {
                   href={STUDIO_CONFIG.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors"
+                  onClick={() => sound.playClick()}
+                  className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors py-1"
                 >
                   <span>INSTAGRAM</span>
                   <ArrowUpRight className="h-3 w-3" />
@@ -141,7 +169,8 @@ export function ContactSection() {
                   href={STUDIO_CONFIG.vimeo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors"
+                  onClick={() => sound.playClick()}
+                  className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors py-1"
                 >
                   <span>VIMEO</span>
                   <ArrowUpRight className="h-3 w-3" />
@@ -150,7 +179,8 @@ export function ContactSection() {
                   href={STUDIO_CONFIG.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors"
+                  onClick={() => sound.playClick()}
+                  className="flex items-center gap-1.5 text-white/70 hover:text-orchid transition-colors py-1"
                 >
                   <span>YOUTUBE</span>
                   <ArrowUpRight className="h-3 w-3" />
@@ -161,23 +191,24 @@ export function ContactSection() {
 
           {/* Right Column: Inquiry Form Card */}
           <div className="lg:col-span-7">
-            <div className="rounded-2xl border border-white/10 bg-[#0e0c0b] p-6 sm:p-10 shadow-2xl relative">
+            <div className="rounded-2xl border border-white/10 bg-[#0e0c0b] p-5 sm:p-8 md:p-10 shadow-2xl relative">
               {status === "success" ? (
-                <div className="py-12 text-center space-y-6">
-                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-orchid/50 bg-orchid/10 text-orchid">
-                    <CheckCircle2 className="h-8 w-8" />
+                <div className="py-10 text-center space-y-5">
+                  <div className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border border-orchid/50 bg-orchid/10 text-orchid">
+                    <CheckCircle2 className="h-7 w-7 sm:h-8 sm:w-8" />
                   </div>
                   <div>
                     <h3 className="font-display text-2xl sm:text-3xl font-bold uppercase text-bone">
                       TRANSMISSION CONFIRMED
                     </h3>
-                    <p className="mt-2 font-sans-ui text-sm text-white/60 max-w-md mx-auto leading-relaxed">
+                    <p className="mt-2 font-sans-ui text-xs sm:text-sm text-white/60 max-w-md mx-auto leading-relaxed">
                       Thank you for reaching out to Red Orchid Films. Sayan and the production team will review your project brief and get back to you within 24 hours.
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => {
+                      sound.playClick();
                       setStatus("idle");
                       setFormData({
                         name: "",
@@ -190,13 +221,13 @@ export function ContactSection() {
                         honeypot: "",
                       });
                     }}
-                    className="font-mono-code text-xs text-orchid uppercase tracking-widest hover:underline pt-4"
+                    className="font-mono-code text-xs text-orchid uppercase tracking-widest hover:underline pt-4 min-h-[44px]"
                   >
                     SEND ANOTHER INQUIRY &rarr;
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                   {/* Honeypot anti-spam field */}
                   <div className="hidden" aria-hidden="true">
                     <input
@@ -209,7 +240,7 @@ export function ContactSection() {
                   </div>
 
                   {/* Name & Email Row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label
                         htmlFor="name"
@@ -224,7 +255,7 @@ export function ContactSection() {
                         placeholder="e.g. Elena Rostova"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none"
+                        className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none min-h-[44px]"
                       />
                     </div>
 
@@ -242,7 +273,7 @@ export function ContactSection() {
                         placeholder="elena@domain.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none"
+                        className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none min-h-[44px]"
                       />
                     </div>
                   </div>
@@ -261,7 +292,7 @@ export function ContactSection() {
                       placeholder="e.g. Muji / Independent Production"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none"
+                      className="w-full rounded-lg border border-white/10 bg-black/50 px-4 py-3 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none min-h-[44px]"
                     />
                   </div>
 
@@ -277,8 +308,8 @@ export function ContactSection() {
                           <button
                             type="button"
                             key={service}
-                            onClick={() => setFormData({ ...formData, serviceType: service })}
-                            className={`rounded-lg border px-3.5 py-2.5 text-left text-xs font-mono-code transition-all ${
+                            onClick={() => handleSelectService(service)}
+                            className={`rounded-lg border px-3.5 py-2.5 text-left text-xs font-mono-code transition-all min-h-[44px] ${
                               isSelected
                                 ? "border-orchid bg-orchid/20 text-white font-medium shadow-[0_0_15px_rgba(225,29,72,0.25)]"
                                 : "border-white/10 bg-black/40 text-white/60 hover:border-white/20 hover:text-white"
@@ -303,8 +334,8 @@ export function ContactSection() {
                           <button
                             type="button"
                             key={tier.label}
-                            onClick={() => setFormData({ ...formData, budgetRange: tier.label })}
-                            className={`flex flex-col rounded-lg border p-3 text-left transition-all ${
+                            onClick={() => handleSelectBudget(tier.label)}
+                            className={`flex flex-col rounded-lg border p-3 text-left transition-all min-h-[44px] ${
                               isSelected
                                 ? "border-orchid bg-orchid/20 text-white"
                                 : "border-white/10 bg-black/40 text-white/60 hover:border-white/20 hover:text-white"
@@ -313,7 +344,7 @@ export function ContactSection() {
                             <span className="font-mono-code text-xs font-semibold text-white">
                               {tier.label}
                             </span>
-                            <span className="font-sans-ui text-[10px] text-white/50 mt-1">
+                            <span className="font-sans-ui text-[10px] text-white/50 mt-0.5">
                               {tier.desc}
                             </span>
                           </button>
@@ -337,13 +368,13 @@ export function ContactSection() {
                       placeholder="Locations, concept synopsis, delivery dates, or technical aspirations..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full rounded-lg border border-white/10 bg-black/50 p-4 text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none"
+                      className="w-full rounded-lg border border-white/10 bg-black/50 p-4 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:border-orchid focus:outline-none"
                     />
                   </div>
 
-                  {/* Error banner if any */}
+                  {/* Error banner with haptic vibration */}
                   {status === "error" && (
-                    <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-950/20 p-3 text-xs text-rose-400">
+                    <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-950/30 p-3 text-xs text-rose-300">
                       <AlertCircle className="h-4 w-4 shrink-0" />
                       <span>{errorMessage}</span>
                     </div>
@@ -354,7 +385,7 @@ export function ContactSection() {
                     type="submit"
                     disabled={status === "submitting"}
                     data-cursor="TRANSMIT"
-                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark disabled:opacity-50"
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark disabled:opacity-50 min-h-[48px]"
                   >
                     {status === "submitting" ? (
                       <>

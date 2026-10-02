@@ -8,6 +8,7 @@ import { WorkItem, StillItem } from "@/types";
 import { Lightbox } from "@/components/ui/Lightbox";
 import { VideoModal } from "@/components/ui/VideoModal";
 import { Play, Pause, Camera, Film, Smartphone, ArrowUpRight, Volume2, VolumeX, Maximize2 } from "lucide-react";
+import { sound } from "@/lib/sound";
 
 type MainFilter = "all" | "photography" | "reels" | "short-films";
 type PhotoSubFilter = "all-photo" | "portraits" | "fashion" | "architecture";
@@ -81,6 +82,7 @@ export default function GalleryPage() {
   }, [mainFilter, photoSubFilter]);
 
   const toggleInlineVideo = (workId: string) => {
+    sound.playClick();
     if (activeInlineVideoId === workId) {
       setActiveInlineVideoId(null);
     } else {
@@ -88,7 +90,18 @@ export default function GalleryPage() {
     }
   };
 
+  const handleSelectFilter = (id: MainFilter) => {
+    sound.playClick();
+    setMainFilter(id);
+  };
+
+  const handleSelectPhotoSub = (id: PhotoSubFilter) => {
+    sound.playClick();
+    setPhotoSubFilter(id);
+  };
+
   const openLightbox = (index: number) => {
+    sound.playClick();
     setLightboxData({
       isOpen: true,
       initialIndex: index,
@@ -97,33 +110,33 @@ export default function GalleryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white pt-32 pb-24">
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-14">
+    <div className="min-h-screen bg-[#070707] text-white pt-28 sm:pt-32 pb-20 sm:pb-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14">
         {/* Page Title & Manifesto */}
-        <div className="mb-14">
+        <div className="mb-10 sm:mb-14">
           <div className="flex items-center gap-2 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
             <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
             <span>// CATALOG & VISUAL REPOSITORY</span>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight text-bone">
+          <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-extrabold uppercase tracking-tight text-bone">
             VISUAL ARCHIVE
           </h1>
 
-          <p className="mt-4 font-sans-ui text-sm sm:text-base text-white/60 max-w-2xl leading-relaxed">
+          <p className="mt-3 sm:mt-4 font-sans-ui text-xs sm:text-sm md:text-base text-white/60 max-w-2xl leading-relaxed">
             Explorations across short films, medium format photography sets, and vertical cinematic reels. Click any playable work to watch directly in-place.
           </p>
         </div>
 
-        {/* Filter Navigation Tabs */}
-        <div className="flex flex-col gap-4 border-b border-white/10 pb-8 mb-12">
+        {/* Filter Navigation Tabs with Mobile Horizontal Scroll */}
+        <div className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:pb-8 mb-8 sm:mb-12">
           {/* Main Category Tabs */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-none">
             {[
               { id: "all", label: "All Works", icon: null },
-              { id: "short-films", label: "Short Films & Commercials", icon: Film },
+              { id: "short-films", label: "Short Films", icon: Film },
               { id: "photography", label: "Photography & Stills", icon: Camera },
-              { id: "reels", label: "9:16 Vertical Reels", icon: Smartphone },
+              { id: "reels", label: "9:16 Reels", icon: Smartphone },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = mainFilter === tab.id;
@@ -131,9 +144,9 @@ export default function GalleryPage() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setMainFilter(tab.id as MainFilter)}
+                  onClick={() => handleSelectFilter(tab.id as MainFilter)}
                   data-cursor="FILTER"
-                  className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-mono-code uppercase tracking-wider transition-all duration-300 ${
+                  className={`flex items-center gap-2 rounded-full border px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-mono-code uppercase tracking-wider whitespace-nowrap shrink-0 transition-all duration-300 min-h-[44px] ${
                     isActive
                       ? "border-orchid bg-orchid text-white font-semibold shadow-[0_0_20px_rgba(225,29,72,0.3)]"
                       : "border-white/10 bg-black/40 text-white/60 hover:border-white/30 hover:text-white"
@@ -148,9 +161,9 @@ export default function GalleryPage() {
 
           {/* Sub-filters when Photography is selected */}
           {mainFilter === "photography" && (
-            <div className="flex flex-wrap items-center gap-2 pt-2 animate-fadeIn">
-              <span className="font-mono-code text-[11px] text-white/40 uppercase mr-2">
-                SUB-CATEGORY:
+            <div className="flex items-center gap-2 pt-1 overflow-x-auto pb-1 scrollbar-none animate-fadeIn">
+              <span className="font-mono-code text-[10px] sm:text-[11px] text-white/40 uppercase whitespace-nowrap mr-1">
+                FILTER:
               </span>
               {[
                 { id: "all-photo", label: "All Stills" },
@@ -160,8 +173,8 @@ export default function GalleryPage() {
               ].map((sub) => (
                 <button
                   key={sub.id}
-                  onClick={() => setPhotoSubFilter(sub.id as PhotoSubFilter)}
-                  className={`rounded-md border px-3 py-1 text-[11px] font-mono-code transition-colors ${
+                  onClick={() => handleSelectPhotoSub(sub.id as PhotoSubFilter)}
+                  className={`rounded-md border px-3 py-1.5 text-[11px] font-mono-code whitespace-nowrap transition-colors min-h-[36px] ${
                     photoSubFilter === sub.id
                       ? "border-orchid/60 bg-orchid/20 text-white font-medium"
                       : "border-white/5 bg-white/5 text-white/50 hover:text-white"
@@ -180,11 +193,11 @@ export default function GalleryPage() {
         {mainFilter === "photography" ? (
           <div>
             <div className="mb-6 flex items-center justify-between text-xs font-mono-code text-white/40">
-              <span>CLICK ANY STILL TO ENTER CINEMA LIGHTBOX</span>
+              <span>TAP ANY STILL TO ENTER LIGHTBOX</span>
               <span>{allStills.length} STILLS ARCHIVED</span>
             </div>
 
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
               {allStills.map((still, idx) => (
                 <div
                   key={still.id}
@@ -197,13 +210,13 @@ export default function GalleryPage() {
                       src={still.url}
                       alt={still.caption || "Photography still"}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                    <div className="absolute bottom-4 left-4 right-4 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                       <p className="font-display text-sm font-semibold text-bone">
                         {still.caption}
                       </p>
@@ -226,7 +239,7 @@ export default function GalleryPage() {
               <span>TAP ANY CARD TO PLAY IN-PLACE</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {filteredWorks.map((work) => {
                 const isPlaying = activeInlineVideoId === work.id;
 
@@ -269,6 +282,7 @@ export default function GalleryPage() {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
+                              sound.playClick();
                               setIsMuted(!isMuted);
                             }}
                             className="rounded-full bg-black/70 p-2 text-white hover:text-orchid backdrop-blur-md"
@@ -286,7 +300,7 @@ export default function GalleryPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
                         {/* Top tags */}
-                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                        <div className="absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 flex items-center justify-between">
                           <span className="font-mono-code text-[10px] font-semibold uppercase tracking-wider rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-md text-white/90">
                             {work.category}
                           </span>
@@ -297,7 +311,7 @@ export default function GalleryPage() {
 
                         {/* Big Play button */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-orchid">
+                          <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-110 group-hover:bg-orchid">
                             <Play className="h-5 w-5 fill-current ml-0.5" />
                           </div>
                         </div>
@@ -305,11 +319,11 @@ export default function GalleryPage() {
                     )}
 
                     {/* Bottom title & metadata */}
-                    <div className="absolute bottom-4 left-4 right-4 z-30 pointer-events-none">
+                    <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-30 pointer-events-none">
                       <span className="font-mono-code text-[10px] text-white/50 uppercase tracking-widest block mb-1">
                         {work.client}
                       </span>
-                      <h3 className="font-display text-lg font-bold uppercase text-bone">
+                      <h3 className="font-display text-base sm:text-lg font-bold uppercase text-bone">
                         {work.title}
                       </h3>
                     </div>
@@ -320,7 +334,7 @@ export default function GalleryPage() {
           </div>
         ) : (
           /* 3. ALL / SHORT FILMS CARDS (Plays directly in-place on card!) */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {filteredWorks.map((work) => {
               const isPlaying = activeInlineVideoId === work.id;
 
@@ -379,19 +393,21 @@ export default function GalleryPage() {
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
+                                sound.playClick();
                                 setIsMuted(!isMuted);
                               }}
                               className="text-white hover:text-orchid"
                             >
                               {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-orchid" />}
                             </button>
-                            <span className="text-[10px] text-white/70 uppercase">PLAYING IN-PLACE</span>
+                            <span className="text-[10px] text-white/70 uppercase">IN-PLACE</span>
                           </div>
 
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
+                              sound.playClick();
                               setModalVideoData({
                                 isOpen: true,
                                 url: work.videoUrl || "",
@@ -414,11 +430,11 @@ export default function GalleryPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
 
                         {/* Top Badges */}
-                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between text-[11px] font-mono-code pointer-events-none">
-                          <span className="rounded-full border border-white/20 bg-black/70 px-3 py-1 backdrop-blur-md text-white/90">
+                        <div className="absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 flex items-center justify-between text-[10px] sm:text-[11px] font-mono-code pointer-events-none">
+                          <span className="rounded-full border border-white/20 bg-black/70 px-2.5 sm:px-3 py-1 backdrop-blur-md text-white/90">
                             {work.category}
                           </span>
-                          <span className="rounded-full border border-white/10 bg-black/70 px-2.5 py-1 backdrop-blur-md text-white/60">
+                          <span className="rounded-full border border-white/10 bg-black/70 px-2 sm:px-2.5 py-1 backdrop-blur-md text-white/60">
                             {work.year}
                           </span>
                         </div>
@@ -426,14 +442,14 @@ export default function GalleryPage() {
                         {/* Center Play Button if has video */}
                         {work.videoUrl && (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-orchid group-hover:bg-orchid">
+                            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-orchid group-hover:bg-orchid">
                               <Play className="h-5 w-5 fill-current ml-0.5" />
                             </div>
                           </div>
                         )}
 
                         {/* Runtime Badge */}
-                        <div className="absolute bottom-4 left-4 font-mono-code text-[10px] text-white/70 bg-black/60 px-2.5 py-1 rounded backdrop-blur-xs">
+                        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 font-mono-code text-[9px] sm:text-[10px] text-white/70 bg-black/60 px-2.5 py-1 rounded backdrop-blur-xs">
                           {work.aspectRatio} {work.duration ? `• ${work.duration}` : ""}
                         </div>
                       </>
@@ -441,17 +457,17 @@ export default function GalleryPage() {
                   </div>
 
                   {/* Details Section */}
-                  <div className="p-6 sm:p-8 flex flex-col justify-between">
-                    <div className="mb-6">
-                      <div className="font-mono-code text-[11px] text-white/40 uppercase mb-1">
+                  <div className="p-5 sm:p-7 md:p-8 flex flex-col justify-between">
+                    <div className="mb-5 sm:mb-6">
+                      <div className="font-mono-code text-[10px] sm:text-[11px] text-white/40 uppercase mb-1">
                         CLIENT: {work.client}
                       </div>
 
-                      <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors">
+                      <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors">
                         {work.title}
                       </h3>
 
-                      <p className="mt-2.5 font-sans-ui text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2">
+                      <p className="mt-2 font-sans-ui text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2">
                         {work.synopsis}
                       </p>
                     </div>
@@ -459,17 +475,18 @@ export default function GalleryPage() {
                     {/* Bottom link row */}
                     <div className="flex items-center justify-between border-t border-white/5 pt-4 text-xs font-mono-code">
                       {work.technicalSpecs?.camera ? (
-                        <span className="text-white/40 truncate max-w-[220px]">
+                        <span className="text-white/40 truncate max-w-[200px] text-[11px]">
                           {work.technicalSpecs.camera}
                         </span>
                       ) : (
-                        <span className="text-white/40">RED ORCHID PRODUCTION</span>
+                        <span className="text-white/40 text-[11px]">RED ORCHID PRODUCTION</span>
                       )}
 
                       <Link
                         href={`/work/${work.slug}`}
+                        onClick={() => sound.playClick()}
                         data-cursor="CASE STUDY"
-                        className="group/btn flex items-center gap-1.5 text-white/80 hover:text-white transition-colors uppercase tracking-wider"
+                        className="group/btn flex items-center gap-1.5 text-white/80 hover:text-white transition-colors uppercase tracking-wider py-1"
                       >
                         <span>CASE STUDY</span>
                         <ArrowUpRight className="h-3.5 w-3.5 text-orchid transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />

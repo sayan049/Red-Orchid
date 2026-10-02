@@ -11,10 +11,10 @@ export function BrandLogo({ className = "", showTagline = false }: BrandLogoProp
       href="/"
       aria-label="Red Orchid Films — Return to Homepage"
       data-cursor="HOME"
-      className={`group flex items-center gap-3.5 transition-opacity hover:opacity-90 ${className}`}
+      className={`group flex items-center gap-2.5 sm:gap-3.5 transition-opacity hover:opacity-90 shrink-0 ${className}`}
     >
       {/* Bespoke Orchid Petal & Iris Glyph */}
-      <div className="relative flex h-8 w-8 items-center justify-center shrink-0">
+      <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center shrink-0">
         <svg
           viewBox="0 0 36 36"
           fill="none"
@@ -56,16 +56,16 @@ export function BrandLogo({ className = "", showTagline = false }: BrandLogoProp
 
       {/* Wordmark */}
       <div className="flex flex-col">
-        <div className="flex items-center gap-1.5">
-          <span className="font-display text-sm font-bold tracking-[0.22em] text-bone uppercase transition-colors group-hover:text-white">
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <span className="font-display text-xs sm:text-sm font-bold tracking-[0.16em] sm:tracking-[0.22em] text-bone uppercase transition-colors group-hover:text-white">
             RED ORCHID
           </span>
-          <span className="font-mono-code text-[9px] font-semibold tracking-widest text-orchid uppercase">
+          <span className="font-mono-code text-[8px] sm:text-[9px] font-semibold tracking-widest text-orchid uppercase">
             FILMS
           </span>
         </div>
         {showTagline && (
-          <span className="font-sans-ui text-[9px] font-normal tracking-[0.28em] text-muted uppercase">
+          <span className="font-sans-ui text-[8px] sm:text-[9px] font-normal tracking-[0.25em] text-muted uppercase">
             Not content, Cinema.
           </span>
         )}

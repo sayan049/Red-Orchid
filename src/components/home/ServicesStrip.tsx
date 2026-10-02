@@ -5,26 +5,32 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { SERVICES_DATA } from "@/data/works";
+import { sound } from "@/lib/sound";
 
 export function ServicesStrip() {
   const [activeServiceId, setActiveServiceId] = useState<string>(SERVICES_DATA[0].id);
 
   const activeService = SERVICES_DATA.find((s) => s.id === activeServiceId) || SERVICES_DATA[0];
 
+  const handleSelectService = (id: string) => {
+    sound.playClick();
+    setActiveServiceId(id);
+  };
+
   return (
     <section
       id="services"
-      className="relative w-full border-t border-white/10 bg-[#070707] py-28 text-white"
+      className="relative w-full border-t border-white/10 bg-[#070707] py-20 sm:py-28 text-white"
     >
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-14">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-10 lg:px-14">
         {/* Section Header */}
-        <div className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/10 pb-8">
+        <div className="mb-12 sm:mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-white/10 pb-8">
           <div>
             <div className="flex items-center gap-2.5 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
               <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
               <span>// EXPERTISE & PRODUCTION</span>
             </div>
-            <h2 className="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-bone uppercase">
+            <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-bone uppercase">
               CAPABILITIES
             </h2>
           </div>
@@ -34,31 +40,31 @@ export function ServicesStrip() {
           </p>
         </div>
 
-        {/* 2-Column Interactive Services Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Interactive List */}
-          <div className="lg:col-span-7 flex flex-col gap-4">
+        {/* Responsive Services Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Left Column: Interactive Capabilities List */}
+          <div className="lg:col-span-7 flex flex-col gap-3.5 sm:gap-4">
             {SERVICES_DATA.map((service, idx) => {
               const isActive = service.id === activeServiceId;
 
               return (
                 <div
                   key={service.id}
-                  onClick={() => setActiveServiceId(service.id)}
+                  onClick={() => handleSelectService(service.id)}
                   data-cursor="SELECT"
-                  className={`group relative cursor-pointer rounded-xl border p-6 md:p-8 transition-all duration-300 ${
+                  className={`group relative cursor-pointer rounded-xl border p-5 sm:p-7 md:p-8 transition-all duration-300 ${
                     isActive
                       ? "border-orchid/60 bg-[#121011] shadow-[0_0_30px_rgba(225,29,72,0.12)]"
                       : "border-white/5 bg-[#0b0a0a] hover:border-white/20 hover:bg-[#0f0e0e]"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-baseline gap-4">
+                    <div className="flex items-baseline gap-3.5 sm:gap-4">
                       <span className="font-mono-code text-xs font-semibold text-orchid">
                         0{idx + 1}
                       </span>
                       <div>
-                        <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-bone uppercase">
+                        <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase">
                           {service.title}
                         </h3>
                         <p className="mt-1 font-sans-ui text-xs sm:text-sm text-white/60">
@@ -78,8 +84,8 @@ export function ServicesStrip() {
 
                   {/* Expanded content when active */}
                   {isActive && (
-                    <div className="mt-6 border-t border-white/10 pt-6">
-                      <p className="font-sans-ui text-xs sm:text-sm text-white/70 leading-relaxed mb-6">
+                    <div className="mt-5 sm:mt-6 border-t border-white/10 pt-5 sm:pt-6 animate-fadeIn">
+                      <p className="font-sans-ui text-xs sm:text-sm text-white/70 leading-relaxed mb-5">
                         {service.description}
                       </p>
 
@@ -94,6 +100,18 @@ export function ServicesStrip() {
                           </div>
                         ))}
                       </div>
+
+                      {/* Mobile-only preview image when active */}
+                      <div className="mt-5 block lg:hidden relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-black">
+                        <Image
+                          src={service.featuredWorkImage}
+                          alt={service.title}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 500px"
+                          className="object-cover filter brightness-90"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -101,8 +119,8 @@ export function ServicesStrip() {
             })}
           </div>
 
-          {/* Right Column: Visual Stage / Still Preview */}
-          <div className="lg:col-span-5 sticky top-32">
+          {/* Right Column: Visual Stage / Still Preview (Desktop & Tablet) */}
+          <div className="hidden lg:block lg:col-span-5 sticky top-28">
             <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#111010] p-3 shadow-2xl">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-black">
                 <Image
@@ -110,7 +128,7 @@ export function ServicesStrip() {
                   src={activeService.featuredWorkImage}
                   alt={activeService.title}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 500px"
+                  sizes="500px"
                   className="object-cover transition-opacity duration-700 filter brightness-90 contrast-105"
                 />
 
@@ -131,7 +149,8 @@ export function ServicesStrip() {
                     <span className="text-white/40">AVAILABLE WORLDWIDE</span>
                     <Link
                       href="/contact"
-                      className="text-orchid hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1"
+                      onClick={() => sound.playClick()}
+                      className="text-orchid hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1 min-h-[44px]"
                     >
                       <span>INQUIRE</span>
                       <ArrowUpRight className="h-3.5 w-3.5" />
