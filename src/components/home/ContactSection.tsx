@@ -35,7 +35,6 @@ export function ContactSection() {
     sound.playClick();
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      sound.playError();
       setErrorMessage("Please complete all required fields (Name, Email, Message).");
       setStatus("error");
       return;
@@ -43,7 +42,6 @@ export function ContactSection() {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email.trim())) {
-      sound.playError();
       setErrorMessage("Please provide a valid email address.");
       setStatus("error");
       return;
@@ -64,12 +62,10 @@ export function ContactSection() {
         sound.playSuccess();
         setStatus("success");
       } else {
-        sound.playError();
         setErrorMessage(data.error || "Failed to submit. Please email hello@redorchidfilms.com directly.");
         setStatus("error");
       }
     } catch {
-      sound.playError();
       setErrorMessage("Network error. Please email hello@redorchidfilms.com directly.");
       setStatus("error");
     }

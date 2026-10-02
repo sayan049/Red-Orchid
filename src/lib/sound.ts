@@ -1,7 +1,7 @@
 "use client";
 
-// Premium Audio & Haptics Engine for Red Orchid Films
-// Synthesized via Web Audio API for 0ms latency, zero external asset dependencies, and 100% reliability
+// Premium Audio Engine for Red Orchid Films
+// Synthesized via Web Audio API for 0ms latency, zero external asset dependencies
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
@@ -27,7 +27,7 @@ class SoundEngine {
     return this.ctx;
   }
 
-  // Tactile Leica / Arri Shutter Click on button presses
+  // Increased intensity, punchy tactile mechanical click (Arri/Leica shutter feel)
   public playClick(): void {
     if (this.isMuted) return;
     try {
@@ -35,33 +35,43 @@ class SoundEngine {
       if (!ctx) return;
 
       const osc = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
       const gain = ctx.createGain();
       const filter = ctx.createBiquadFilter();
 
-      // High-frequency mechanical snap
+      // Primary crisp impulse
       osc.type = "sine";
-      osc.frequency.setValueAtTime(1400, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.025);
+      osc.frequency.setValueAtTime(1600, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.035);
+
+      // Secondary metallic body harmonic
+      osc2.type = "triangle";
+      osc2.frequency.setValueAtTime(800, ctx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.03);
 
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1200, ctx.currentTime);
-      filter.Q.setValueAtTime(3, ctx.currentTime);
+      filter.frequency.setValueAtTime(1400, ctx.currentTime);
+      filter.Q.setValueAtTime(2.5, ctx.currentTime);
 
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.035);
+      // Higher intensity gain (0.24) for punchy, satisfying tactile feedback
+      gain.gain.setValueAtTime(0.24, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.045);
 
       osc.connect(filter);
+      osc2.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.04);
+      osc2.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.05);
+      osc2.stop(ctx.currentTime + 0.05);
     } catch {
       // Ignore if audio is restricted
     }
   }
 
-  // Ethereal Cinematic Chord for Form Submissions & Milestones
+  // Ethereal Cinematic Chord - strictly for successful form submission
   public playSuccess(): void {
     if (this.isMuted) return;
     try {
@@ -77,62 +87,26 @@ class SoundEngine {
 
         const startTime = ctx.currentTime + idx * 0.04;
         gain.gain.setValueAtTime(0.0001, startTime);
-        gain.gain.linearRampToValueAtTime(0.06, startTime + 0.15);
-        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.6);
+        gain.gain.linearRampToValueAtTime(0.08, startTime + 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.8);
 
         osc.connect(gain);
         gain.connect(ctx.destination);
 
         osc.start(startTime);
-        osc.stop(startTime + 1.7);
+        osc.stop(startTime + 1.9);
       });
-
-      // Mobile Haptics
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        navigator.vibrate([30, 40, 60]);
-      }
     } catch {
       // Ignore
     }
   }
 
-  // Form Error Thud + Physical Hardware Vibration
-  public playError(): void {
-    try {
-      const ctx = this.getContext();
-      if (ctx && !this.isMuted) {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "triangle";
-        osc.frequency.setValueAtTime(90, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.18);
-
-        gain.gain.setValueAtTime(0.12, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.22);
-      }
-
-      // Physical vibration on mobile devices
-      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-        navigator.vibrate([60, 50, 70]);
-      }
-    } catch {
-      // Ignore
-    }
-  }
-
-  // Ambient Cinema Room Tone
+  // Ambient Cinema Room Tone (toggled via header sound button)
   public toggleAmbient(): boolean {
     const ctx = this.getContext();
     if (!ctx) return false;
 
     if (this.isAmbientPlaying) {
-      // Turn Off
       if (this.ambientGain) {
         const now = ctx.currentTime;
         this.ambientGain.gain.cancelScheduledValues(now);
@@ -142,7 +116,6 @@ class SoundEngine {
       this.isAmbientPlaying = false;
       return false;
     } else {
-      // Turn On
       if (!this.ambientGain) {
         const gain = ctx.createGain();
         gain.gain.setValueAtTime(0.0001, ctx.currentTime);
@@ -175,7 +148,7 @@ class SoundEngine {
       const now = ctx.currentTime;
       this.ambientGain.gain.cancelScheduledValues(now);
       this.ambientGain.gain.setValueAtTime(0.0001, now);
-      this.ambientGain.gain.exponentialRampToValueAtTime(0.07, now + 0.8);
+      this.ambientGain.gain.exponentialRampToValueAtTime(0.08, now + 0.8);
       this.isAmbientPlaying = true;
       return true;
     }

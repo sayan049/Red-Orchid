@@ -24,7 +24,7 @@ export function Hero() {
 
   return (
     <>
-      <section className="relative flex min-h-[100svh] w-full flex-col justify-between overflow-hidden bg-[#070707] px-5 sm:px-8 md:px-10 lg:px-14 pt-28 sm:pt-32 pb-10 sm:pb-12 text-white">
+      <section className="relative flex min-h-[100svh] w-full flex-col justify-between overflow-hidden bg-[#070707] px-5 sm:px-8 md:px-12 lg:px-16 pt-28 sm:pt-32 pb-10 sm:pb-14 text-white">
         {/* Full-bleed Background Reel / Poster Fallback */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* High-priority poster image */}
@@ -75,20 +75,20 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Center: Monumental Editorial Statement */}
-        <div className="relative z-20 my-auto py-8 sm:py-12 max-w-6xl">
+        {/* Center: Monumental Editorial Statement - Perfectly padded, no cutouts */}
+        <div className="relative z-20 my-auto py-8 sm:py-12 max-w-7xl w-full">
           <p className="mb-3 sm:mb-4 font-mono-code text-[11px] sm:text-xs md:text-sm tracking-[0.25em] text-orchid uppercase">
             // BESPOKE PRODUCTION ATELIER
           </p>
 
-          <h1 className="font-display text-monumental font-extrabold uppercase text-bone select-none break-words">
-            NOT CONTENT, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-bone via-white to-white/40">
+          <h1 className="font-display text-hero-fluid font-black uppercase text-bone select-none tracking-tight">
+            <span className="inline-block whitespace-nowrap">NOT CONTENT,</span>{" "}
+            <span className="inline-block whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-bone via-white to-white/50">
               CINEMA.
             </span>
           </h1>
 
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center gap-6 text-xs sm:text-sm md:text-base text-white/70 max-w-2xl font-sans-ui font-normal leading-relaxed">
+          <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row sm:items-center gap-6 text-xs sm:text-sm md:text-base text-white/70 max-w-2xl font-sans-ui font-normal leading-relaxed">
             <p>
               Short films, medium format photography, 9:16 kinetic reels, and commercial worlds. 
               We craft images with deliberate patience, sculpted light, and uncompromising artistic gravity.
