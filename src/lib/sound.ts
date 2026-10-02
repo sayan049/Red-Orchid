@@ -1,15 +1,11 @@
 "use client";
 
 // Premium Audio Engine for Red Orchid Films
-// Synthesized via Web Audio API for 0ms latency, zero external asset dependencies
+// Master sound manager with zero continuous buzz or electric hum
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
-  private ambientGain: GainNode | null = null;
-  private ambientOsc1: OscillatorNode | null = null;
-  private ambientOsc2: OscillatorNode | null = null;
-  private isAmbientPlaying = false;
-  private isMuted = false;
+  private isSoundEnabled = true;
 
   private getContext(): AudioContext | null {
     if (typeof window === "undefined") return null;
@@ -27,9 +23,9 @@ class SoundEngine {
     return this.ctx;
   }
 
-  // Increased intensity, punchy tactile mechanical click (Arri/Leica shutter feel)
+  // Punchy, tactile mechanical click (Arri/Leica shutter feel)
   public playClick(): void {
-    if (this.isMuted) return;
+    if (!this.isSoundEnabled) return;
     try {
       const ctx = this.getContext();
       if (!ctx) return;
@@ -53,7 +49,6 @@ class SoundEngine {
       filter.frequency.setValueAtTime(1400, ctx.currentTime);
       filter.Q.setValueAtTime(2.5, ctx.currentTime);
 
-      // Higher intensity gain (0.24) for punchy, satisfying tactile feedback
       gain.gain.setValueAtTime(0.24, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.045);
 
@@ -73,7 +68,7 @@ class SoundEngine {
 
   // Ethereal Cinematic Chord - strictly for successful form submission
   public playSuccess(): void {
-    if (this.isMuted) return;
+    if (!this.isSoundEnabled) return;
     try {
       const ctx = this.getContext();
       if (!ctx) return;
@@ -87,7 +82,7 @@ class SoundEngine {
 
         const startTime = ctx.currentTime + idx * 0.04;
         gain.gain.setValueAtTime(0.0001, startTime);
-        gain.gain.linearRampToValueAtTime(0.08, startTime + 0.15);
+        gain.gain.linearRampToValueAtTime(0.09, startTime + 0.15);
         gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.8);
 
         osc.connect(gain);
@@ -101,61 +96,35 @@ class SoundEngine {
     }
   }
 
-  // Ambient Cinema Room Tone (toggled via header sound button)
-  public toggleAmbient(): boolean {
-    const ctx = this.getContext();
-    if (!ctx) return false;
+  // Master Sound Toggle: Enables/disables all audio across the site with ZERO continuous buzz
+  public toggleSound(): boolean {
+    this.isSoundEnabled = !this.isSoundEnabled;
+    if (this.isSoundEnabled) {
+      // Play a soft luxury acoustic chime confirming audio is active
+      try {
+        const ctx = this.getContext();
+        if (ctx) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(528, ctx.currentTime); // 528Hz Solfeggio frequency
+          osc.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.2);
 
-    if (this.isAmbientPlaying) {
-      if (this.ambientGain) {
-        const now = ctx.currentTime;
-        this.ambientGain.gain.cancelScheduledValues(now);
-        this.ambientGain.gain.setValueAtTime(this.ambientGain.gain.value, now);
-        this.ambientGain.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
-      }
-      this.isAmbientPlaying = false;
-      return false;
-    } else {
-      if (!this.ambientGain) {
-        const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-        gain.connect(ctx.destination);
-        this.ambientGain = gain;
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
 
-        const filter = ctx.createBiquadFilter();
-        filter.type = "lowpass";
-        filter.frequency.setValueAtTime(280, ctx.currentTime);
-        filter.connect(gain);
-
-        const osc1 = ctx.createOscillator();
-        osc1.type = "sine";
-        osc1.frequency.setValueAtTime(108, ctx.currentTime);
-        osc1.connect(filter);
-        osc1.start();
-        this.ambientOsc1 = osc1;
-
-        const osc2 = ctx.createOscillator();
-        osc2.type = "triangle";
-        osc2.frequency.setValueAtTime(162, ctx.currentTime);
-        const subGain = ctx.createGain();
-        subGain.gain.setValueAtTime(0.35, ctx.currentTime);
-        osc2.connect(subGain);
-        subGain.connect(filter);
-        osc2.start();
-        this.ambientOsc2 = osc2;
-      }
-
-      const now = ctx.currentTime;
-      this.ambientGain.gain.cancelScheduledValues(now);
-      this.ambientGain.gain.setValueAtTime(0.0001, now);
-      this.ambientGain.gain.exponentialRampToValueAtTime(0.08, now + 0.8);
-      this.isAmbientPlaying = true;
-      return true;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.45);
+        }
+      } catch {}
     }
+    return this.isSoundEnabled;
   }
 
-  public getIsAmbientPlaying(): boolean {
-    return this.isAmbientPlaying;
+  public getIsSoundEnabled(): boolean {
+    return this.isSoundEnabled;
   }
 }
 

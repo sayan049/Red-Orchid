@@ -83,21 +83,21 @@
   letter-spacing: -0.01em;
 }
 
-/* Monumental fluid hero title - perfectly balanced, no clipping */
+/* Monumental fluid hero title - calibrated so 320px to 4K displays never overflow */
 .text-hero-fluid {
-  font-size: clamp(2.1rem, 6.8vw, 6.8rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-}
-
-.text-editorial-lg {
-  font-size: clamp(2rem, 5.2vw, 5.5rem);
+  font-size: clamp(1.65rem, 5.8vw, 6.2rem);
   line-height: 1.0;
   letter-spacing: -0.03em;
 }
 
+.text-editorial-lg {
+  font-size: clamp(1.8rem, 4.8vw, 5.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
 .text-editorial-md {
-  font-size: clamp(1.4rem, 3.5vw, 3.2rem);
+  font-size: clamp(1.3rem, 3.2vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
