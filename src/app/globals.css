@@ -186,6 +186,40 @@
   z-index: 1;
 }
 
+/* Current slide number at middle left (21st.dev specification) */
+.slide-number {
+  position: absolute;
+  top: 50%;
+  left: clamp(20px, 3.5vw, 48px);
+  transform: translateY(-50%);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 25;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Total slides at middle right (21st.dev specification) */
+.slide-total {
+  position: absolute;
+  top: 50%;
+  right: clamp(20px, 3.5vw, 48px);
+  transform: translateY(-50%);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 25;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+}
+
 .slide-content {
   position: absolute;
   bottom: clamp(100px, 15vh, 160px);
@@ -283,6 +317,14 @@
 
 /* Tablet & Mobile responsive adjustments */
 @media (max-width: 768px) {
+  .slide-number {
+    left: 14px;
+    font-size: 11px;
+  }
+  .slide-total {
+    right: 14px;
+    font-size: 11px;
+  }
   .slide-content {
     bottom: 85px;
     left: 16px;

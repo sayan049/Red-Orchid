@@ -3,13 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { Play } from "lucide-react";
-import { VideoModal } from "@/components/ui/VideoModal";
 import { sound } from "@/lib/sound";
 
 interface SlideData {
   title: string;
-  category: string;
+  category?: string;
   description: string;
   media: string;
 }
@@ -140,7 +138,6 @@ export function LuminaInteractiveList() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
     let renderer: THREE.WebGLRenderer | null = null;
@@ -177,11 +174,6 @@ export function LuminaInteractiveList() {
     const updateContent = (idx: number) => {
       const titleEl = document.getElementById("mainTitle");
       const descEl = document.getElementById("mainDesc");
-      const catEl = document.getElementById("mainCategory");
-
-      if (catEl) {
-        catEl.textContent = RED_ORCHID_SLIDES[idx].category;
-      }
 
       if (titleEl && descEl) {
         const prevChars = titleEl.querySelectorAll(".char-span");
@@ -397,8 +389,11 @@ export function LuminaInteractiveList() {
 
         const tEl = document.getElementById("mainTitle");
         const dEl = document.getElementById("mainDesc");
-        const cEl = document.getElementById("mainCategory");
-        if (cEl) cEl.textContent = RED_ORCHID_SLIDES[0].category;
+        const sn = document.getElementById("slideNumber");
+        const st = document.getElementById("slideTotal");
+        if (sn) sn.textContent = "01";
+        if (st) st.textContent = String(RED_ORCHID_SLIDES.length).padStart(2, "0");
+
         if (tEl && dEl) {
           tEl.innerHTML = splitText(RED_ORCHID_SLIDES[0].title);
           dEl.textContent = RED_ORCHID_SLIDES[0].description;
@@ -461,46 +456,18 @@ export function LuminaInteractiveList() {
         <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-[#070707] via-black/35 to-black/75" />
         <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#070707]/50 to-[#070707]" />
 
-        {/* Top Indicators */}
-        <div className="absolute top-20 sm:top-24 md:top-28 left-4 sm:left-8 md:left-12 lg:left-16 z-20 flex items-center gap-3 sm:gap-4 pointer-events-none">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-2.5 sm:px-3 py-1 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-            <span id="mainCategory" className="font-mono-code text-[10px] sm:text-[11px] font-medium tracking-wider text-white/80 uppercase">
-              // 01 • ETHEREAL GLOW
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1 font-mono-code text-[11px] sm:text-xs text-white/40">
-            <span id="slideNumber" className="text-orchid font-semibold">01</span>
-            <span>/</span>
-            <span id="slideTotal">06</span>
-          </div>
-        </div>
+        {/* Left and Right Slide Numbers in the Middle */}
+        <span className="slide-number" id="slideNumber">
+          01
+        </span>
+        <span className="slide-total" id="slideTotal">
+          06
+        </span>
 
         {/* Main Content Area */}
         <div className="slide-content">
           <h1 id="mainTitle" className="slide-title"></h1>
           <p id="mainDesc" className="slide-description"></p>
-
-          {/* Interactive Atelier Showreel button */}
-          <div className="mt-4 sm:mt-6 md:mt-8 flex items-center gap-4 pointer-events-auto">
-            <button
-              type="button"
-              onClick={() => {
-                sound.playClick();
-                setIsVideoModalOpen(true);
-              }}
-              data-cursor="PLAY"
-              className="group inline-flex items-center gap-2.5 sm:gap-3 rounded-full border border-white/20 bg-white/10 px-4 sm:px-5 py-2.5 sm:py-3.5 backdrop-blur-md transition-all duration-300 hover:border-orchid hover:bg-orchid hover:text-white touch-manipulation cursor-pointer active:scale-95 select-none"
-            >
-              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:scale-110 group-hover:bg-black group-hover:text-white pointer-events-none">
-                <Play className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current ml-0.5 pointer-events-none" />
-              </div>
-              <span className="font-mono-code text-[11px] sm:text-xs font-semibold tracking-wider sm:tracking-widest uppercase pointer-events-none">
-                PLAY ATELIER REEL (02:15)
-              </span>
-            </button>
-          </div>
         </div>
 
         {/* Interactive Slide Navigation Track with Live Filling Progress Bars */}
@@ -519,15 +486,6 @@ export function LuminaInteractiveList() {
           ))}
         </nav>
       </main>
-
-      {/* Accessible Cinema Video Player Modal */}
-      <VideoModal
-        isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
-        videoUrl="/videos/hero-reel.mp4"
-        title="Red Orchid Films — Annual Showreel 2024"
-        aspectRatio="2.39:1"
-      />
     </>
   );
 }
