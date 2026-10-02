@@ -165,7 +165,7 @@ const ImageCard = ({ item, onLoad, onItemClick }: ImageCardProps) => {
         if (onItemClick) onItemClick(item);
       }}
       data-cursor="VIEW FILM"
-      className="group relative w-full h-[220px] sm:h-[320px] md:h-[420px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#111010] border border-white/10 hover:border-white/40 transition-all duration-500 shadow-xl cursor-pointer will-change-transform"
+      className="group relative w-full h-[220px] sm:h-[320px] md:h-[400px] flex-shrink-0 rounded-2xl overflow-hidden bg-[#111010] border border-white/10 hover:border-white/40 transition-all duration-300 shadow-2xl cursor-pointer will-change-transform backface-hidden"
     >
       {/* Background Image */}
       <Image
@@ -175,14 +175,14 @@ const ImageCard = ({ item, onLoad, onItemClick }: ImageCardProps) => {
         sizes="(max-width: 768px) 50vw, 25vw"
         loading="lazy"
         onLoad={onLoad}
-        className="w-full h-full object-cover filter brightness-[0.88] group-hover:brightness-100 group-hover:scale-105 transition-all duration-700 ease-out"
+        className="w-full h-full object-cover filter brightness-[0.88] group-hover:brightness-100 group-hover:scale-105 transition-all duration-500 ease-out"
       />
 
       {/* Atmospheric Cinema Vignette Gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 opacity-70 group-hover:opacity-90 transition-opacity duration-300" />
 
       {/* Top badges (Category & Year) */}
-      <div className="absolute top-3 left-3 right-3 flex items-center justify-between text-[9.5px] sm:text-[10px] font-mono-code transition-transform duration-300 group-hover:translate-y-0.5">
+      <div className="absolute top-3 left-3 right-3 flex items-center justify-between text-[9.5px] sm:text-[10px] font-mono-code transition-transform duration-300">
         {item.category && (
           <span className="rounded-full border border-white/15 bg-black/75 px-2.5 py-1 text-white backdrop-blur-md">
             {item.category}
@@ -237,16 +237,13 @@ export interface ParallaxUnfurlingGalleryProps {
   items?: GalleryItem[];
   className?: string;
   onItemClick?: (item: GalleryItem) => void;
-  useInnerScroll?: boolean;
 }
 
 export default function ParallaxUnfurlingGallery({
   items = DEFAULT_IMAGES,
   className,
   onItemClick,
-  useInnerScroll = false,
 }: ParallaxUnfurlingGalleryProps) {
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [, setIsReady] = useState(false);
   const loadedCountRef = useRef(0);
@@ -257,7 +254,7 @@ export default function ParallaxUnfurlingGallery({
   }, []);
 
   useEffect(() => {
-    const t = setTimeout(() => setIsReady(true), 1200);
+    const t = setTimeout(() => setIsReady(true), 1000);
     return () => clearTimeout(t);
   }, []);
 
@@ -277,173 +274,200 @@ export default function ParallaxUnfurlingGallery({
     };
   }, [items]);
 
-  // LINKED SCROLL: Supports both normal page scroll (smooth integration) and inner container
+  // Track window scroll over this pinned container
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    ...(useInnerScroll ? { container: scrollWrapperRef } : {}),
     offset: ["start start", "end end"],
   });
 
+  // Fast, responsive spring so it feels immediate with wheel/touch
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
-    mass: 0.4,
+    stiffness: 160,
+    damping: 26,
+    mass: 0.2,
   });
 
-  // Banner size unfurling
-  const bannerWidth = useTransform(smoothProgress, [0, 0.15], ["92vw", "100vw"]);
-  const bannerHeight = useTransform(smoothProgress, [0, 0.15], ["85vh", "100vh"]);
-  const bannerRadius = useTransform(smoothProgress, [0, 0.15], ["40px", "0px"]);
-  const bannerBorderWidth = useTransform(smoothProgress, [0, 0.15], ["2px", "0px"]);
+  // 1. OPEN EFFECT: Banner starts as framed floating card, expands to full viewport
+  const bannerWidth = useTransform(smoothProgress, [0, 0.22], ["86vw", "100vw"]);
+  const bannerHeight = useTransform(smoothProgress, [0, 0.22], ["72vh", "100vh"]);
+  const bannerRadius = useTransform(smoothProgress, [0, 0.22], ["32px", "0px"]);
+  const bannerBorderWidth = useTransform(smoothProgress, [0, 0.22], ["2px", "0px"]);
 
-  // 3D Matrix animations unfurling into PERFECT 0° UNTILTED alignment
-  // By progress ~0.70, it rotates smoothly into 0 degrees (not tilted), allowing users to clearly view every item!
-  const rotateY = useTransform(smoothProgress, [0.12, 0.72], [-32, 0]);
-  const rotateX = useTransform(smoothProgress, [0.12, 0.72], [18, 0]);
-  const rotateZ = useTransform(smoothProgress, [0.12, 0.72], [10, 0]);
-  const translateZ = useTransform(smoothProgress, [0.12, 0.72], [-650, 0]);
+  // 2. TILT TO STRAIGHT: Rotates from dramatic 3D angles directly into PERFECT 0° UNTILTED view
+  const rotateY = useTransform(smoothProgress, [0, 0.52], [-35, 0]);
+  const rotateX = useTransform(smoothProgress, [0, 0.52], [22, 0]);
+  const rotateZ = useTransform(smoothProgress, [0, 0.52], [12, 0]);
+  const translateZ = useTransform(smoothProgress, [0, 0.52], [-650, 0]);
 
-  // Column vertical parallax movement
-  const yCol1 = useTransform(smoothProgress, [0.12, 0.72, 1], ["10%", "-20%", "-35%"]);
-  const yCol2 = useTransform(smoothProgress, [0.12, 0.72, 1], ["-30%", "10%", "20%"]);
-  const yCol3 = useTransform(smoothProgress, [0.12, 0.72, 1], ["15%", "-15%", "-30%"]);
-  const yCol4 = useTransform(smoothProgress, [0.12, 0.72, 1], ["-20%", "15%", "25%"]);
+  // 3. Columns vertical parallax glide during scroll
+  const yCol1 = useTransform(smoothProgress, [0, 0.52, 1], ["12%", "-18%", "-32%"]);
+  const yCol2 = useTransform(smoothProgress, [0, 0.52, 1], ["-32%", "8%", "22%"]);
+  const yCol3 = useTransform(smoothProgress, [0, 0.52, 1], ["18%", "-12%", "-28%"]);
+  const yCol4 = useTransform(smoothProgress, [0, 0.52, 1], ["-22%", "12%", "26%"]);
 
-  // Dynamic status cue indicating when gallery is aligned
-  const alignedOpacity = useTransform(smoothProgress, [0.65, 0.75], [0, 1]);
+  // Status indicator opacity
+  const alignedStatusOpacity = useTransform(smoothProgress, [0.48, 0.55], [0, 1]);
+  const initialCueOpacity = useTransform(smoothProgress, [0.45, 0.55], [1, 0]);
 
   return (
     <div
-      ref={useInnerScroll ? scrollWrapperRef : undefined}
+      ref={containerRef}
       className={cn(
-        "w-full bg-[#070707] text-white",
-        useInnerScroll ? "h-screen overflow-y-auto overflow-x-hidden" : "",
+        "relative w-full h-[320vh] sm:h-[350vh] bg-[#070707] text-white",
         className
       )}
     >
-      <section
-        ref={containerRef}
-        className="relative w-full h-[380vh] sm:h-[420vh] bg-[#070707] text-white font-sans selection:bg-orchid selection:text-white"
-      >
-        {/* Sticky 100vh stage */}
-        <div className="sticky top-0 h-screen w-full flex justify-center items-center overflow-hidden">
-          <motion.div
-            style={{
-              width: bannerWidth,
-              height: bannerHeight,
-              borderRadius: bannerRadius,
-              borderWidth: bannerBorderWidth,
-              borderColor: "rgba(255, 255, 255, 0.12)",
-            }}
-            className="relative bg-[#070707] overflow-hidden flex items-center justify-center max-w-[1920px] mx-auto will-change-transform backface-hidden preserve-3d"
-          >
-            {/* Header Floating Info Bar */}
-            <div className="absolute top-6 left-6 right-6 sm:top-8 sm:left-10 sm:right-10 z-30 flex items-center justify-between pointer-events-none">
-              <div className="flex items-center gap-2.5 font-mono-code text-[11px] text-orchid uppercase tracking-widest">
-                <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-                <span>{"// 3D CELLULOID MATRIX"}</span>
-              </div>
+      {/* Sticky 100vh stage: Stays PINNED while user scrolls through 320vh */}
+      <div className="sticky top-0 h-screen w-full flex justify-center items-center overflow-hidden">
+        {/* Banner Window: Opens from card to full viewport */}
+        <motion.div
+          style={{
+            width: bannerWidth,
+            height: bannerHeight,
+            borderRadius: bannerRadius,
+            borderWidth: bannerBorderWidth,
+            borderColor: "rgba(255, 255, 255, 0.15)",
+          }}
+          className="relative bg-[#070707] overflow-hidden flex items-center justify-center max-w-[1920px] mx-auto will-change-transform backface-hidden preserve-3d shadow-[0_20px_80px_rgba(0,0,0,0.9)]"
+        >
+          {/* Top Floating Cinema HUD */}
+          <div className="absolute top-5 left-5 right-5 sm:top-8 sm:left-10 sm:right-10 z-30 flex items-center justify-between pointer-events-none">
+            <div className="flex items-center gap-2.5 font-mono-code text-[11px] text-orchid uppercase tracking-widest bg-black/60 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
+              <span>{"// SELECTED ARCHIVE • 3D MATRIX"}</span>
+            </div>
 
-              {/* Status cue when aligned */}
+            {/* Dynamic Status: Shows scroll cue initially, then flips to aligned */}
+            <div className="flex items-center gap-3">
               <motion.div
-                style={{ opacity: alignedOpacity }}
-                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white/50 uppercase tracking-widest bg-black/60 px-3 py-1 rounded-full border border-white/10 backdrop-blur-md"
+                style={{ opacity: initialCueOpacity }}
+                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white/60 uppercase tracking-widest bg-black/60 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md"
+              >
+                <span>SCROLL TO UNFURL & STRAIGHTEN</span>
+                <span className="animate-bounce">&darr;</span>
+              </motion.div>
+
+              <motion.div
+                style={{ opacity: alignedStatusOpacity }}
+                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white uppercase tracking-widest bg-emerald-950/70 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/30 backdrop-blur-md shadow-lg"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                <span>ALIGNED • HOVER & EXPLORE</span>
+                <span>MATRIX ALIGNED • HOVER & EXPLORE</span>
               </motion.div>
-            </div>
 
-            <div
-              className="absolute inset-0 flex justify-center items-center pointer-events-none"
-              style={{ perspective: "1100px" }}
-            >
-              {/* Cinematic Vignette Shadow Box Edge Masking */}
-              <div className="absolute inset-0 z-20 pointer-events-none shadow-[inset_0_120px_160px_-40px_rgba(7,7,7,1),inset_0_-120px_160px_-40px_rgba(7,7,7,1)]" />
-              <div className="absolute inset-0 z-20 pointer-events-none shadow-[inset_160px_0_160px_-40px_rgba(7,7,7,1),inset_-160px_0_160px_-40px_rgba(7,7,7,1)]" />
-
-              {/* 3D Parallax Image Matrix */}
-              <motion.div
-                style={{
-                  rotateX,
-                  rotateY,
-                  rotateZ,
-                  z: translateZ,
-                  transformStyle: "preserve-3d",
-                }}
-                className="flex gap-4 sm:gap-6 md:gap-8 justify-center items-center w-[125vw] h-[160vh] origin-center opacity-100 will-change-transform backface-hidden"
+              <Link
+                href="/gallery"
+                onClick={() => sound.playClick()}
+                data-cursor="GALLERY"
+                className="pointer-events-auto flex items-center gap-1.5 font-mono-code text-[10px] sm:text-[11px] text-white/80 hover:text-white bg-black/70 hover:bg-white/10 px-3.5 py-1.5 rounded-full border border-white/20 backdrop-blur-md transition-colors"
               >
-                {/* Column 1 */}
-                <motion.div
-                  style={{ y: yCol1 }}
-                  className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[220px] max-w-[340px] pointer-events-auto"
-                >
-                  {colMedia.col1.map((item, index) => (
-                    <ImageCard
-                      key={`col1-${item.id}-${index}`}
-                      item={item}
-                      onLoad={handleItemLoad}
-                      onItemClick={onItemClick}
-                    />
-                  ))}
-                </motion.div>
+                <span>VISUAL ARCHIVE</span>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
 
-                {/* Column 2 */}
-                <motion.div
-                  style={{ y: yCol2 }}
-                  className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[220px] max-w-[340px] pointer-events-auto"
-                >
-                  {colMedia.col2.map((item, index) => (
-                    <ImageCard
-                      key={`col2-${item.id}-${index}`}
-                      item={item}
-                      onLoad={handleItemLoad}
-                      onItemClick={onItemClick}
-                    />
-                  ))}
-                </motion.div>
+          {/* Perspective Container */}
+          <div
+            className="absolute inset-0 flex justify-center items-center pointer-events-none"
+            style={{ perspective: "1100px" }}
+          >
+            {/* Cinematic Edge Masking Shadows */}
+            <div className="absolute inset-0 z-20 pointer-events-none shadow-[inset_0_120px_160px_-40px_rgba(7,7,7,1),inset_0_-120px_160px_-40px_rgba(7,7,7,1)]" />
+            <div className="absolute inset-0 z-20 pointer-events-none shadow-[inset_160px_0_160px_-40px_rgba(7,7,7,1),inset_-160px_0_160px_-40px_rgba(7,7,7,1)]" />
 
-                {/* Column 3 */}
-                <motion.div
-                  style={{ y: yCol3 }}
-                  className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[220px] max-w-[340px] pointer-events-auto"
-                >
-                  {colMedia.col3.map((item, index) => (
-                    <ImageCard
-                      key={`col3-${item.id}-${index}`}
-                      item={item}
-                      onLoad={handleItemLoad}
-                      onItemClick={onItemClick}
-                    />
-                  ))}
-                </motion.div>
-
-                {/* Column 4 */}
-                <motion.div
-                  style={{ y: yCol4 }}
-                  className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[220px] max-w-[340px] pointer-events-auto"
-                >
-                  {colMedia.col4.map((item, index) => (
-                    <ImageCard
-                      key={`col4-${item.id}-${index}`}
-                      item={item}
-                      onLoad={handleItemLoad}
-                      onItemClick={onItemClick}
-                    />
-                  ))}
-                </motion.div>
+            {/* 3D Parallax Image Matrix: Tilts into 0° straight */}
+            <motion.div
+              style={{
+                rotateX,
+                rotateY,
+                rotateZ,
+                z: translateZ,
+                transformStyle: "preserve-3d",
+              }}
+              className="flex gap-4 sm:gap-6 md:gap-8 justify-center items-center w-[125vw] h-[160vh] origin-center opacity-100 will-change-transform backface-hidden"
+            >
+              {/* Column 1 */}
+              <motion.div
+                style={{ y: yCol1 }}
+                className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[210px] max-w-[340px] pointer-events-auto"
+              >
+                {colMedia.col1.map((item, index) => (
+                  <ImageCard
+                    key={`col1-${item.id}-${index}`}
+                    item={item}
+                    onLoad={handleItemLoad}
+                    onItemClick={onItemClick}
+                  />
+                ))}
               </motion.div>
-            </div>
 
-            {/* Bottom floating instruction banner */}
-            <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center pointer-events-none">
-              <span className="font-mono-code text-[10px] sm:text-[11px] text-white/40 uppercase tracking-widest bg-black/60 px-4 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
-                SCROLL TO UNFURL & ALIGN MATRIX // CLICK TO VIEW FILM
+              {/* Column 2 */}
+              <motion.div
+                style={{ y: yCol2 }}
+                className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[210px] max-w-[340px] pointer-events-auto"
+              >
+                {colMedia.col2.map((item, index) => (
+                  <ImageCard
+                    key={`col2-${item.id}-${index}`}
+                    item={item}
+                    onLoad={handleItemLoad}
+                    onItemClick={onItemClick}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Column 3 */}
+              <motion.div
+                style={{ y: yCol3 }}
+                className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[210px] max-w-[340px] pointer-events-auto"
+              >
+                {colMedia.col3.map((item, index) => (
+                  <ImageCard
+                    key={`col3-${item.id}-${index}`}
+                    item={item}
+                    onLoad={handleItemLoad}
+                    onItemClick={onItemClick}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Column 4 */}
+              <motion.div
+                style={{ y: yCol4 }}
+                className="flex flex-col gap-4 sm:gap-6 md:gap-8 w-[23vw] min-w-[210px] max-w-[340px] pointer-events-auto"
+              >
+                {colMedia.col4.map((item, index) => (
+                  <ImageCard
+                    key={`col4-${item.id}-${index}`}
+                    item={item}
+                    onLoad={handleItemLoad}
+                    onItemClick={onItemClick}
+                  />
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Bottom Floating Info / Action Bar */}
+          <div className="absolute bottom-6 left-0 right-0 z-30 flex justify-center pointer-events-none px-4">
+            <div className="pointer-events-auto flex items-center gap-3 bg-black/75 px-4 sm:px-6 py-2 rounded-full border border-white/15 backdrop-blur-md shadow-2xl">
+              <span className="font-mono-code text-[10px] sm:text-[11px] text-white/60 uppercase tracking-widest">
+                35MM & DIGITAL CINEMA ATELIER
               </span>
+              <span className="text-white/20">•</span>
+              <Link
+                href="/gallery"
+                onClick={() => sound.playClick()}
+                className="font-mono-code text-[10px] sm:text-[11px] text-orchid hover:text-white uppercase tracking-widest flex items-center gap-1 transition-colors"
+              >
+                <span>VIEW ARCHIVE</span>
+                <ArrowUpRight className="h-3 w-3" />
+              </Link>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
