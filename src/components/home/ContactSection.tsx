@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { STUDIO_CONFIG } from "@/data/works";
-import { ArrowUpRight, Check, ChevronDown, IndianRupee, Clapperboard } from "lucide-react";
+import { ArrowUpRight, Check, Loader2, ChevronDown, IndianRupee, Clapperboard } from "lucide-react";
 import { sound } from "@/lib/sound";
 import {
   Field,
@@ -10,7 +10,6 @@ import {
   FieldError,
   FieldGroup,
 } from "@/components/ui/field";
-import { MetallicButton } from "@/components/ui/metallic-button";
 
 const PRIMARY_INTEREST_OPTIONS = [
   {
@@ -114,10 +113,10 @@ function CustomSelect({
         }}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        className={`group relative flex w-full items-center justify-between rounded-xl border px-4 py-3.5 text-left transition-colors min-h-[48px] touch-manipulation cursor-pointer select-none bg-black/40 ${
+        className={`group relative flex w-full items-center justify-between rounded-xl border px-4 py-3.5 text-left transition-colors min-h-[48px] touch-manipulation cursor-pointer select-none bg-black/40 outline-none focus:outline-none focus:ring-0 ${
           isOpen
-            ? "border-white/50"
-            : "border-white/10 hover:border-white/25"
+            ? "border-orchid"
+            : "border-white/10 hover:border-white/20"
         }`}
       >
         <div className="flex flex-col pr-3 truncate">
@@ -447,7 +446,7 @@ export function ContactSection() {
                       Thank you for reaching out to Red Orchid Films. Sayan and our atelier production team will review your scope and get back to you within 24 hours.
                     </p>
                   </div>
-                  <MetallicButton
+                  <button
                     type="button"
                     onClick={() => {
                       sound.playClick();
@@ -463,12 +462,11 @@ export function ContactSection() {
                         honeypot: "",
                       });
                     }}
-                    text="SEND ANOTHER INQUIRY"
-                    icon={<span>&rarr;</span>}
-                    iconPlacement="right"
-                    size="md"
-                    className="mx-auto font-mono-code"
-                  />
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 font-mono-code text-xs font-semibold text-white uppercase tracking-wider hover:border-orchid hover:bg-orchid transition-all cursor-pointer min-h-[44px]"
+                  >
+                    <span>SEND ANOTHER INQUIRY</span>
+                    <span>&rarr;</span>
+                  </button>
                 </div>
               ) : (
                 <form
@@ -523,10 +521,10 @@ export function ContactSection() {
                             if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
                             if (status === "error") setStatus("idle");
                           }}
-                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:outline-none min-h-[48px] bg-black/40 ${
+                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 min-h-[48px] bg-black/40 ${
                             fieldErrors.name
                               ? "border-rose-500/80 focus:border-rose-400"
-                              : "border-white/10 focus:border-white/50"
+                              : "border-white/10 focus:border-orchid"
                           }`}
                         />
                         {fieldErrors.name && (
@@ -556,10 +554,10 @@ export function ContactSection() {
                             if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
                             if (status === "error") setStatus("idle");
                           }}
-                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:outline-none min-h-[48px] bg-black/40 ${
+                          className={`w-full rounded-xl border px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 min-h-[48px] bg-black/40 ${
                             fieldErrors.email
                               ? "border-rose-500/80 focus:border-rose-400"
-                              : "border-white/10 focus:border-white/50"
+                              : "border-white/10 focus:border-orchid"
                           }`}
                         />
                         {fieldErrors.email && (
@@ -585,7 +583,7 @@ export function ContactSection() {
                         placeholder="e.g. Warner Bros. / Maison Margiela / Independent"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:border-white/50 focus:outline-none min-h-[48px]"
+                        className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3.5 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 focus:border-orchid min-h-[48px]"
                       />
                     </Field>
 
@@ -632,10 +630,10 @@ export function ContactSection() {
                           if (fieldErrors.message) setFieldErrors((prev) => ({ ...prev, message: undefined }));
                           if (status === "error") setStatus("idle");
                         }}
-                        className={`w-full rounded-xl border p-4 text-base sm:text-sm text-white placeholder-white/20 transition-colors focus:outline-none resize-y min-h-[110px] bg-black/40 ${
+                        className={`w-full rounded-xl border p-4 text-base sm:text-sm text-white placeholder-white/20 transition-colors outline-none focus:outline-none focus:ring-0 resize-y min-h-[110px] bg-black/40 ${
                           fieldErrors.message
                             ? "border-rose-500/80 focus:border-rose-400"
-                            : "border-white/10 focus:border-white/50"
+                            : "border-white/10 focus:border-orchid"
                         }`}
                       />
                       {fieldErrors.message && (
@@ -655,18 +653,25 @@ export function ContactSection() {
                     </div>
                   )}
 
-                  {/* 7. Submit Option (Metallic 3D Industrial Hardware Button) */}
-                  <MetallicButton
+                  {/* 7. Submit Option */}
+                  <button
                     type="submit"
                     disabled={status === "submitting"}
-                    loading={status === "submitting"}
-                    text={status === "submitting" ? "TRANSMITTING INQUIRY..." : "SUBMIT PRODUCTION INQUIRY"}
-                    icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2} />}
-                    iconPlacement="right"
-                    size="xl"
-                    className="w-full font-mono-code"
                     data-cursor="SUBMIT"
-                  />
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-orchid bg-orchid px-6 py-4 font-mono-code text-xs sm:text-sm font-bold tracking-widest text-white uppercase transition-all duration-300 hover:bg-orchid-dark hover:shadow-[0_0_30px_rgba(225,29,72,0.4)] disabled:opacity-50 min-h-[50px] touch-manipulation cursor-pointer active:scale-[0.99] select-none"
+                  >
+                    {status === "submitting" ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />
+                        <span>TRANSMITTING INQUIRY...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>SUBMIT PRODUCTION INQUIRY</span>
+                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" strokeWidth={2} />
+                      </>
+                    )}
+                  </button>
 
                   <p className="text-center font-mono-code text-[10px] text-white/35 uppercase tracking-wider pt-1">
                     STRICT CONFIDENTIALITY. DIRECT ATELIER DISPATCH. 24H RESPONSE.
