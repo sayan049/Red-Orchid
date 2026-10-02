@@ -1,11 +1,55 @@
 "use client";
 
 // Premium Audio Engine for Red Orchid Films
-// Master sound manager with zero continuous buzz or electric hum
+// Master sound manager with robust mobile WebKit audio unlock & mobile speaker acoustic tuning
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private isSoundEnabled = true;
+  private isUnlocked = false;
+
+  constructor() {
+    if (typeof window !== "undefined") {
+      this.attachUnlockListeners();
+    }
+  }
+
+  // iOS Safari & Android WebKit require user gesture to unlock Web Audio API
+  private attachUnlockListeners(): void {
+    const unlock = () => {
+      this.unlock();
+      window.removeEventListener("touchstart", unlock);
+      window.removeEventListener("touchend", unlock);
+      window.removeEventListener("click", unlock);
+    };
+
+    window.addEventListener("touchstart", unlock, { passive: true, once: true });
+    window.addEventListener("touchend", unlock, { passive: true, once: true });
+    window.addEventListener("click", unlock, { passive: true, once: true });
+  }
+
+  public unlock(): void {
+    if (this.isUnlocked) return;
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+
+      if (ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+      }
+
+      // Play a silent 1-sample buffer to force iOS WebKit audio hardware to engage
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+
+      this.isUnlocked = true;
+    } catch {
+      // Audio permission restricted
+    }
+  }
 
   private getContext(): AudioContext | null {
     if (typeof window === "undefined") return null;
@@ -23,10 +67,11 @@ class SoundEngine {
     return this.ctx;
   }
 
-  // Punchy, tactile mechanical click (Arri/Leica shutter feel)
+  // Punchy, tactile mechanical click (Arri/Leica shutter feel) tuned for mobile speakers & headphones
   public playClick(): void {
     if (!this.isSoundEnabled) return;
     try {
+      this.unlock();
       const ctx = this.getContext();
       if (!ctx) return;
 
@@ -35,21 +80,21 @@ class SoundEngine {
       const gain = ctx.createGain();
       const filter = ctx.createBiquadFilter();
 
-      // Primary crisp impulse
+      // Primary crisp impulse (1900Hz -> 550Hz, audible on mobile phone speakers)
       osc.type = "sine";
-      osc.frequency.setValueAtTime(1600, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.035);
+      osc.frequency.setValueAtTime(1900, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(550, ctx.currentTime + 0.032);
 
-      // Secondary metallic body harmonic
+      // Secondary metallic body harmonic (1100Hz -> 380Hz)
       osc2.type = "triangle";
-      osc2.frequency.setValueAtTime(800, ctx.currentTime);
-      osc2.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.03);
+      osc2.frequency.setValueAtTime(1100, ctx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(380, ctx.currentTime + 0.028);
 
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-      filter.Q.setValueAtTime(2.5, ctx.currentTime);
+      filter.frequency.setValueAtTime(1300, ctx.currentTime);
+      filter.Q.setValueAtTime(2.2, ctx.currentTime);
 
-      gain.gain.setValueAtTime(0.24, ctx.currentTime);
+      gain.gain.setValueAtTime(0.32, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.045);
 
       osc.connect(filter);
@@ -70,10 +115,11 @@ class SoundEngine {
   public playSuccess(): void {
     if (!this.isSoundEnabled) return;
     try {
+      this.unlock();
       const ctx = this.getContext();
       if (!ctx) return;
 
-      const chords = [174.61, 220.0, 261.63, 349.23]; // F Major Cinematic Triad
+      const chords = [349.23, 440.0, 523.25, 698.46]; // F Major Cinematic Triad (Audible range on mobile)
       chords.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -82,7 +128,7 @@ class SoundEngine {
 
         const startTime = ctx.currentTime + idx * 0.04;
         gain.gain.setValueAtTime(0.0001, startTime);
-        gain.gain.linearRampToValueAtTime(0.09, startTime + 0.15);
+        gain.gain.linearRampToValueAtTime(0.12, startTime + 0.15);
         gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.8);
 
         osc.connect(gain);
@@ -100,6 +146,7 @@ class SoundEngine {
   public toggleSound(): boolean {
     this.isSoundEnabled = !this.isSoundEnabled;
     if (this.isSoundEnabled) {
+      this.unlock();
       // Play a soft luxury acoustic chime confirming audio is active
       try {
         const ctx = this.getContext();
@@ -108,9 +155,9 @@ class SoundEngine {
           const gain = ctx.createGain();
           osc.type = "sine";
           osc.frequency.setValueAtTime(528, ctx.currentTime); // 528Hz Solfeggio frequency
-          osc.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.2);
+          osc.frequency.exponentialRampToValueAtTime(792, ctx.currentTime + 0.2);
 
-          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
 
           osc.connect(gain);

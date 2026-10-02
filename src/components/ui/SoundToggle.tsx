@@ -19,7 +19,7 @@ export function SoundToggle() {
       data-cursor="SOUND"
       aria-label={isEnabled ? "Mute all website audio" : "Enable website audio"}
       aria-pressed={isEnabled}
-      className={`group flex items-center gap-2 rounded-full border px-3 sm:px-3.5 py-1.5 backdrop-blur-md transition-all duration-300 focus-visible:outline-orchid ${
+      className={`group flex items-center gap-2 rounded-full border px-3 sm:px-3.5 py-1.5 backdrop-blur-md transition-all duration-300 focus-visible:outline-orchid touch-manipulation cursor-pointer select-none ${
         isEnabled
           ? "border-orchid/60 bg-orchid/20 text-white shadow-[0_0_15px_rgba(225,29,72,0.3)]"
           : "border-white/10 bg-black/40 text-white/70 hover:border-white/30 hover:bg-white/5 hover:text-white"

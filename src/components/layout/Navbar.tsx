@@ -110,7 +110,7 @@ export function Navbar() {
               onClick={toggleMenu}
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white/80 backdrop-blur-md transition-colors hover:border-white/30 hover:text-white md:hidden focus-visible:outline-orchid touch-manipulation cursor-pointer"
             >
               {isMobileMenuOpen ? (
                 <X className="h-5 w-5" strokeWidth={1.5} />
@@ -132,7 +132,7 @@ export function Navbar() {
       >
         <nav aria-label="Mobile Navigation" className="flex flex-col gap-5 sm:gap-6 my-auto">
           <span className="font-mono-code text-[11px] font-medium tracking-widest text-orchid uppercase">
-            // INDEX DIRECTORY
+            {"// INDEX DIRECTORY"}
           </span>
           {NAV_LINKS.map((link, idx) => (
             <Link

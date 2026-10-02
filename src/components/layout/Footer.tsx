@@ -25,13 +25,13 @@ export function Footer() {
           <div className="flex items-center gap-3 mb-4 sm:mb-6">
             <span className="h-2 w-2 rounded-full bg-orchid animate-pulse" />
             <span className="font-mono-code text-[11px] sm:text-xs tracking-widest text-white/50 uppercase">
-              // READY FOR PRODUCTION
+              {"// READY FOR PRODUCTION"}
             </span>
           </div>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 sm:gap-8">
-            <h2 className="font-display text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight text-bone max-w-3xl leading-[0.95] break-words">
-              HAVE A VISION? <br />
+            <h2 className="font-display text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-bone max-w-3xl leading-[1.05] sm:leading-[0.95] break-words">
+              HAVE A VISION? <br className="hidden sm:inline" />
               <span className="text-white/40 italic font-normal">LET&apos;S CRAFT</span>{" "}
               <span className="text-orchid">CINEMA.</span>
             </h2>
@@ -66,7 +66,7 @@ export function Footer() {
           {/* Col 2: Navigation */}
           <div className="space-y-3">
             <span className="font-mono-code text-[11px] tracking-widest text-orchid uppercase block">
-              // INDEX
+              {"// INDEX"}
             </span>
             <ul className="space-y-2 text-xs font-sans-ui">
               <li>
@@ -111,7 +111,7 @@ export function Footer() {
           {/* Col 3: Capabilities */}
           <div className="space-y-3">
             <span className="font-mono-code text-[11px] tracking-widest text-white/40 uppercase block">
-              // CAPABILITIES
+              {"// CAPABILITIES"}
             </span>
             <ul className="space-y-2 text-xs font-sans-ui text-white/60">
               <li>Narrative Short Films</li>
@@ -125,7 +125,7 @@ export function Footer() {
           {/* Col 4: Dispatch & Socials */}
           <div className="space-y-3">
             <span className="font-mono-code text-[11px] tracking-widest text-white/40 uppercase block">
-              // DISPATCH
+              {"// DISPATCH"}
             </span>
             <div className="space-y-2 text-xs font-mono-code text-white/80">
               <p>

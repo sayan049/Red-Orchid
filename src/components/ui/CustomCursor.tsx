@@ -8,13 +8,19 @@ export function CustomCursor() {
   const [cursorText, setCursorText] = useState<string>("");
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [hasFinePointer, setHasFinePointer] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!isFinePointer || prefersReducedMotion) return;
+    if (!isFinePointer || prefersReducedMotion) {
+      setHasFinePointer(false);
+      return;
+    }
+
+    setHasFinePointer(true);
 
     document.documentElement.classList.add("has-custom-cursor");
 
@@ -83,6 +89,10 @@ export function CustomCursor() {
       cancelAnimationFrame(animationFrameId);
     };
   }, [isVisible]);
+
+  if (!hasFinePointer) {
+    return null;
+  }
 
   return (
     <>

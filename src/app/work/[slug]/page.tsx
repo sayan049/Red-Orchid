@@ -75,7 +75,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
             <span className="text-white/60">{work.client}</span>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold uppercase tracking-tight text-bone">
+          <h1 className="font-display text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight text-bone break-words">
             {work.title}
           </h1>
 
@@ -188,7 +188,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
         {/* Magnetic Next Project Gateway */}
         <div className="mt-20 pt-8 text-center">
           <span className="font-mono-code text-xs text-orchid uppercase tracking-widest block mb-4">
-            NEXT PROJECT IN ARCHIVE
+            {"NEXT PROJECT IN ARCHIVE"}
           </span>
 
           <Link
@@ -196,7 +196,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
             data-cursor="NEXT FILM"
             className="group inline-flex flex-col items-center gap-4 transition-all"
           >
-            <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold uppercase text-bone transition-colors group-hover:text-orchid">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold uppercase text-bone transition-colors group-hover:text-orchid break-words text-center">
               {nextWork.title}
             </h2>
             <div className="flex items-center gap-2 font-mono-code text-xs text-white/60 group-hover:text-white transition-colors">

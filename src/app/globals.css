@@ -85,21 +85,27 @@
 
 /* Monumental fluid hero title - calibrated so 320px to 4K displays never overflow */
 .text-hero-fluid {
-  font-size: clamp(1.65rem, 5.8vw, 6.2rem);
-  line-height: 1.0;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.35rem, 5.2vw, 6.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .text-editorial-lg {
-  font-size: clamp(1.8rem, 4.8vw, 5.2rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.4rem, 4.2vw, 5.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .text-editorial-md {
-  font-size: clamp(1.3rem, 3.2vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.15rem, 2.8vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Subtle 35mm grain overlay */

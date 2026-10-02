@@ -24,9 +24,9 @@ export function SelectedWorks({ works }: SelectedWorksProps) {
           <div>
             <div className="flex items-center gap-2.5 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
               <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-              <span>// SELECTED ARCHIVE</span>
+              <span>{"// SELECTED ARCHIVE"}</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-bone uppercase">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-tight text-bone uppercase break-words">
               SELECTED WORKS
             </h2>
           </div>
@@ -98,7 +98,7 @@ export function SelectedWorks({ works }: SelectedWorksProps) {
                       </p>
 
                       <div className="flex items-center justify-between gap-4">
-                        <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase transition-colors group-hover:text-orchid">
+                        <h3 className="font-display text-lg sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase transition-colors group-hover:text-orchid break-words">
                           {work.title}
                         </h3>
 

@@ -52,9 +52,9 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
           <div>
             <div className="flex items-center gap-2.5 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
               <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-              <span>// SPOTLIGHT ARCHIVE</span>
+              <span>{"// SPOTLIGHT ARCHIVE"}</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-bone uppercase">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-bone uppercase break-words">
               TRENDING CINEMA
             </h2>
           </div>
@@ -214,7 +214,7 @@ export function TrendingWorks({ works }: TrendingWorksProps) {
                       )}
                     </div>
 
-                    <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors">
+                    <h3 className="font-display text-lg sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors break-words">
                       {work.title}
                     </h3>
 

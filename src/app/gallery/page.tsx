@@ -116,10 +116,10 @@ export default function GalleryPage() {
         <div className="mb-10 sm:mb-14">
           <div className="flex items-center gap-2 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
             <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-            <span>// CATALOG & VISUAL REPOSITORY</span>
+            <span>{"// CATALOG & VISUAL REPOSITORY"}</span>
           </div>
 
-          <h1 className="font-display text-3xl sm:text-5xl md:text-7xl font-extrabold uppercase tracking-tight text-bone">
+          <h1 className="font-display text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight text-bone break-words">
             VISUAL ARCHIVE
           </h1>
 
@@ -463,7 +463,7 @@ export default function GalleryPage() {
                         CLIENT: {work.client}
                       </div>
 
-                      <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors">
+                      <h3 className="font-display text-lg sm:text-2xl md:text-3xl font-bold tracking-tight text-bone uppercase group-hover:text-orchid transition-colors break-words">
                         {work.title}
                       </h3>
 

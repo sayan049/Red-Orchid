@@ -73,10 +73,10 @@ export function Hero() {
         {/* Center: Monumental Editorial Statement */}
         <div className="relative z-20 my-auto py-6 sm:py-10 max-w-7xl w-full">
           <p className="mb-2.5 sm:mb-4 font-mono-code text-[10px] sm:text-xs md:text-sm tracking-[0.25em] text-orchid uppercase">
-            // BESPOKE PRODUCTION ATELIER
+            {"// BESPOKE PRODUCTION ATELIER"}
           </p>
 
-          <h1 className="font-display text-hero-fluid font-black uppercase text-bone select-none tracking-tight leading-[0.98] sm:leading-[1.02]">
+          <h1 className="font-display text-hero-fluid font-black uppercase text-bone select-none tracking-tight leading-[1.02] sm:leading-[1.05] break-words">
             <span className="block sm:inline">NOT CONTENT,</span>{" "}
             <span className="block sm:inline text-transparent bg-clip-text bg-gradient-to-r from-bone via-white to-white/50">
               CINEMA.

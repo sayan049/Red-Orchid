@@ -19,6 +19,14 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       return;
     }
 
+    // Do NOT run Lenis on mobile / touch devices.
+    // Native mobile momentum scrolling on iOS and Android is hardware-accelerated
+    // and running Lenis touch interception blocks tap and click events on buttons.
+    const isTouch = window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
+    if (isTouch) {
+      return;
+    }
+
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
@@ -28,7 +36,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 0.95,
-      touchMultiplier: 1.5,
+      syncTouch: false,
     });
 
     lenisRef.current = lenis;

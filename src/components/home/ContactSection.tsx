@@ -81,10 +81,10 @@ export function ContactSection() {
         <div className="mb-14 sm:mb-20">
           <div className="flex items-center gap-2.5 font-mono-code text-xs text-orchid uppercase tracking-widest mb-3">
             <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-            <span>// COMMISSIONS & INQUIRIES</span>
+            <span>{"// COMMISSIONS & INQUIRIES"}</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-bone uppercase max-w-4xl leading-[0.95] break-words">
-            LET&apos;S CRAFT SOMETHING <br />
+          <h2 className="font-display text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-bone uppercase max-w-4xl leading-[1.05] sm:leading-[0.95] break-words">
+            LET&apos;S CRAFT SOMETHING <br className="hidden sm:inline" />
             <span className="text-orchid">TIMELESS.</span>
           </h2>
         </div>
