@@ -645,7 +645,7 @@ export default function GalleryPage() {
           <div className="py-4">
             <div className="mb-4 flex items-center justify-between text-xs font-mono-code text-white/40">
               <span className="uppercase tracking-wider">
-                SCROLL OR DRAG TO RUN INFINITE PARALLAX FILMSTRIP • TAP TO OPEN VIEWER
+                DRAG OR USE ARROWS TO RUN INFINITE PARALLAX FILMSTRIP • TAP TO OPEN VIEWER
               </span>
               <span>{sliderItems.length} SEQUENCES</span>
             </div>

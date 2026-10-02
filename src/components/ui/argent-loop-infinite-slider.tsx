@@ -308,29 +308,15 @@ export function ArgentLoopInfiniteSlider({
 
     measure();
 
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      const s = state.current;
-      s.isSnapping = false;
-      s.lastScrollTime = Date.now();
-      const delta = Math.max(
-        Math.min(e.deltaY * CONFIG.SCROLL_SPEED, CONFIG.MAX_VELOCITY),
-        -CONFIG.MAX_VELOCITY,
-      );
-      s.targetY -= delta;
-    };
-
     const onResize = () => {
       measure();
     };
 
-    container.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("resize", onResize);
 
     requestRef.current = requestAnimationFrame(animationLoop);
 
     return () => {
-      container.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", onResize);
       if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
     };
@@ -358,7 +344,7 @@ export function ArgentLoopInfiniteSlider({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      className={`parallax-container group relative select-none w-full h-[600px] sm:h-[680px] md:h-[740px] overflow-hidden rounded-2xl border border-white/10 bg-[#070707] shadow-2xl cursor-grab active:cursor-grabbing touch-none ${className}`}
+      className={`parallax-container group relative select-none w-full h-[600px] sm:h-[680px] md:h-[740px] overflow-hidden rounded-2xl border border-white/10 bg-[#070707] shadow-2xl cursor-grab active:cursor-grabbing ${className}`}
     >
       {/* Background Project Slides List */}
       <ul className="project-list absolute inset-0 m-0 p-0 list-none overflow-hidden pointer-events-none">
@@ -399,7 +385,7 @@ export function ArgentLoopInfiniteSlider({
         {/* Right Section: Hint + Buttons in unified flex container */}
         <div className="flex items-center gap-2 sm:gap-3 pointer-events-auto">
           <span className="font-mono-code text-[10px] text-white/50 uppercase tracking-wider hidden md:inline-block bg-black/50 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
-            SCROLL / DRAG TO CYCLE
+            DRAG OR USE ARROWS
           </span>
 
           <div className="flex items-center gap-1.5 bg-black/60 p-1 rounded-full border border-white/15 backdrop-blur-md">
