@@ -306,7 +306,6 @@ export default function ParallaxUnfurlingGallery({
   const yCol4 = useTransform(smoothProgress, [0, 0.52, 1], ["-22%", "12%", "26%"]);
 
   // Status indicator opacity
-  const alignedStatusOpacity = useTransform(smoothProgress, [0.48, 0.55], [0, 1]);
   const initialCueOpacity = useTransform(smoothProgress, [0.45, 0.55], [1, 0]);
 
   return (
@@ -337,7 +336,7 @@ export default function ParallaxUnfurlingGallery({
               <span>{"// SELECTED ARCHIVE • 3D MATRIX"}</span>
             </div>
 
-            {/* Dynamic Status: Shows scroll cue initially, then flips to aligned */}
+            {/* Dynamic Status: Shows scroll cue initially */}
             <div className="flex items-center gap-3">
               <motion.div
                 style={{ opacity: initialCueOpacity }}
@@ -345,14 +344,6 @@ export default function ParallaxUnfurlingGallery({
               >
                 <span>SCROLL TO UNFURL & STRAIGHTEN</span>
                 <span className="animate-bounce">&darr;</span>
-              </motion.div>
-
-              <motion.div
-                style={{ opacity: alignedStatusOpacity }}
-                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white uppercase tracking-widest bg-emerald-950/70 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/30 backdrop-blur-md"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                <span>MATRIX ALIGNED • HOVER & EXPLORE</span>
               </motion.div>
 
               <Link

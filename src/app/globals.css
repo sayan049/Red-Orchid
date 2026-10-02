@@ -478,8 +478,8 @@ textarea:active {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   font-weight: 900;
   font-size: clamp(3.2rem, 15vw, 19rem);
-  line-height: 0.76;
-  letter-spacing: -0.06em;
+  line-height: 0.78;
+  letter-spacing: -0.05em;
   text-transform: uppercase;
   white-space: nowrap;
   user-select: none;
@@ -489,28 +489,28 @@ textarea:active {
   width: 100%;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.32) 0%,
-    rgba(255, 255, 255, 0.16) 35%,
-    rgba(255, 255, 255, 0.03) 70%,
-    rgba(255, 255, 255, 0) 100%
+    rgba(255, 255, 255, 0.48) 0%,
+    rgba(255, 255, 255, 0.28) 45%,
+    rgba(255, 255, 255, 0.12) 80%,
+    rgba(255, 255, 255, 0.02) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.95) 30%,
-    rgba(0, 0, 0, 0.3) 68%,
+    rgba(0, 0, 0, 0.95) 55%,
+    rgba(0, 0, 0, 0.4) 85%,
     rgba(0, 0, 0, 0) 100%
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.95) 30%,
-    rgba(0, 0, 0, 0.3) 68%,
+    rgba(0, 0, 0, 0.95) 55%,
+    rgba(0, 0, 0, 0.4) 85%,
     rgba(0, 0, 0, 0) 100%
   );
-  transform: translateY(4%);
+  transform: translateY(3%);
 }
 
 .footer-brand-blur-overlay {
@@ -518,17 +518,17 @@ textarea:active {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 60%;
+  height: 35%;
   background: linear-gradient(
     to top,
-    #070707 15%,
-    rgba(7, 7, 7, 0.8) 45%,
+    #070707 20%,
+    rgba(7, 7, 7, 0.6) 60%,
     transparent 100%
   );
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 100%);
   pointer-events: none;
 }
 

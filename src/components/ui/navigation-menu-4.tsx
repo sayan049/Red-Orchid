@@ -14,6 +14,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import {
   Popover,
@@ -168,7 +169,7 @@ export function NavigationMenu4() {
                                       sound.playClick()
                                       setIsOpen(false)
                                     }}
-                                    className="flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-sans-ui text-white/80 hover:bg-white/10 hover:text-white transition-colors"
+                                    className="flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider text-white/80 hover:bg-white/10 hover:text-white transition-colors"
                                   >
                                     <span>{item.label}</span>
                                     <ArrowRight className="h-3 w-3 text-white/30" />
@@ -186,9 +187,9 @@ export function NavigationMenu4() {
                               sound.playClick()
                               setIsOpen(false)
                             }}
-                            className="block rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider text-bone hover:bg-white/10 hover:text-white transition-colors"
+                            className="block rounded-lg px-2.5 py-2 text-xs font-mono-code uppercase tracking-wider text-white/80 hover:bg-white/10 hover:text-white transition-colors"
                           >
-                            {link.label}
+                            <span>{link.label}</span>
                           </Link>
                         </NavigationMenuLink>
                       )}
@@ -235,7 +236,7 @@ export function NavigationMenu4() {
                     <>
                       <NavigationMenuTrigger
                         onClick={() => sound.playClick()}
-                        className="h-9 inline-flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 bg-transparent px-3 py-1.5 text-xs font-mono-code uppercase tracking-wider transition-colors rounded-md"
+                        className="bg-transparent"
                       >
                         {link.label}
                       </NavigationMenuTrigger>
@@ -287,7 +288,7 @@ export function NavigationMenu4() {
                                   {/* Description preview */}
                                   {link.type === "description" && "description" in item && (
                                     <>
-                                      <div className="text-xs font-mono-code uppercase tracking-wider text-white font-semibold leading-none flex items-center justify-between">
+                                      <div className="text-xs font-mono-code uppercase tracking-wider text-white font-medium leading-none flex items-center justify-between">
                                         <span>{item.label}</span>
                                         <ArrowRight className="h-3 w-3 text-white/30 opacity-0 group-hover:opacity-100 transition-opacity" />
                                       </div>
@@ -316,9 +317,9 @@ export function NavigationMenu4() {
                       <Link
                         href={link.href || "#"}
                         onClick={() => sound.playClick()}
-                        className="h-9 inline-flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 py-1.5 px-3 rounded-md text-xs font-mono-code uppercase tracking-wider transition-colors"
+                        className={cn(navigationMenuTriggerStyle(), "leading-none")}
                       >
-                        {link.label}
+                        <span className="leading-none">{link.label}</span>
                       </Link>
                     </NavigationMenuLink>
                   )}

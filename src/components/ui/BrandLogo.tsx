@@ -31,17 +31,17 @@ export function BrandLogo({ className = "", showTagline = false }: BrandLogoProp
       </div>
 
       {/* Wordmark */}
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1 sm:gap-1.5">
-          <span className="font-display text-xs sm:text-sm font-bold tracking-[0.16em] sm:tracking-[0.22em] text-bone uppercase transition-colors group-hover:text-white">
+      <div className="flex flex-col justify-center">
+        <div className="flex items-center gap-1.5 leading-none">
+          <span className="font-display text-xs sm:text-sm font-bold tracking-[0.16em] sm:tracking-[0.22em] text-bone uppercase transition-colors group-hover:text-white leading-none">
             RED ORCHID
           </span>
-          <span className="font-mono-code text-[8px] sm:text-[9px] font-semibold tracking-widest text-orchid uppercase">
+          <span className="font-mono-code text-[8px] sm:text-[9px] font-semibold tracking-widest text-orchid uppercase leading-none">
             FILMS
           </span>
         </div>
         {showTagline && (
-          <span className="font-sans-ui text-[8px] sm:text-[9px] font-normal tracking-[0.25em] text-muted uppercase">
+          <span className="font-sans-ui text-[8px] sm:text-[9px] font-normal tracking-[0.25em] text-muted uppercase mt-1 leading-none">
             Not content, Cinema.
           </span>
         )}
