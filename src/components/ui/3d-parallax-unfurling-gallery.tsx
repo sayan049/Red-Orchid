@@ -330,27 +330,15 @@ export default function ParallaxUnfurlingGallery({
           className="relative bg-[#070707] overflow-hidden flex items-center justify-center max-w-[1920px] mx-auto will-change-transform backface-hidden preserve-3d"
         >
           {/* Top Floating Cinema HUD */}
-          <div className="absolute top-5 left-5 right-5 sm:top-8 sm:left-10 sm:right-10 z-30 flex items-center justify-end pointer-events-none">
+          <div className="absolute top-5 right-5 sm:top-8 sm:right-10 z-30 flex items-center justify-end pointer-events-none">
             {/* Dynamic Status: Shows scroll cue initially */}
-            <div className="flex items-center gap-3">
-              <motion.div
-                style={{ opacity: initialCueOpacity }}
-                className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white/60 uppercase tracking-widest bg-black/60 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md"
-              >
-                <span>SCROLL TO UNFURL & STRAIGHTEN</span>
-                <span className="animate-bounce">&darr;</span>
-              </motion.div>
-
-              <Link
-                href="/gallery"
-                onClick={() => sound.playClick()}
-                data-cursor="GALLERY"
-                className="pointer-events-auto flex items-center gap-1.5 font-mono-code text-[10px] sm:text-[11px] text-white/80 hover:text-white bg-black/70 hover:bg-white/10 px-3.5 py-1.5 rounded-full border border-white/20 backdrop-blur-md transition-colors"
-              >
-                <span>VISUAL ARCHIVE</span>
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+            <motion.div
+              style={{ opacity: initialCueOpacity }}
+              className="hidden sm:flex items-center gap-2 font-mono-code text-[10px] text-white/60 uppercase tracking-widest bg-black/60 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md"
+            >
+              <span>SCROLL TO UNFURL & STRAIGHTEN</span>
+              <span className="animate-bounce">&darr;</span>
+            </motion.div>
           </div>
 
           {/* Perspective Container */}
