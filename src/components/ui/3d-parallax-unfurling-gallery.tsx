@@ -330,12 +330,7 @@ export default function ParallaxUnfurlingGallery({
           className="relative bg-[#070707] overflow-hidden flex items-center justify-center max-w-[1920px] mx-auto will-change-transform backface-hidden preserve-3d"
         >
           {/* Top Floating Cinema HUD */}
-          <div className="absolute top-5 left-5 right-5 sm:top-8 sm:left-10 sm:right-10 z-30 flex items-center justify-between pointer-events-none">
-            <div className="flex items-center gap-2.5 font-mono-code text-[11px] text-orchid uppercase tracking-widest bg-black/60 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-orchid animate-pulse" />
-              <span>{"// SELECTED ARCHIVE • 3D MATRIX"}</span>
-            </div>
-
+          <div className="absolute top-5 left-5 right-5 sm:top-8 sm:left-10 sm:right-10 z-30 flex items-center justify-end pointer-events-none">
             {/* Dynamic Status: Shows scroll cue initially */}
             <div className="flex items-center gap-3">
               <motion.div
