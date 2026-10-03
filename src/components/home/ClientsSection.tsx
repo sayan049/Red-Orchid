@@ -165,13 +165,19 @@ export function ClientsSection() {
         />
       </div>
 
-      {/* Bottom subtle metadata strip */}
-      <div className="mt-10 flex items-center justify-center gap-6 font-mono-code text-[10px] text-white/30 uppercase tracking-widest">
-        <span>35MM CELLULOID</span>
-        <span>•</span>
-        <span>COMMERCIAL & EDITORIAL</span>
-        <span>•</span>
-        <span>GLOBAL SYNDICATION</span>
+      {/* Bottom subtle metadata strip - fully responsive on mobile */}
+      <div className="mt-8 sm:mt-12 px-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6 font-mono-code text-[9px] sm:text-[10px] text-white/40 uppercase tracking-wider sm:tracking-widest text-center">
+        <span className="px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] whitespace-nowrap">
+          35MM CELLULOID
+        </span>
+        <span className="hidden sm:inline text-white/20 select-none">•</span>
+        <span className="px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] whitespace-nowrap">
+          COMMERCIAL & EDITORIAL
+        </span>
+        <span className="hidden sm:inline text-white/20 select-none">•</span>
+        <span className="px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] whitespace-nowrap">
+          GLOBAL SYNDICATION
+        </span>
       </div>
     </section>
   );

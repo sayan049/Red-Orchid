@@ -199,7 +199,6 @@ export function NavigationMenu4() {
         const id = hash.replace(/^#/, "")
         const target = document.getElementById(id) || document.querySelector(hash)
         if (target) {
-          window.history.pushState(null, "", href)
           const y = target.getBoundingClientRect().top + window.scrollY - 80
           window.scrollTo({ top: Math.max(0, y), behavior: "smooth" })
         }
@@ -216,7 +215,6 @@ export function NavigationMenu4() {
     } else if (href === "/") {
       if (pathname === "/") {
         e.preventDefault()
-        window.history.pushState(null, "", "/")
         window.scrollTo({ top: 0, behavior: "smooth" })
       }
     }

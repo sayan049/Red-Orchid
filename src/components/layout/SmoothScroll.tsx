@@ -29,6 +29,49 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     let attempts = 0;
     const maxAttempts = 35; // 35 * 60ms = 2.1s polling window
 
+    const isReload = () => {
+      try {
+        const navEntries = performance.getEntriesByType("navigation");
+        if (navEntries.length > 0) {
+          const nav = navEntries[0] as PerformanceNavigationTiming;
+          return nav.type === "reload";
+        }
+        return (
+          (window.performance as unknown as { navigation?: { type: number } })
+            ?.navigation?.type === 1
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    const resetScrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      }
+    };
+
+    // On page reload, always start at the very top (Hero) and clear any stale target hash
+    if (isReload()) {
+      try {
+        sessionStorage.removeItem("target_scroll_hash");
+        if (window.location.hash) {
+          window.history.replaceState(null, "", window.location.pathname);
+        }
+      } catch {
+        // ignore
+      }
+
+      resetScrollToTop();
+      requestAnimationFrame(resetScrollToTop);
+      setTimeout(resetScrollToTop, 60);
+      setTimeout(resetScrollToTop, 200);
+      return;
+    }
+
     const getHash = () => {
       let hash = window.location.hash;
       if (!hash) {
@@ -52,6 +95,15 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
           sessionStorage.removeItem("target_scroll_hash");
         } catch {
           // ignore
+        }
+
+        // Clean up hash from URL bar so subsequent reloads don't jump back to the anchor
+        if (window.location.hash) {
+          try {
+            window.history.replaceState(null, "", window.location.pathname);
+          } catch {
+            // ignore
+          }
         }
 
         // Force Lenis to recalculate page dimensions if active
@@ -98,10 +150,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
           timer = setTimeout(poll, 60);
         } else {
           // Fallback to top only if element is not found after polling
-          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-          if (lenisRef.current) {
-            lenisRef.current.scrollTo(0, { immediate: true });
-          }
+          resetScrollToTop();
         }
       };
 
@@ -109,13 +158,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       poll();
     } else {
       // No hash at all: Unconditionally reset window & document scroll to top
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { immediate: true });
-      }
+      resetScrollToTop();
     }
 
     const handleHashChange = () => {
@@ -125,11 +168,27 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       }
     };
 
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted || isReload()) {
+        try {
+          sessionStorage.removeItem("target_scroll_hash");
+          if (window.location.hash) {
+            window.history.replaceState(null, "", window.location.pathname);
+          }
+        } catch {
+          // ignore
+        }
+        resetScrollToTop();
+      }
+    };
+
     window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("pageshow", handlePageShow);
 
     return () => {
       if (timer) clearTimeout(timer);
       window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("pageshow", handlePageShow);
     };
   }, [pathname]);
 

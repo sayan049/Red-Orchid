@@ -145,6 +145,32 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                  }
+                  var nav = window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType('navigation')[0];
+                  var isReload = nav ? nav.type === 'reload' : (window.performance && window.performance.navigation && window.performance.navigation.type === 1);
+                  if (isReload) {
+                    try {
+                      sessionStorage.removeItem('target_scroll_hash');
+                    } catch(e) {}
+                    if (window.location.hash) {
+                      history.replaceState(null, '', window.location.pathname);
+                    }
+                    window.scrollTo(0, 0);
+                    if (document.documentElement) document.documentElement.scrollTop = 0;
+                    if (document.body) document.body.scrollTop = 0;
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
