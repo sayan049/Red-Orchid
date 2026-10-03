@@ -478,6 +478,8 @@ export function ContactSection() {
                       type="text"
                       name="honeypot"
                       tabIndex={-1}
+                      autoComplete="off"
+                      suppressHydrationWarning
                       value={formData.honeypot}
                       onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
                     />
@@ -510,7 +512,10 @@ export function ContactSection() {
                         </FieldLabel>
                         <input
                           id="name"
+                          name="name"
                           type="text"
+                          autoComplete="name"
+                          suppressHydrationWarning
                           placeholder="e.g. Sayan Patra"
                           value={formData.name}
                           onChange={(e) => {
@@ -541,7 +546,10 @@ export function ContactSection() {
                         </FieldLabel>
                         <input
                           id="email"
+                          name="email"
                           type="email"
+                          autoComplete="email"
+                          suppressHydrationWarning
                           placeholder="you@domain.com"
                           value={formData.email}
                           onChange={(e) => {
@@ -572,7 +580,10 @@ export function ContactSection() {
                       </FieldLabel>
                       <input
                         id="company"
+                        name="company"
                         type="text"
+                        autoComplete="organization"
+                        suppressHydrationWarning
                         placeholder="e.g. Warner Bros. / Maison Margiela / Independent"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -615,7 +626,9 @@ export function ContactSection() {
                       </FieldLabel>
                       <textarea
                         id="message"
+                        name="message"
                         rows={4}
+                        suppressHydrationWarning
                         placeholder="Concept synopsis, expected timeline, location aspirations, technical specs (e.g. 35mm film or digital cinema)..."
                         value={formData.message}
                         onChange={(e) => {
