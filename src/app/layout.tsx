@@ -54,10 +54,11 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: [
-      { url: "/logo-orchid.png", sizes: "any" },
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/icon.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo-orchid.png", sizes: "any", type: "image/png" },
     ],
-    shortcut: "/logo-orchid.png",
+    shortcut: "/icon.png",
     apple: "/icon.png",
   },
   authors: [{ name: "Red Orchid Films" }],
@@ -142,6 +143,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon.png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <script
