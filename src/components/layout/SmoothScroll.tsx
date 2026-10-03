@@ -13,6 +13,7 @@ interface SmoothScrollProps {
 export function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null);
   const pathname = usePathname();
+  const isInitialMountRef = useRef(true);
 
   // 1. Enforce manual scroll restoration globally so the browser never restores stale scroll positions
   useEffect(() => {
@@ -27,7 +28,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
 
     let timer: NodeJS.Timeout | null = null;
     let attempts = 0;
-    const maxAttempts = 35; // 35 * 60ms = 2.1s polling window
+    const maxAttempts = 40; // 40 * 60ms = 2.4s polling window
 
     const isReload = () => {
       try {
@@ -54,22 +55,36 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       }
     };
 
-    // On page reload, always start at the very top (Hero) and clear any stale target hash
-    if (isReload()) {
+    const isFirstMount = isInitialMountRef.current;
+    if (isFirstMount) {
+      isInitialMountRef.current = false;
+    }
+
+    // On hard page reload of the initial document:
+    // Only reset to top if there is NO explicit navigation intent stored
+    if (isFirstMount && isReload()) {
+      let storedHash = "";
       try {
-        sessionStorage.removeItem("target_scroll_hash");
-        if (window.location.hash) {
-          window.history.replaceState(null, "", window.location.pathname);
-        }
+        storedHash = sessionStorage.getItem("target_scroll_hash") || "";
       } catch {
         // ignore
       }
 
-      resetScrollToTop();
-      requestAnimationFrame(resetScrollToTop);
-      setTimeout(resetScrollToTop, 60);
-      setTimeout(resetScrollToTop, 200);
-      return;
+      if (!storedHash) {
+        if (window.location.hash) {
+          try {
+            window.history.replaceState(null, "", window.location.pathname);
+          } catch {
+            // ignore
+          }
+        }
+
+        resetScrollToTop();
+        requestAnimationFrame(resetScrollToTop);
+        setTimeout(resetScrollToTop, 60);
+        setTimeout(resetScrollToTop, 200);
+        return;
+      }
     }
 
     const getHash = () => {
@@ -95,15 +110,6 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
           sessionStorage.removeItem("target_scroll_hash");
         } catch {
           // ignore
-        }
-
-        // Clean up hash from URL bar so subsequent reloads don't jump back to the anchor
-        if (window.location.hash) {
-          try {
-            window.history.replaceState(null, "", window.location.pathname);
-          } catch {
-            // ignore
-          }
         }
 
         // Force Lenis to recalculate page dimensions if active
